@@ -4,7 +4,7 @@ import LogTable from "../components/LogTable";
 import { LogEntry } from "../types/logTypes";
 
 const LogsPage: React.FC = () => {
-  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [logs, setLogs] = useState<String[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
