@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MyPlants.css";
+import plantImage from "../images/image.png";
 
 interface Plant{
   plantName: string;
@@ -93,7 +94,7 @@ const MyPlants: React.FC = () => {
             <div className="plant-box">
                {plant.plants.map((plant, idx) => (
                 <div key={idx} className="pot-container">
-                  <div className="pot-image">🌱</div>
+                  <div className="pot-image"><img src={plantImage} alt="Plant pot" /></div>
                   <div className="pot-name">{plant.plantName}</div>
                 </div>
               ))}
