@@ -1,10 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./MyPlants.css";
 
-interface PlantType {
+interface Plant{
+  plantName: string;
+}
+
+interface PlantType{
   typeName: string;
   wateringFrequency: number;
   dosage: number;
+  plants: Plant[];
 }
 
 const MyPlants: React.FC = () => {
@@ -13,7 +19,31 @@ const MyPlants: React.FC = () => {
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
   const [error, setError] = useState("");
-  const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
+  const [plantTypes, setPlantTypes] = useState<PlantType[]>([
+  
+  // Dummy data for existing plant types
+  {
+    typeName: "Basil",
+    wateringFrequency: 3,
+    dosage: 50,
+    plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }],
+  },
+  {
+    typeName: "Lemon",
+    wateringFrequency: 2,
+    dosage: 100,
+    plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }],
+  },
+  {
+    typeName: "Watermelon",
+    wateringFrequency: 4,
+    dosage: 200,
+    plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }],
+  },
+]);
+//end of dummy data
+  
+  const navigate = useNavigate();
 
   const handleContinue = () => {
     if (!typeName || !wateringFrequency || !dosage) {
@@ -28,11 +58,13 @@ const MyPlants: React.FC = () => {
       setError("Values cannot be negative.");
       return;
     }
+   
 
     const newPlant: PlantType = {
       typeName,
       wateringFrequency: watering,
       dosage: dose,
+      plants: []
     };
 
     setPlantTypes([...plantTypes, newPlant]);
@@ -56,12 +88,18 @@ const MyPlants: React.FC = () => {
         {plantTypes.map((plant, index) => (
           <div key={index} className="plant-type-section">
             <div className="plant-type-title">
-              Type: {plant.typeName} ({plant.wateringFrequency}x/week,{" "}
-              {plant.dosage}ml)
+              Type: {plant.typeName}
             </div>
             <div className="plant-box">
+               {plant.plants.map((plant, idx) => (
+                <div key={idx} className="pot-container">
+                  <div className="pot-image">🌱</div>
+                  <div className="pot-name">{plant.plantName}</div>
+                </div>
+              ))}
+
               <div className="add-pot-container">
-                <button className="add-pot-button">+</button>
+                <button className="add-pot-button" onClick={() => navigate(`/addplant/${plant.typeName}`)}>➕</button>
                 <div className="add-pot-text">New</div>
               </div>
             </div>
