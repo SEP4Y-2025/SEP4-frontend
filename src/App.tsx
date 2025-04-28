@@ -1,22 +1,19 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LogsPage from "./pages/LogsPage";
-import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import MyPlants from "./pages/MyPlants";
-import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
+import PlantDetails from "./pages/PlantDetails";
+import "./App.css";
 
 const App: React.FC = () => {
   return (
     <Router>
-      <Navbar />
-      <Container>
-        <Routes>
-          <Route path="/" element={<LogsPage />} />
-          <Route path="/plants" element={<MyPlants />} />
-          <Route path="/addplant/:typeName" element={<AddPlant />} />
-        </Routes>
-      </Container>
+      <Routes>
+        <Route path="/" element={<Navigate to="/plants" replace />} />
+        <Route path="/plants" element={<MyPlants />} />
+        <Route path="/addplant/:typeName" element={<AddPlant />} />
+        <Route path="/plant/:id" element={<PlantDetails />} />
+      </Routes>
     </Router>
   );
 };
