@@ -261,7 +261,7 @@ const MyPlants: React.FC = () => {
                         <img src={plantImage} alt="Plant pot" />
                       </div>
                       <div className="pot-name">{pot._id}</div>
-                      <div className="pot-humidity">Humidity: {pot.soil_humidity}%</div>
+                      {/* Removed soil humidity display from list view */}
                     </div>
                   ))}
                   
@@ -289,6 +289,7 @@ const MyPlants: React.FC = () => {
                             <img src={plantImage} alt="Plant pot" />
                           </div>
                           <div className="pot-name">{plant.plantName}</div>
+                          {/* No soil humidity displayed here either */}
                         </div>
                       );
                     })}
