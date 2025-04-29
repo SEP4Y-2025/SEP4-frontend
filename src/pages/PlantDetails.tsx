@@ -2,299 +2,319 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./PlantDetails.css";
 
-interface PlantPot {
-  id: string;
-  label: string;
-  typeName: string;
-  lastWatering?: string;
-  soilHumidity?: number;
+interface Pot {
+  _id: string;
+  plant_type_id: string;
+  environment_id: string;
+  water_tank_id: string;
+  soil_humidity: number;
 }
 
 interface PlantType {
   typeName: string;
   wateringFrequency: number;
   dosage: number;
+  plants: { plantName: string }[];
 }
 
-interface WateringLog {
-  timestamp: string;
-  operation: string; // "watering", "window_open", "window_close"
-  initiator: string;
-}
+// Visual Circle Gauge Component
+const CircleGauge: React.FC<{
+  value: number;
+  maxValue: number;
+  unit: string;
+  label: string;
+}> = ({ value, maxValue, unit, label }) => {
+  const percentage = Math.min(100, Math.max(0, (value / maxValue) * 100));
+  const circumference = 2 * Math.PI * 40; // Circle radius is 40
+  const dashOffset = circumference - (percentage / 100) * circumference;
+
+  return (
+    <div className="gauge-container">
+      <h3>{label}</h3>
+      <div className="gauge">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          {/* Background circle */}
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            fill="none"
+            stroke="#e0e0e0"
+            strokeWidth="10"
+          />
+          {/* Foreground circle */}
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            fill="none"
+            stroke="#8bc34a"
+            strokeWidth="10"
+            strokeDasharray={circumference}
+            strokeDashoffset={dashOffset}
+            strokeLinecap="round"
+            transform="rotate(-90 50 50)"
+          />
+          <text
+            x="50"
+            y="50"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="16"
+            fontWeight="bold"
+          >
+            {value}
+            {unit}
+          </text>
+        </svg>
+      </div>
+    </div>
+  );
+};
+
+// Temperature Gauge Component
+const TemperatureGauge: React.FC<{ temperature: number }> = ({ temperature }) => {
+  return (
+    <div className="gauge-container">
+      <h3>Temperature:</h3>
+      <div className="gauge">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          {/* Thermometer background */}
+          <rect x="45" y="20" width="10" height="60" rx="5" fill="#e0e0e0" />
+          <circle cx="50" cy="80" r="10" fill="#e0e0e0" />
+          
+          {/* Thermometer fill */}
+          <rect 
+            x="45" 
+            y={80 - Math.min(60, Math.max(0, (temperature / 40) * 60))} 
+            width="10" 
+            height={Math.min(60, Math.max(0, (temperature / 40) * 60))} 
+            rx="5" 
+            fill={temperature > 30 ? "#f44336" : temperature > 20 ? "#8bc34a" : "#2196f3"} 
+          />
+          <circle cx="50" cy="80" r="10" fill={temperature > 30 ? "#f44336" : temperature > 20 ? "#8bc34a" : "#2196f3"} />
+          
+          <text
+            x="50"
+            y="50"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="16"
+            fontWeight="bold"
+            fill="#333"
+          >
+            {temperature}°C
+          </text>
+        </svg>
+      </div>
+    </div>
+  );
+};
 
 const PlantDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   
-  const [plant, setPlant] = useState<PlantPot | null>(null);
+  const [pot, setPot] = useState<Pot | null>(null);
   const [plantType, setPlantType] = useState<PlantType | null>(null);
-  const [logs, setLogs] = useState<WateringLog[]>([]);
-  const [isWindowOpen, setIsWindowOpen] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [tankLevel, setTankLevel] = useState(85); // Default tank level (%)
+  const [temperature, setTemperature] = useState(22); // Default temperature (°C)
   
-  // Environmental data (mock)
-  const [soilHumidity, setSoilHumidity] = useState(65);
-  const [waterLevel, setWaterLevel] = useState(78);
-  const [temperature, setTemperature] = useState(22.5);
-  const [airHumidity, setAirHumidity] = useState(45);
-  const [lightIntensity, setLightIntensity] = useState(820);
-  const [tankCapacity, setTankCapacity] = useState(500); // ml
-
+  // Load pot and plant type data
   useEffect(() => {
-    if (!id) return;
-    
     console.log("Loading plant details for ID:", id);
     
-    // Load plant pot data
-    const savedPots = JSON.parse(localStorage.getItem("plantPots") || "[]");
-    const foundPlant = savedPots.find((pot: PlantPot) => pot.id === id);
+    if (!id) return;
     
-    if (foundPlant) {
-      console.log("Found plant:", foundPlant);
-      setPlant(foundPlant);
-      setSoilHumidity(foundPlant.soilHumidity || Math.floor(Math.random() * 100));
-      
-      // Load plant type data
-      const savedTypes = JSON.parse(localStorage.getItem("plantTypes") || "[]");
-      const foundType = savedTypes.find((type: PlantType) => type.typeName === foundPlant.typeName);
-      
-      if (foundType) {
-        console.log("Found plant type:", foundType);
-        setPlantType(foundType);
-      }
-      
-      // Generate mock watering logs
-      generateMockLogs(foundPlant.lastWatering || new Date().toISOString());
-      
-      // Set random environment values
-      setWaterLevel(Math.floor(Math.random() * 100));
-      setTemperature(20 + Math.random() * 5);
-      setAirHumidity(40 + Math.random() * 20);
-      setLightIntensity(500 + Math.random() * 500);
-      setIsWindowOpen(Math.random() > 0.5);
-    } else {
-      console.log("Plant not found with ID:", id);
+    // Load pot data from localStorage
+    const storedPots = localStorage.getItem("pots");
+    if (!storedPots) {
+      console.error("No pots found in localStorage");
+      return;
     }
+    
+    const pots: Pot[] = JSON.parse(storedPots);
+    const foundPot = pots.find(p => p._id === id);
+    
+    if (!foundPot) {
+      console.error("Pot not found with ID:", id);
+      // If ID doesn't exist in pots, try to create a virtual pot based on plant name
+      // This is for handling plants that don't have a real pot yet
+      if (id.includes("pot_")) {
+        const parts = id.split("_");
+        if (parts.length >= 2) {
+          const plantTypeId = parts[1];
+          // Create a virtual pot
+          const virtualPot: Pot = {
+            _id: id,
+            plant_type_id: plantTypeId,
+            environment_id: localStorage.getItem("currentEnvironment") || "env_greenhouse",
+            water_tank_id: "tank_virtual",
+            soil_humidity: 50 // Default value
+          };
+          setPot(virtualPot);
+          
+          // Also load the plant type
+          const storedPlantTypes = localStorage.getItem("plantTypes");
+          if (storedPlantTypes) {
+            const plantTypes: PlantType[] = JSON.parse(storedPlantTypes);
+            const foundType = plantTypes.find(type => type.typeName === plantTypeId);
+            if (foundType) {
+              setPlantType(foundType);
+            }
+          }
+        }
+      }
+      return;
+    }
+    
+    console.log("Found pot:", foundPot);
+    setPot(foundPot);
+    
+    // Load plant type data from localStorage
+    const storedPlantTypes = localStorage.getItem("plantTypes");
+    if (!storedPlantTypes) {
+      console.error("No plant types found in localStorage");
+      return;
+    }
+    
+    const plantTypes: PlantType[] = JSON.parse(storedPlantTypes);
+    const foundType = plantTypes.find(type => type.typeName === foundPot.plant_type_id);
+    
+    if (!foundType) {
+      console.error("Plant type not found:", foundPot.plant_type_id);
+      return;
+    }
+    
+    console.log("Found plant type:", foundType);
+    setPlantType(foundType);
+    
+    // Simulate loading random tank level and temperature
+    // In a real app, these would come from sensors or API
+    setTankLevel(Math.floor(Math.random() * 30) + 70); // Random between 70-100
+    setTemperature(Math.floor(Math.random() * 10) + 18); // Random between 18-28
   }, [id]);
 
-  // Generate mock logs based on the last watering date
-  const generateMockLogs = (lastWatering: string) => {
-    const lastWateringDate = new Date(lastWatering);
+  // Handle delete pot
+  const handleDelete = () => {
+    if (!pot || !id) return;
     
-    // Generate logs for the past 2 weeks
-    const mockLogs: WateringLog[] = [];
+    console.log("Deleting pot:", id);
     
-    // Add the most recent watering
-    mockLogs.push({
-      timestamp: lastWateringDate.toISOString(),
-      operation: "watering",
-      initiator: "System"
-    });
+    // Get current pots from localStorage
+    const storedPots = localStorage.getItem("pots");
+    if (!storedPots) return;
     
-    // Add some random window operations
-    const twoDaysAgo = new Date();
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    // Remove the pot
+    const pots: Pot[] = JSON.parse(storedPots);
+    const updatedPots = pots.filter(p => p._id !== id);
     
-    mockLogs.push({
-      timestamp: twoDaysAgo.toISOString(),
-      operation: "window_open",
-      initiator: "User"
-    });
+    // Update localStorage
+    localStorage.setItem("pots", JSON.stringify(updatedPots));
+    console.log("Pot deleted, remaining pots:", updatedPots.length);
     
-    const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    // Close modal
+    setShowDeleteConfirm(false);
     
-    mockLogs.push({
-      timestamp: threeDaysAgo.toISOString(),
-      operation: "window_close",
-      initiator: "System"
-    });
-    
-    // Add more watering events
-    for (let i = 1; i <= 3; i++) {
-      const date = new Date(lastWateringDate);
-      date.setDate(date.getDate() - (i * 7)); // Weekly watering
-      
-      mockLogs.push({
-        timestamp: date.toISOString(),
-        operation: "watering",
-        initiator: Math.random() > 0.5 ? "System" : "User"
-      });
-    }
-    
-    // Sort logs by timestamp (newest first)
-    mockLogs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-    
-    setLogs(mockLogs);
+    // Navigate back to plants page
+    navigate("/plants");
   };
 
-  const toggleWindow = () => {
-    const newWindowState = !isWindowOpen;
-    setIsWindowOpen(newWindowState);
-    
-    // Add a new log entry
-    const newLog: WateringLog = {
-      timestamp: new Date().toISOString(),
-      operation: newWindowState ? "window_open" : "window_close",
-      initiator: "User"
-    };
-    
-    setLogs([newLog, ...logs]);
+  // Handle save (stub)
+  const handleSave = () => {
+    console.log("Saving plant data...");
+    // Here you would update the pot data in localStorage
+    // For now, just show a confirmation
+    alert("Plant data saved!");
   };
 
-  const calculateNextWatering = () => {
-    if (!plant?.lastWatering || !plantType) return "Unknown";
-    
-    const lastWateringDate = new Date(plant.lastWatering);
-    const daysPerWatering = 7 / plantType.wateringFrequency;
-    
-    const nextWateringDate = new Date(lastWateringDate);
-    nextWateringDate.setDate(lastWateringDate.getDate() + daysPerWatering);
-    
-    return nextWateringDate.toLocaleDateString();
-  };
-
-  if (!plant) {
+  if (!pot || !plantType) {
     return (
       <div className="plant-details-container">
-        <div className="plant-details-header">
-          <button className="back-button" onClick={() => navigate(-1)}>
-            <span role="img" aria-label="back">⬅️</span>
-          </button>
-          <h2>Plant Not Found</h2>
-          <p>Unable to find plant details for the specified ID.</p>
-        </div>
+        <h1>Plant Details</h1>
+        <p>Loading plant information...</p>
+        <button className="back-button" onClick={() => navigate("/plants")}>Back to Plants</button>
       </div>
     );
   }
 
   return (
     <div className="plant-details-container">
-      <div className="plant-details-header">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          <span role="img" aria-label="back">⬅️</span>
+      <h1>Plant Details</h1>
+      
+      <div className="plant-info-main">
+        <div className="plant-info-card">
+          <div className="plant-icon">
+            <svg viewBox="0 0 24 24" width="40" height="40">
+              <circle cx="12" cy="12" r="10" fill="#e8f5e9" stroke="#66bb6a" strokeWidth="1.5" />
+              <path d="M12,2 C16.42,2 20,5.58 20,10 C20,16 12,22 12,22 C12,22 4,16 4,10 C4,5.58 7.58,2 12,2 Z" fill="none" stroke="#66bb6a" strokeWidth="1.5" />
+            </svg>
+          </div>
+          
+          <div className="plant-info-section">
+            <div className="info-row">
+              <label>Name</label>
+              <span>{pot._id.includes("pot_") ? pot._id.split("_").slice(2).join(" ") : pot._id}</span>
+            </div>
+            
+            <div className="info-row">
+              <label>Type Details</label>
+              <span>{plantType.typeName} ▼</span>
+            </div>
+            
+            <div className="info-row">
+              <label>Watering Frequency</label>
+              <span>{plantType.wateringFrequency}</span>
+            </div>
+            
+            <div className="info-row">
+              <label>Dosage ml</label>
+              <span>{plantType.dosage}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="plant-gauges">
+          <CircleGauge 
+            value={tankLevel} 
+            maxValue={100} 
+            unit="%" 
+            label="Tank level:" 
+          />
+          
+          <CircleGauge 
+            value={pot.soil_humidity} 
+            maxValue={100} 
+            unit="%" 
+            label="Soil humidity:" 
+          />
+          
+          <TemperatureGauge temperature={temperature} />
+        </div>
+      </div>
+      
+      <div className="button-container">
+        <button className="save-button" onClick={handleSave}>
+          Save
         </button>
-        <div className="header-content">
-          <span className="plant-icon" role="img" aria-label="leaf">🌿</span>
-          <h2>{plant.label}</h2>
-        </div>
+        <button className="delete-button" onClick={() => setShowDeleteConfirm(true)}>
+          Delete Plant
+        </button>
       </div>
-
-      <div className="plant-info-section">
-        <h3>Plant Information</h3>
-        <div className="info-grid">
-          <div className="info-item">
-            <label>Type:</label>
-            <span>{plant.typeName}</span>
-          </div>
-          <div className="info-item">
-            <label>Watering Frequency:</label>
-            <span>{plantType?.wateringFrequency || "Unknown"} times/week</span>
-          </div>
-          <div className="info-item">
-            <label>Water Dosage:</label>
-            <span>{plantType?.dosage || "Unknown"} ml</span>
-          </div>
-          <div className="info-item">
-            <label>Last Watering:</label>
-            <span>{plant.lastWatering ? new Date(plant.lastWatering).toLocaleDateString() : "Unknown"}</span>
-          </div>
-          <div className="info-item">
-            <label>Next Watering:</label>
-            <span>{calculateNextWatering()}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="sensor-data-section">
-        <h3>Current Conditions</h3>
-        <div className="info-grid">
-          <div className="sensor-item">
-            <div className="sensor-icon">💧</div>
-            <label>Soil Humidity:</label>
-            <span>{soilHumidity}%</span>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${soilHumidity}%`, backgroundColor: soilHumidity < 30 ? '#e74c3c' : soilHumidity > 70 ? '#2ecc71' : '#f39c12' }}></div>
-            </div>
-          </div>
-          <div className="sensor-item">
-            <div className="sensor-icon">🌡️</div>
-            <label>Temperature:</label>
-            <span>{temperature.toFixed(1)}°C</span>
-          </div>
-          <div className="sensor-item">
-            <div className="sensor-icon">💦</div>
-            <label>Air Humidity:</label>
-            <span>{airHumidity.toFixed(1)}%</span>
-          </div>
-          <div className="sensor-item">
-            <div className="sensor-icon">☀️</div>
-            <label>Light Intensity:</label>
-            <span>{lightIntensity.toFixed(0)} lux</span>
-          </div>
-          <div className="water-tank-item">
-            <div className="sensor-icon">🚰</div>
-            <label>Water Tank:</label>
-            <div className="water-level-container">
-              <div className="water-level-info">
-                <span>{waterLevel}%</span>
-                <span className="water-volume">{Math.round(tankCapacity * waterLevel / 100)} / {tankCapacity} ml</span>
-              </div>
-              <div className="water-level-indicator">
-                <div 
-                  className="water-level-fill" 
-                  style={{ 
-                    height: `${waterLevel}%`,
-                    backgroundColor: waterLevel < 20 ? '#e74c3c' : '#3498db' 
-                  }}
-                ></div>
-              </div>
+      
+      {showDeleteConfirm && (
+        <div className="delete-confirm-modal">
+          <div className="modal-content">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this plant pot?</p>
+            <div className="button-row">
+              <button onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
+              <button onClick={handleDelete} className="delete-button">Delete</button>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="controls-section">
-        <h3>Controls</h3>
-        <div className="controls-grid">
-          <div className="control-item">
-            <button className={`window-button ${isWindowOpen ? 'open' : 'closed'}`} onClick={toggleWindow}>
-              <span className="window-icon">{isWindowOpen ? '🪟' : '🪟'}</span>
-              <span>Window is {isWindowOpen ? 'Open' : 'Closed'}</span>
-            </button>
-          </div>
-          <div className="control-item">
-            <button className="water-now-button">
-              <span className="water-icon">💧</span>
-              <span>Water Now</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="logs-section">
-        <h3>Activity History</h3>
-        {logs.length > 0 ? (
-          <div className="logs-list">
-            {logs.map((log, index) => (
-              <div key={index} className="log-item">
-                <div className="log-timestamp">
-                  {new Date(log.timestamp).toLocaleString()}
-                </div>
-                <div className="log-details">
-                  <span className="log-operation">
-                    {log.operation === "watering" ? "💧 Watering" : 
-                     log.operation === "window_open" ? "🪟 Window Opened" : 
-                     "🪟 Window Closed"}
-                  </span>
-                  <span className="log-initiator">by {log.initiator}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="no-logs-message">No activity recorded yet.</div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

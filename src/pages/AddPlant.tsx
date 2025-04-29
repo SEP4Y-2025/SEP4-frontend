@@ -18,6 +18,9 @@ const AddPlant: React.FC = () => {
     // In a real app, we would call an API here
     // For now, we're using dummy data and localStorage
 
+    // Get current environment from localStorage or use default
+    const currentEnvironmentId = localStorage.getItem("currentEnvironment") || "env_greenhouse";
+
     // Get existing plant types from localStorage or use our dummy data
     const storedPlantTypes = localStorage.getItem("plantTypes");
     let plantTypes = storedPlantTypes ? JSON.parse(storedPlantTypes) : [
@@ -79,7 +82,7 @@ const AddPlant: React.FC = () => {
     const newPot = { 
       _id: newPotId, 
       plant_type_id: typeName || "", 
-      environment_id: "env_greenhouse", // Default environment
+      environment_id: currentEnvironmentId, // Use the current environment from localStorage
       water_tank_id: "tank_1", // Default tank
       soil_humidity: Math.floor(Math.random() * 30) + 40 // Random humidity between 40-70%
     };
