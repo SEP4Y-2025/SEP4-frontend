@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./MyPlants.css";
-import PotList from "../components/PotList";
-import { Pot } from "../services/api"; // keeping the type only
 import plantImage from "../images/image.png";
 
 interface Plant {
@@ -20,6 +18,15 @@ interface PlantType {
 interface Environment {
   id: string;
   name: string;
+}
+
+interface Pot {
+  _id: string;
+  plant_type_id: string;
+  environment_id: string;
+  water_tank_id: string;
+  soil_humidity: number;
+  plantName?: string; // Optional field to store the plant name directly
 }
 
 // Dummy Data
@@ -47,6 +54,12 @@ const dummyPlantTypes: PlantType[] = [
     wateringFrequency: 4,
     dosage: 40,
     plants: [{ plantName: "Freshy" }]
+  },
+  {
+    typeName: "Watermelon",
+    wateringFrequency: 2,
+    dosage: 300,
+    plants: [{ plantName: "Green Pot" }]
   }
 ];
 
@@ -56,12 +69,14 @@ const dummyPots: Pot[] = [
   { _id: "pot_003", plant_type_id: "Mint", environment_id: "env_greenhouse", water_tank_id: "tank_3", soil_humidity: 60 },
   { _id: "pot_004", plant_type_id: "Basil", environment_id: "env_balcony", water_tank_id: "tank_4", soil_humidity: 55 },
   { _id: "pot_005", plant_type_id: "Aloe", environment_id: "env_balcony", water_tank_id: "tank_1", soil_humidity: 40 },
+  { _id: "pot_006", plant_type_id: "Watermelon", environment_id: "env_kitchen", water_tank_id: "tank_5", soil_humidity: 65 }
 ];
 
 const dummyEnvironments: Environment[] = [
   { id: "env_greenhouse", name: "Greenhouse" },
   { id: "env_outdoor", name: "Outdoor Garden" },
-  { id: "env_balcony", name: "Balcony" }
+  { id: "env_balcony", name: "Balcony" },
+  { id: "env_kitchen", name: "Kitchen" }
 ];
 
 const MyPlants: React.FC = () => {
@@ -74,19 +89,73 @@ const MyPlants: React.FC = () => {
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
   const [pots, setPots] = useState<Pot[]>([]);
   const [currentEnvironmentId, setCurrentEnvironmentId] = useState<string>("env_greenhouse");
-
+  
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Load data from localStorage or use dummy data
+  const loadData = () => {
+    console.log("Loading data...");
+    
+    // Check for stored plant types
+    const storedPlantTypes = localStorage.getItem("plantTypes");
+    if (storedPlantTypes) {
+      console.log("Found stored plant types");
+      setPlantTypes(JSON.parse(storedPlantTypes));
+    } else {
+      console.log("Using dummy plant types");
+      setPlantTypes(dummyPlantTypes);
+      // Initialize localStorage with dummy data
+      localStorage.setItem("plantTypes", JSON.stringify(dummyPlantTypes));
+    }
+    
+    // Check for stored pots
+    const storedPots = localStorage.getItem("pots");
+    if (storedPots) {
+      console.log("Found stored pots");
+      setPots(JSON.parse(storedPots).sort((a: Pot, b: Pot) => a._id.localeCompare(b._id)));
+    } else {
+      console.log("Using dummy pots");
+      setPots(dummyPots.sort((a, b) => a._id.localeCompare(b._id)));
+      // Initialize localStorage with dummy data
+      localStorage.setItem("pots", JSON.stringify(dummyPots));
+    }
+    
+    // Check for stored environment preference
+    const storedEnvironment = localStorage.getItem("currentEnvironment");
+    if (storedEnvironment) {
+      console.log("Found stored environment:", storedEnvironment);
+      setCurrentEnvironmentId(storedEnvironment);
+    }
+    
+    // Clear the plant added flag
+    localStorage.removeItem("plantAdded");
+  };
 
   useEffect(() => {
-    setPlantTypes(dummyPlantTypes);
-    setPots(dummyPots.sort((a, b) => a._id.localeCompare(b._id)));
+    loadData();
   }, []);
+  
+  // Check for navigation back from AddPlant component
+  useEffect(() => {
+    // This effect will run whenever location changes (e.g., when navigating back from AddPlant)
+    const plantAdded = localStorage.getItem("plantAdded");
+    if (plantAdded === "true") {
+      console.log("Plant was added, reloading data");
+      loadData(); // Reload data to show newly added plants
+    }
+  }, [location]);
 
   const currentEnvironment = dummyEnvironments.find(env => env.id === currentEnvironmentId);
   const potsInCurrentEnvironment = pots.filter(pot => pot.environment_id === currentEnvironmentId);
 
   const handleEnvironmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurrentEnvironmentId(e.target.value);
+    const newEnvironmentId = e.target.value;
+    console.log("Environment changed to:", newEnvironmentId);
+    setCurrentEnvironmentId(newEnvironmentId);
+    
+    // Store the selected environment in localStorage so AddPlant can use it
+    localStorage.setItem("currentEnvironment", newEnvironmentId);
   };
 
   const handleContinue = () => {
@@ -103,15 +172,23 @@ const MyPlants: React.FC = () => {
       return;
     }
 
+    console.log("Adding new plant type:", typeName);
+    
+    // Create new plant type with the current environment
     const newPlant: PlantType = {
       typeName,
       wateringFrequency: watering,
       dosage: dose,
-      plants: [],
+      plants: [], // Initialize with no plants - they'll be added via pots
       environmentId: currentEnvironmentId
     };
 
-    setPlantTypes([...plantTypes, newPlant]);
+    // Add to plant types array
+    const updatedPlantTypes = [...plantTypes, newPlant];
+    setPlantTypes(updatedPlantTypes);
+    localStorage.setItem("plantTypes", JSON.stringify(updatedPlantTypes));
+    
+    // Reset form
     setTypeName("");
     setWateringFrequency("");
     setDosage("");
@@ -122,6 +199,21 @@ const MyPlants: React.FC = () => {
   const handleCancel = () => {
     setOpen(false);
     setError("");
+  };
+
+  const handlePotClick = (potId: string) => {
+    console.log("Pot clicked:", potId);
+    navigate(`/plant/${potId}`);
+  };
+
+  // Function to get display name for a pot
+  const getPotDisplayName = (pot: Pot) => {
+    // If the pot has a plantName property, use that
+    if (pot.plantName) {
+      return pot.plantName;
+    }
+    // Otherwise use the pot ID
+    return pot._id;
   };
 
   return (
@@ -138,48 +230,65 @@ const MyPlants: React.FC = () => {
             </option>
           ))}
         </select>
-        </div>
+      </div>
  
       <div className="plants-list">
-      {plantTypes
-  .filter((plantType) => {
-    const existsInEnvironment = potsInCurrentEnvironment.some(
-      (pot) => pot.plant_type_id === plantType.typeName
-    );
-    const isNewAndBelongsHere = 
-      !pots.some(pot => pot.plant_type_id === plantType.typeName) &&
-      plantType.environmentId === currentEnvironmentId;
-
-    return existsInEnvironment || isNewAndBelongsHere;
-  })
-
+        {/* Display all plant types that exist in the current environment */}
+        {plantTypes
+          .filter((plantType) => {
+            // Show plant types that have pots in this environment
+            const existsInEnvironment = potsInCurrentEnvironment.some(
+              (pot) => pot.plant_type_id === plantType.typeName
+            );
+            
+            // Show plant types that were newly added to this environment
+            const isNewAndBelongsHere = 
+              plantType.environmentId === currentEnvironmentId;
+              
+            // Show plant types with no environment specified (for backward compatibility)
+            const hasNoEnvironment = !plantType.environmentId;
+            
+            return existsInEnvironment || isNewAndBelongsHere || hasNoEnvironment;
+          })
           .sort((a, b) => a.typeName.localeCompare(b.typeName))
-          .map((plantType, index) => (
-            <div key={index} className="plant-type-section">
-              <div className="plant-type-title">Type: {plantType.typeName}</div>
-              <div className="plant-box">
-                {plantType.plants
-                  .sort((a, b) => a.plantName.localeCompare(b.plantName))
-                  .map((plant, idx) => (
-                    <div key={idx} className="pot-container">
+          .map((plantType, index) => {
+            // Get pots for this plant type in the current environment
+            const potsOfThisType = potsInCurrentEnvironment.filter(
+              pot => pot.plant_type_id === plantType.typeName
+            );
+            
+            return (
+              <div key={index} className="plant-type-section">
+                <div className="plant-type-title">Type: {plantType.typeName}</div>
+                <div className="plant-box">
+                  {/* Show pots for this plant type */}
+                  {potsOfThisType.length > 0 && potsOfThisType.map((pot, potIdx) => (
+                    <div 
+                      key={pot._id} 
+                      className="pot-container" 
+                      onClick={() => handlePotClick(pot._id)}
+                    >
                       <div className="pot-image">
                         <img src={plantImage} alt="Plant pot" />
                       </div>
-                      <div className="pot-name">{plant.plantName}</div>
+                      <div className="pot-name">{getPotDisplayName(pot)}</div>
                     </div>
                   ))}
-                <div className="add-pot-container">
-                  <button
-                    className="add-pot-button"
-                    onClick={() => navigate(`/addplant/${plantType.typeName}`)}
-                  >
-                    ➕
-                  </button>
-                  <div className="add-pot-text">New</div>
+                  
+                  {/* Add new plant button */}
+                  <div className="add-pot-container">
+                    <button
+                      className="add-pot-button"
+                      onClick={() => navigate(`/addplant/${plantType.typeName}`)}
+                    >
+                      ➕
+                    </button>
+                    <div className="add-pot-text">New</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
       </div>
 
       <button className="add-type-button" onClick={() => setOpen(true)}>
