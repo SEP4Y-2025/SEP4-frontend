@@ -6,78 +6,133 @@ const AddPlant: React.FC = () => {
   const { typeName } = useParams<{ typeName: string }>();
   const navigate = useNavigate();
   
-  const [potName, setPotName] = useState("");
+  const [plantName, setPlantName] = useState("");
   const [error, setError] = useState("");
 
   const handleSave = () => {
-    if (!potName.trim()) {
-      setError("Please enter the pot name");
+    if (!plantName.trim()) {
+      setError("Please enter a plant name");
       return;
     }
     
-    // Get existing pots
-    const existingPots = JSON.parse(localStorage.getItem("plantPots") || "[]");
+    // In a real app, we would call an API here
+    // For now, we're using dummy data and localStorage
+
+    // Get existing plant types from localStorage or use our dummy data
+    const storedPlantTypes = localStorage.getItem("plantTypes");
+    let plantTypes = storedPlantTypes ? JSON.parse(storedPlantTypes) : [
+      {
+        typeName: "Aloe",
+        wateringFrequency: 1,
+        dosage: 30,
+        plants: [{ plantName: "Greenie" }, { plantName: "Spiky" }]
+      },
+      {
+        typeName: "Basil",
+        wateringFrequency: 3,
+        dosage: 50,
+        plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }]
+      },
+      {
+        typeName: "Lemon",
+        wateringFrequency: 2,
+        dosage: 100,
+        plants: [{ plantName: "Lemony" }, { plantName: "AAron" }]
+      },
+      {
+        typeName: "Mint",
+        wateringFrequency: 4,
+        dosage: 40,
+        plants: [{ plantName: "Freshy" }]
+      }
+    ];
+
+    // Find the plant type and add the new plant
+    const updatedPlantTypes = plantTypes.map((plant: any) => {
+      if (plant.typeName === typeName) {
+        // Add the new plant to this type
+        return {
+          ...plant,
+          plants: [...plant.plants, { plantName: plantName }]
+        };
+      }
+      return plant;
+    });
+
+    // Update localStorage
+    localStorage.setItem("plantTypes", JSON.stringify(updatedPlantTypes));
+
+    // Also update the pots collection
+    const storedPots = localStorage.getItem("pots");
+    let pots = storedPots ? JSON.parse(storedPots) : [
+      { _id: "pot_001", plant_type_id: "Aloe", environment_id: "env_greenhouse", water_tank_id: "tank_1", soil_humidity: 45 },
+      { _id: "pot_002", plant_type_id: "Lemon", environment_id: "env_outdoor", water_tank_id: "tank_2", soil_humidity: 50 },
+      { _id: "pot_003", plant_type_id: "Mint", environment_id: "env_greenhouse", water_tank_id: "tank_3", soil_humidity: 60 },
+      { _id: "pot_004", plant_type_id: "Basil", environment_id: "env_balcony", water_tank_id: "tank_4", soil_humidity: 55 },
+      { _id: "pot_005", plant_type_id: "Aloe", environment_id: "env_balcony", water_tank_id: "tank_1", soil_humidity: 40 },
+    ];
+
+    // Create a unique ID for the new pot
+    const newPotId = `pot_${Date.now().toString().slice(-3)}`;
     
-    // Create new pot
-    const newPot = {
-      id: `pot${Date.now()}`, // Generate a unique ID
-      label: potName,
-      typeName: typeName,
-      lastWatering: new Date().toISOString(),
-      soilHumidity: Math.floor(Math.random() * (80 - 40) + 40), // Random value between 40-80%
+    // Add new pot to the pots collection
+    const newPot = { 
+      _id: newPotId, 
+      plant_type_id: typeName || "", 
+      environment_id: "env_greenhouse", // Default environment
+      water_tank_id: "tank_1", // Default tank
+      soil_humidity: Math.floor(Math.random() * 30) + 40 // Random humidity between 40-70%
     };
     
-    // Add the new pot and save to localStorage
-    existingPots.push(newPot);
-    localStorage.setItem("plantPots", JSON.stringify(existingPots));
+    pots.push(newPot);
+    localStorage.setItem("pots", JSON.stringify(pots));
+
+    // Set a flag in localStorage to indicate a new plant was added
+    // This will be used by MyPlants component to refresh data
+    localStorage.setItem("plantAdded", "true");
     
-    // Navigate back to the plants page
+    // Navigate back to MyPlants page
     navigate("/plants");
   };
 
+  const handleCancel = () => {
+    navigate(-1); // Go back to previous page
+  };
+
   return (
-    <div className="add-plant-container">
-      <div className="add-plant-header">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          <span role="img" aria-label="back">⬅️</span>
-        </button>
-        <div className="header-content">
-          <span className="plant-icon" role="img" aria-label="leaf">🌿</span>
-          <h2>Add New Plant</h2>
-        </div>
-      </div>
-
-      <div className="input-section">
-        <div className="input-group">
-          <label>Name</label>
-          <input
-            type="text"
-            className="input-field"
-            placeholder="Enter pot name"
-            value={potName}
-            onChange={(e) => setPotName(e.target.value)}
-          />
+    <div className="add-plant-modal">
+      <div className="modal-content">
+        <div className="modal-header">
+          <span role="img" aria-label="leaf">🌿</span>
+          <h2>Add new Plant</h2>
         </div>
 
-        <div className="input-group">
-          <label>Type</label>
-          <input
-            type="text"
-            className="input-field disabled"
-            value={typeName}
-            disabled
-          />
-        </div>
+        <div className="modal-body">
+          <div className="input-group">
+            <label>Name</label>
+            <input
+              className="input"
+              placeholder="Enter plant name"
+              value={plantName}
+              onChange={(e) => setPlantName(e.target.value)}
+            />
+          </div>
 
-        {error && <div className="error-message">{error}</div>}
+          <div className="input-group">
+            <label>Type</label>
+            <div className="type-display">{typeName}</div>
+          </div>
 
-        <div className="button-group">
-          <button className="cancel-button" onClick={() => navigate(-1)}>
-            Cancel
-          </button>
-          <button className="save-button" onClick={handleSave}>
-            Save
-          </button>
+          {error && <div className="error-message">{error}</div>}
+
+          <div className="modal-footer">
+            <button className="cancel-button" onClick={handleCancel}>
+              Cancel
+            </button>
+            <button className="save-button" onClick={handleSave}>
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </div>
