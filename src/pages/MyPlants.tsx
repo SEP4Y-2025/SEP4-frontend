@@ -35,48 +35,84 @@ const dummyPlantTypes: PlantType[] = [
     typeName: "Aloe",
     wateringFrequency: 1,
     dosage: 30,
-    plants: [{ plantName: "Greenie" }, { plantName: "Spiky" }]
+    plants: [{ plantName: "Greenie" }, { plantName: "Spiky" }],
   },
   {
     typeName: "Basil",
     wateringFrequency: 3,
     dosage: 50,
-    plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }]
+    plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }],
   },
   {
     typeName: "Lemon",
     wateringFrequency: 2,
     dosage: 100,
-    plants: [{ plantName: "Lemony" }, { plantName: "AAron" }]
+    plants: [{ plantName: "Lemony" }, { plantName: "AAron" }],
   },
   {
     typeName: "Mint",
     wateringFrequency: 4,
     dosage: 40,
-    plants: [{ plantName: "Freshy" }]
+    plants: [{ plantName: "Freshy" }],
   },
   {
     typeName: "Watermelon",
     wateringFrequency: 2,
     dosage: 300,
-    plants: [{ plantName: "Green Pot" }]
-  }
+    plants: [{ plantName: "Green Pot" }],
+  },
 ];
 
 const dummyPots: Pot[] = [
-  { _id: "pot_001", plant_type_id: "Aloe", environment_id: "env_greenhouse", water_tank_id: "tank_1", soil_humidity: 45 },
-  { _id: "pot_002", plant_type_id: "Lemon", environment_id: "env_outdoor", water_tank_id: "tank_2", soil_humidity: 50 },
-  { _id: "pot_003", plant_type_id: "Mint", environment_id: "env_greenhouse", water_tank_id: "tank_3", soil_humidity: 60 },
-  { _id: "pot_004", plant_type_id: "Basil", environment_id: "env_balcony", water_tank_id: "tank_4", soil_humidity: 55 },
-  { _id: "pot_005", plant_type_id: "Aloe", environment_id: "env_balcony", water_tank_id: "tank_1", soil_humidity: 40 },
-  { _id: "pot_006", plant_type_id: "Watermelon", environment_id: "env_kitchen", water_tank_id: "tank_5", soil_humidity: 65 }
+  {
+    _id: "pot_001",
+    plant_type_id: "Aloe",
+    environment_id: "env_greenhouse",
+    water_tank_id: "tank_1",
+    soil_humidity: 45,
+  },
+  {
+    _id: "pot_002",
+    plant_type_id: "Lemon",
+    environment_id: "env_outdoor",
+    water_tank_id: "tank_2",
+    soil_humidity: 50,
+  },
+  {
+    _id: "pot_003",
+    plant_type_id: "Mint",
+    environment_id: "env_greenhouse",
+    water_tank_id: "tank_3",
+    soil_humidity: 60,
+  },
+  {
+    _id: "pot_004",
+    plant_type_id: "Basil",
+    environment_id: "env_balcony",
+    water_tank_id: "tank_4",
+    soil_humidity: 55,
+  },
+  {
+    _id: "pot_005",
+    plant_type_id: "Aloe",
+    environment_id: "env_balcony",
+    water_tank_id: "tank_1",
+    soil_humidity: 40,
+  },
+  {
+    _id: "pot_006",
+    plant_type_id: "Watermelon",
+    environment_id: "env_kitchen",
+    water_tank_id: "tank_5",
+    soil_humidity: 65,
+  },
 ];
 
 const dummyEnvironments: Environment[] = [
   { id: "env_greenhouse", name: "Greenhouse" },
   { id: "env_outdoor", name: "Outdoor Garden" },
   { id: "env_balcony", name: "Balcony" },
-  { id: "env_kitchen", name: "Kitchen" }
+  { id: "env_kitchen", name: "Kitchen" },
 ];
 
 const MyPlants: React.FC = () => {
@@ -88,15 +124,16 @@ const MyPlants: React.FC = () => {
 
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
   const [pots, setPots] = useState<Pot[]>([]);
-  const [currentEnvironmentId, setCurrentEnvironmentId] = useState<string>("env_greenhouse");
-  
+  const [currentEnvironmentId, setCurrentEnvironmentId] =
+    useState<string>("env_greenhouse");
+
   const navigate = useNavigate();
   const location = useLocation();
 
   // Load data from localStorage or use dummy data
   const loadData = () => {
     console.log("Loading data...");
-    
+
     // Check for stored plant types
     const storedPlantTypes = localStorage.getItem("plantTypes");
     if (storedPlantTypes) {
@@ -108,26 +145,30 @@ const MyPlants: React.FC = () => {
       // Initialize localStorage with dummy data
       localStorage.setItem("plantTypes", JSON.stringify(dummyPlantTypes));
     }
-    
+
     // Check for stored pots
     const storedPots = localStorage.getItem("pots");
     if (storedPots) {
       console.log("Found stored pots");
-      setPots(JSON.parse(storedPots).sort((a: Pot, b: Pot) => a._id.localeCompare(b._id)));
+      setPots(
+        JSON.parse(storedPots).sort((a: Pot, b: Pot) =>
+          a._id.localeCompare(b._id)
+        )
+      );
     } else {
       console.log("Using dummy pots");
       setPots(dummyPots.sort((a, b) => a._id.localeCompare(b._id)));
       // Initialize localStorage with dummy data
       localStorage.setItem("pots", JSON.stringify(dummyPots));
     }
-    
+
     // Check for stored environment preference
     const storedEnvironment = localStorage.getItem("currentEnvironment");
     if (storedEnvironment) {
       console.log("Found stored environment:", storedEnvironment);
       setCurrentEnvironmentId(storedEnvironment);
     }
-    
+
     // Clear the plant added flag
     localStorage.removeItem("plantAdded");
   };
@@ -135,7 +176,7 @@ const MyPlants: React.FC = () => {
   useEffect(() => {
     loadData();
   }, []);
-  
+
   // Check for navigation back from AddPlant component
   useEffect(() => {
     // This effect will run whenever location changes (e.g., when navigating back from AddPlant)
@@ -146,14 +187,18 @@ const MyPlants: React.FC = () => {
     }
   }, [location]);
 
-  const currentEnvironment = dummyEnvironments.find(env => env.id === currentEnvironmentId);
-  const potsInCurrentEnvironment = pots.filter(pot => pot.environment_id === currentEnvironmentId);
+  const currentEnvironment = dummyEnvironments.find(
+    (env) => env.id === currentEnvironmentId
+  );
+  const potsInCurrentEnvironment = pots.filter(
+    (pot) => pot.environment_id === currentEnvironmentId
+  );
 
   const handleEnvironmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newEnvironmentId = e.target.value;
     console.log("Environment changed to:", newEnvironmentId);
     setCurrentEnvironmentId(newEnvironmentId);
-    
+
     // Store the selected environment in localStorage so AddPlant can use it
     localStorage.setItem("currentEnvironment", newEnvironmentId);
   };
@@ -172,22 +217,31 @@ const MyPlants: React.FC = () => {
       return;
     }
 
+    const alreadyExists = plantTypes.some(
+      (pt) => pt.typeName.toLowerCase() === typeName.trim().toLowerCase()
+    );
+
+    if (alreadyExists) {
+      setError(`Type "${typeName}" already exists.`);
+      return;
+    }
+
     console.log("Adding new plant type:", typeName);
-    
+
     // Create new plant type with the current environment
     const newPlant: PlantType = {
       typeName,
       wateringFrequency: watering,
       dosage: dose,
       plants: [], // Initialize with no plants - they'll be added via pots
-      environmentId: currentEnvironmentId
+      environmentId: currentEnvironmentId,
     };
 
     // Add to plant types array
     const updatedPlantTypes = [...plantTypes, newPlant];
     setPlantTypes(updatedPlantTypes);
     localStorage.setItem("plantTypes", JSON.stringify(updatedPlantTypes));
-    
+
     // Reset form
     setTypeName("");
     setWateringFrequency("");
@@ -218,12 +272,18 @@ const MyPlants: React.FC = () => {
 
   return (
     <div className="plants-page">
-      <h1 className="page-title">My Plants - {currentEnvironment?.name || "Unknown"}</h1>
+      <h1 className="page-title">
+        My Plants - {currentEnvironment?.name || "Unknown"}
+      </h1>
 
       {/* Environment selector */}
       <div className="environment-selector">
-      <label htmlFor="environment-select">Select Environment: </label>
-        <select id="environment-select" value={currentEnvironmentId} onChange={handleEnvironmentChange}>
+        <label htmlFor="environment-select">Select Environment: </label>
+        <select
+          id="environment-select"
+          value={currentEnvironmentId}
+          onChange={handleEnvironmentChange}
+        >
           {dummyEnvironments.map((env) => (
             <option key={env.id} value={env.id}>
               {env.name}
@@ -231,7 +291,7 @@ const MyPlants: React.FC = () => {
           ))}
         </select>
       </div>
- 
+
       <div className="plants-list">
         {/* Display all plant types that exist in the current environment */}
         {plantTypes
@@ -240,46 +300,53 @@ const MyPlants: React.FC = () => {
             const existsInEnvironment = potsInCurrentEnvironment.some(
               (pot) => pot.plant_type_id === plantType.typeName
             );
-            
+
             // Show plant types that were newly added to this environment
-            const isNewAndBelongsHere = 
+            const isNewAndBelongsHere =
               plantType.environmentId === currentEnvironmentId;
-              
+
             // Show plant types with no environment specified (for backward compatibility)
             const hasNoEnvironment = !plantType.environmentId;
-            
-            return existsInEnvironment || isNewAndBelongsHere || hasNoEnvironment;
+
+            return (
+              existsInEnvironment || isNewAndBelongsHere || hasNoEnvironment
+            );
           })
           .sort((a, b) => a.typeName.localeCompare(b.typeName))
           .map((plantType, index) => {
             // Get pots for this plant type in the current environment
             const potsOfThisType = potsInCurrentEnvironment.filter(
-              pot => pot.plant_type_id === plantType.typeName
+              (pot) => pot.plant_type_id === plantType.typeName
             );
-            
+
             return (
               <div key={index} className="plant-type-section">
-                <div className="plant-type-title">Type: {plantType.typeName}</div>
+                <div className="plant-type-title">
+                  Type: {plantType.typeName}
+                </div>
                 <div className="plant-box">
                   {/* Show pots for this plant type */}
-                  {potsOfThisType.length > 0 && potsOfThisType.map((pot, potIdx) => (
-                    <div 
-                      key={pot._id} 
-                      className="pot-container" 
-                      onClick={() => handlePotClick(pot._id)}
-                    >
-                      <div className="pot-image">
-                        <img src={plantImage} alt="Plant pot" />
+                  {potsOfThisType.length > 0 &&
+                    potsOfThisType.map((pot, potIdx) => (
+                      <div
+                        key={pot._id}
+                        className="pot-container"
+                        onClick={() => handlePotClick(pot._id)}
+                      >
+                        <div className="pot-image">
+                          <img src={plantImage} alt="Plant pot" />
+                        </div>
+                        <div className="pot-name">{getPotDisplayName(pot)}</div>
                       </div>
-                      <div className="pot-name">{getPotDisplayName(pot)}</div>
-                    </div>
-                  ))}
-                  
+                    ))}
+
                   {/* Add new plant button */}
                   <div className="add-pot-container">
                     <button
                       className="add-pot-button"
-                      onClick={() => navigate(`/addplant/${plantType.typeName}`)}
+                      onClick={() =>
+                        navigate(`/addplant/${plantType.typeName}`)
+                      }
                     >
                       ➕
                     </button>
@@ -299,7 +366,9 @@ const MyPlants: React.FC = () => {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <span role="img" aria-label="leaf">🌿</span>
+              <span role="img" aria-label="leaf">
+                🌿
+              </span>
               <h2>Add new type</h2>
             </div>
 
