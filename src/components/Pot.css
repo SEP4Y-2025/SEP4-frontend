@@ -1,0 +1,31 @@
+.pot-container {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .pot-image img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .pot-label {
+    font-weight: bold;
+    margin-top: 0.5rem;
+  }
+  
+  .pot-humidity {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 0.25rem;
+  }
+  
+  .pots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+  
