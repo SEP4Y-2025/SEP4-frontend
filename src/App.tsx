@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LogsPage from "./pages/LogsPage";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/common/Navbar";
 import MyPlants from "./pages/MyPlants";
 import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
