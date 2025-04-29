@@ -14,6 +14,7 @@ interface PlantType {
   wateringFrequency: number;
   dosage: number;
   plants: Plant[];
+  environmentId?: string;
 }
 
 interface Environment {
@@ -106,7 +107,8 @@ const MyPlants: React.FC = () => {
       typeName,
       wateringFrequency: watering,
       dosage: dose,
-      plants: []
+      plants: [],
+      environmentId: currentEnvironmentId
     };
 
     setPlantTypes([...plantTypes, newPlant]);
@@ -124,11 +126,11 @@ const MyPlants: React.FC = () => {
 
   return (
     <div className="plants-page">
-      <h1 className="page-title">My Plants - SpaceName</h1>
+      <h1 className="page-title">My Plants - {currentEnvironment?.name || "Unknown"}</h1>
 
-      {/* Environment Selector */}
+      {/* Environment selector */}
       <div className="environment-selector">
-        <label htmlFor="environment-select">Select Environment: </label>
+      <label htmlFor="environment-select">Select Environment: </label>
         <select id="environment-select" value={currentEnvironmentId} onChange={handleEnvironmentChange}>
           {dummyEnvironments.map((env) => (
             <option key={env.id} value={env.id}>
@@ -136,16 +138,21 @@ const MyPlants: React.FC = () => {
             </option>
           ))}
         </select>
-      </div>
-
-      {/* Current Environment Title */}
-      <h2>Now viewing: {currentEnvironment?.name || "Unknown"}</h2>
-
+        </div>
+ 
       <div className="plants-list">
-        {plantTypes
-          .filter((plantType) => 
-            potsInCurrentEnvironment.some(pot => pot.plant_type_id === plantType.typeName)
-          )
+      {plantTypes
+  .filter((plantType) => {
+    const existsInEnvironment = potsInCurrentEnvironment.some(
+      (pot) => pot.plant_type_id === plantType.typeName
+    );
+    const isNewAndBelongsHere = 
+      !pots.some(pot => pot.plant_type_id === plantType.typeName) &&
+      plantType.environmentId === currentEnvironmentId;
+
+    return existsInEnvironment || isNewAndBelongsHere;
+  })
+
           .sort((a, b) => a.typeName.localeCompare(b.typeName))
           .map((plantType, index) => (
             <div key={index} className="plant-type-section">
