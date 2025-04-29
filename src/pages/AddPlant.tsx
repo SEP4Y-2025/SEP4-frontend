@@ -15,9 +15,6 @@ const AddPlant: React.FC = () => {
       return;
     }
     
-    // In a real app, we would call an API here
-    // For now, we're using dummy data and localStorage
-
     // Get current environment from localStorage or use default
     const currentEnvironmentId = localStorage.getItem("currentEnvironment") || "env_greenhouse";
 
@@ -50,7 +47,9 @@ const AddPlant: React.FC = () => {
       }
     ];
 
-    // Find the plant type and add the new plant
+    // Find the plant type and add the new plant - COMMENTING OUT THIS PART
+    // to avoid duplication of plants
+    /*
     const updatedPlantTypes = plantTypes.map((plant: any) => {
       if (plant.typeName === typeName) {
         // Add the new plant to this type
@@ -64,8 +63,10 @@ const AddPlant: React.FC = () => {
 
     // Update localStorage
     localStorage.setItem("plantTypes", JSON.stringify(updatedPlantTypes));
+    */
 
-    // Also update the pots collection
+    // Instead, we'll just add the pot without modifying the plantTypes plants array
+    // Get stored pots from localStorage
     const storedPots = localStorage.getItem("pots");
     let pots = storedPots ? JSON.parse(storedPots) : [
       { _id: "pot_001", plant_type_id: "Aloe", environment_id: "env_greenhouse", water_tank_id: "tank_1", soil_humidity: 45 },
@@ -75,23 +76,24 @@ const AddPlant: React.FC = () => {
       { _id: "pot_005", plant_type_id: "Aloe", environment_id: "env_balcony", water_tank_id: "tank_1", soil_humidity: 40 },
     ];
 
-    // Create a unique ID for the new pot
-    const newPotId = `pot_${Date.now().toString().slice(-3)}`;
+    // Create a unique ID for the new pot that includes the plant name
+    const safePlantName = plantName.replace(/\s+/g, '_');
+    const newPotId = `pot_${safePlantName}_${Date.now().toString().slice(-3)}`;
     
     // Add new pot to the pots collection
     const newPot = { 
       _id: newPotId, 
       plant_type_id: typeName || "", 
-      environment_id: currentEnvironmentId, // Use the current environment from localStorage
+      environment_id: currentEnvironmentId,
       water_tank_id: "tank_1", // Default tank
-      soil_humidity: Math.floor(Math.random() * 30) + 40 // Random humidity between 40-70%
+      soil_humidity: Math.floor(Math.random() * 30) + 40, // Random humidity between 40-70%
+      plantName: plantName // Add plantName to the pot object for reference
     };
     
     pots.push(newPot);
     localStorage.setItem("pots", JSON.stringify(pots));
 
     // Set a flag in localStorage to indicate a new plant was added
-    // This will be used by MyPlants component to refresh data
     localStorage.setItem("plantAdded", "true");
     
     // Navigate back to MyPlants page

@@ -26,6 +26,7 @@ interface Pot {
   environment_id: string;
   water_tank_id: string;
   soil_humidity: number;
+  plantName?: string; // Optional field to store the plant name directly
 }
 
 // Dummy Data
@@ -178,7 +179,7 @@ const MyPlants: React.FC = () => {
       typeName,
       wateringFrequency: watering,
       dosage: dose,
-      plants: [],
+      plants: [], // Initialize with no plants - they'll be added via pots
       environmentId: currentEnvironmentId
     };
 
@@ -203,6 +204,16 @@ const MyPlants: React.FC = () => {
   const handlePotClick = (potId: string) => {
     console.log("Pot clicked:", potId);
     navigate(`/plant/${potId}`);
+  };
+
+  // Function to get display name for a pot
+  const getPotDisplayName = (pot: Pot) => {
+    // If the pot has a plantName property, use that
+    if (pot.plantName) {
+      return pot.plantName;
+    }
+    // Otherwise use the pot ID
+    return pot._id;
   };
 
   return (
@@ -250,7 +261,7 @@ const MyPlants: React.FC = () => {
               <div key={index} className="plant-type-section">
                 <div className="plant-type-title">Type: {plantType.typeName}</div>
                 <div className="plant-box">
-                  {/* Show actual pots for this plant type */}
+                  {/* Show pots for this plant type */}
                   {potsOfThisType.length > 0 && potsOfThisType.map((pot, potIdx) => (
                     <div 
                       key={pot._id} 
@@ -260,39 +271,9 @@ const MyPlants: React.FC = () => {
                       <div className="pot-image">
                         <img src={plantImage} alt="Plant pot" />
                       </div>
-                      <div className="pot-name">{pot._id}</div>
-                      {/* Removed soil humidity display from list view */}
+                      <div className="pot-name">{getPotDisplayName(pot)}</div>
                     </div>
                   ))}
-                  
-                  {/* Show plants based on plant.plantName */}
-                  {plantType.plants
-                    .filter(plant => {
-                      // Only show plants that don't already have a pot
-                      return !potsOfThisType.some(pot => 
-                        pot._id.includes(plant.plantName.replace(/\s+/g, '_'))
-                      );
-                    })
-                    .sort((a, b) => a.plantName.localeCompare(b.plantName))
-                    .map((plant, idx) => {
-                      // Create a mock pot ID
-                      const mockPotId = `pot_${plantType.typeName}_${plant.plantName.replace(/\s+/g, '_')}`;
-                      
-                      return (
-                        <div 
-                          key={`plant-${idx}`} 
-                          className="pot-container"
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => handlePotClick(mockPotId)}
-                        >
-                          <div className="pot-image">
-                            <img src={plantImage} alt="Plant pot" />
-                          </div>
-                          <div className="pot-name">{plant.plantName}</div>
-                          {/* No soil humidity displayed here either */}
-                        </div>
-                      );
-                    })}
                   
                   {/* Add new plant button */}
                   <div className="add-pot-container">
