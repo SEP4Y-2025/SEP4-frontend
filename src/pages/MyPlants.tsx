@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MyPlants.css";
+import PotList from "../components/PotList";
+import { Pot } from "../services/api"; // keeping the type only
 import plantImage from "../images/image.png";
 
-interface Plant{
+interface Plant {
   plantName: string;
 }
 
-interface PlantType{
+interface PlantType {
   typeName: string;
   wateringFrequency: number;
   dosage: number;
@@ -20,30 +22,29 @@ const MyPlants: React.FC = () => {
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
   const [error, setError] = useState("");
+
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([
-  
-  // Dummy data for existing plant types
-  {
-    typeName: "Basil",
-    wateringFrequency: 3,
-    dosage: 50,
-    plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }],
-  },
-  {
-    typeName: "Lemon",
-    wateringFrequency: 2,
-    dosage: 100,
-    plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }],
-  },
-  {
-    typeName: "Watermelon",
-    wateringFrequency: 4,
-    dosage: 200,
-    plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }],
-  },
-]);
-//end of dummy data
-  
+    {
+      typeName: "Aloe",
+      wateringFrequency: 1,
+      dosage: 30,
+      plants: [{ plantName: "Spiky" }, { plantName: "Greenie" }]
+    },
+    {
+      typeName: "Basil",
+      wateringFrequency: 3,
+      dosage: 50,
+      plants: [{ plantName: "Basil Jr" }, { plantName: "YumYum" }]
+    },
+    {
+      typeName: "Lemon",
+      wateringFrequency: 2,
+      dosage: 100,
+      plants: [{ plantName: "Lemony" }, { plantName: "AAron" }]
+    }
+  ]);
+
+  const [pots, setPots] = useState<Pot[]>([]);
   const navigate = useNavigate();
 
   const handleContinue = () => {
@@ -59,7 +60,6 @@ const MyPlants: React.FC = () => {
       setError("Values cannot be negative.");
       return;
     }
-   
 
     const newPlant: PlantType = {
       typeName,
@@ -86,27 +86,40 @@ const MyPlants: React.FC = () => {
       <h1 className="page-title">My Plants - SpaceName</h1>
 
       <div className="plants-list">
-        {plantTypes.map((plant, index) => (
-          <div key={index} className="plant-type-section">
-            <div className="plant-type-title">
-              Type: {plant.typeName}
-            </div>
-            <div className="plant-box">
-               {plant.plants.map((plant, idx) => (
-                <div key={idx} className="pot-container">
-                  <div className="pot-image"><img src={plantImage} alt="Plant pot" /></div>
-                  <div className="pot-name">{plant.plantName}</div>
+  {[...plantTypes]
+    .sort((a, b) => a.typeName.localeCompare(b.typeName)) // Sort plant types
+    .map((plantType, index) => (
+      <div key={index} className="plant-type-section">
+        <div className="plant-type-title">Type: {plantType.typeName}</div>
+        <div className="plant-box">
+          {[...plantType.plants]
+            .sort((a, b) => a.plantName.localeCompare(b.plantName)) // Sort plants
+            .map((plant, idx) => (
+              <div key={idx} className="pot-container">
+                <div className="pot-image">
+                  <img src={plantImage} alt="Plant pot" />
                 </div>
-              ))}
-
-              <div className="add-pot-container">
-                <button className="add-pot-button" onClick={() => navigate(`/addplant/${plant.typeName}`)}>➕</button>
-                <div className="add-pot-text">New</div>
+                <div className="pot-name">{plant.plantName}</div>
               </div>
-            </div>
+            ))}
+
+          <div className="add-pot-container">
+            <button
+              className="add-pot-button"
+              onClick={() => navigate(`/addplant/${plantType.typeName}`)}
+            >
+              ➕
+            </button>
+            <div className="add-pot-text">New</div>
           </div>
-        ))}
+        </div>
       </div>
+    ))}
+</div>
+  {/*
+      <h2>All pots in environment:</h2>
+    <PotList pots={pots} />
+        */}
 
       <button className="add-type-button" onClick={() => setOpen(true)}>
         Add new type
@@ -116,9 +129,7 @@ const MyPlants: React.FC = () => {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <span role="img" aria-label="leaf">
-                🌿
-              </span>
+              <span role="img" aria-label="leaf">🌿</span>
               <h2>Add new type</h2>
             </div>
 
