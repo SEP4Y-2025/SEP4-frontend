@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import PlantTypeSection from "../components/MyPlants/PlantTypeRow";
+import React, { useState, useEffect } from "react";
+import PlantTypeRow from "../components/MyPlants/PlantTypeRow";
 import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import "./MyPlants.css";
+import { getPlantTypes, addPlantType, addPotToPlantType } from "../services/plantPotsRepo";
 
 interface PlantType {
   typeName: string;
   wateringFrequency: number;
   dosage: number;
+  plants?: { plantName: string }[];
 }
 
 const MyPlants: React.FC = () => {
@@ -17,6 +19,14 @@ const MyPlants: React.FC = () => {
   const [error, setError] = useState("");
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
 
+  useEffect(() => {
+    const fetchPlantTypes = async () => {
+      const plants = await getPlantTypes();
+      setPlantTypes(plants);
+    };
+
+    fetchPlantTypes();
+  }, []);
 
   const handleContinue = () => {
     if (!typeName || !wateringFrequency || !dosage) {
@@ -36,6 +46,7 @@ const MyPlants: React.FC = () => {
       typeName,
       wateringFrequency: watering,
       dosage: dose,
+      plants: [],
     };
 
     setPlantTypes([...plantTypes, newPlant]);
@@ -51,13 +62,18 @@ const MyPlants: React.FC = () => {
     setError("");
   };
 
+
   return (
     <div className="plants-page">
       <h1 className="page-title">My Plants - SpaceName</h1>
 
       <div className="plants-list">
         {plantTypes.map((plant, index) => (
-          <PlantTypeSection key={index} plant={plant} />
+          <PlantTypeRow 
+          key={index} 
+          plant={plant} 
+          plants={plant.plants || []}
+          />
         ))}
       </div>
 
@@ -66,7 +82,7 @@ const MyPlants: React.FC = () => {
       </button>
 
       {open && (
-        <AddPlantModal
+        <AddPlantTypeModal
           typeName={typeName}
           setTypeName={setTypeName}
           wateringFrequency={wateringFrequency}
