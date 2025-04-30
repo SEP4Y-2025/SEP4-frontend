@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PlantTypeSection from "../components/MyPlants/PlantTypeRow";
-import AddPlantModal from "../components/MyPlants/AddPlantModal";
+import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import "./MyPlants.css";
 
 interface PlantType {
