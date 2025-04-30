@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import PlantTypeSection from "../components/MyPlants/PlantTypeSection";
+import PlantTypeSection from "../components/MyPlants/PlantTypeRow";
 import AddPlantModal from "../components/MyPlants/AddPlantModal";
 import "./MyPlants.css";
 

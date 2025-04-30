@@ -16,8 +16,6 @@ const AddPlant: React.FC = () => {
   };
 
 
-
-
   return (
     <div className="add-plant-container">
       <div className="add-plant-header">
