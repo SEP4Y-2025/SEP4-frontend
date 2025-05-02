@@ -1,4 +1,4 @@
-// components/MyPlants/PlantDetails.tsx
+
 import React, { useState } from "react";
 import "./PlantDetails.css";
 
@@ -23,49 +23,52 @@ const PlantDetails: React.FC<PlantDetailsProps> = ({
 
   return (
     <div className="modal-overlay">
+      <div className="top-bar">
+        <div className="logo-container">
+         
+        </div>
+      </div>
+
       <div className="modal-content">
         <div className="modal-header">
-          <span role="img" aria-label="leaf">
-            🌿
-          </span>
           <h2>Plant Details</h2>
         </div>
 
-        <div className="modal-body">
-          <div className="input-group">
-            <label>Name</label>
-            <input
-              className="input"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+        <div className="details-container">
+          <div className="gear-icon-container">
+            <div className="gear-icon">⚙️</div>
+          </div>
+          
+          <div className="details-row">
+            <div className="details-label">Name</div>
+            <div className="details-value">Green Pot</div>
           </div>
 
-          <div className="input-group">
-            <label>Type Details</label>
-            <div className="type-display">
-              {typeName} <span>▼</span>
+          <div className="details-row">
+            <div className="details-label">Type Details</div>
+            <div className="details-value type-display">
+              Watermelon <span>▼</span>
             </div>
           </div>
 
-          <div className="input-group">
-            <label>Watering Frequency</label>
-            <div className="type-display">{wateringFrequency}</div>
+          <div className="details-row">
+            <div className="details-label">Watering Frequency</div>
+            <div className="details-value">2</div>
           </div>
 
-          <div className="input-group">
-            <label>Dosage ml</label>
-            <div className="type-display">{dosage}</div>
+          <div className="details-row">
+            <div className="details-label">Dosage ml</div>
+            <div className="details-value">300</div>
           </div>
+        </div>
 
-          <div className="modal-footer">
-            <button className="delete-button" onClick={onDelete}>
-              Delete Plant
-            </button>
-            <button className="save-button" onClick={onClose}>
-              Save
-            </button>
-          </div>
+        <div className="footer-buttons">
+          <button className="delete-button" onClick={onClose}>
+            Save
+          </button>
+          <button className="delete-button" onClick={onDelete}>
+            Delete Plant
+          </button>
         </div>
       </div>
     </div>

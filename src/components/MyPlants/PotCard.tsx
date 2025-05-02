@@ -1,4 +1,4 @@
-// components/MyPlants/PotCard.tsx
+
 import React from "react";
 import Pot from "../../assets/pot.svg";
 import "./PotCard.css";
