@@ -45,3 +45,42 @@ export const addPotToPlantType = async (typeName: string, newPotName: string): P
     }, 500);
   });
 };
+
+// services/plantPotsRepo.ts - Add this function to work with dummy data
+
+export const getPlantPotDetails = async (typeName: string, plantName: string): Promise<any> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const plantType = plantTypes.find((p) => p.typeName === typeName);
+      if (plantType) {
+        const plant = plantType.plants.find((p) => p.plantName === plantName);
+        if (plant) {
+          resolve({
+            plantName: plant.plantName,
+            typeName: plantType.typeName,
+            wateringFrequency: plantType.wateringFrequency,
+            dosage: plantType.dosage
+          });
+        }
+      }
+      resolve(null);
+    }, 500);
+  });
+};
+
+export const deletePlantPot = async (typeName: string, plantName: string): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const plantTypeIndex = plantTypes.findIndex((p) => p.typeName === typeName);
+      if (plantTypeIndex !== -1) {
+        const plantIndex = plantTypes[plantTypeIndex].plants.findIndex(
+          (p) => p.plantName === plantName
+        );
+        if (plantIndex !== -1) {
+          plantTypes[plantTypeIndex].plants.splice(plantIndex, 1);
+        }
+      }
+      resolve();
+    }, 500);
+  });
+};

@@ -1,5 +1,6 @@
+// components/MyPlants/PlantTypeRow.tsx
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PotCard from "./PotCard";
 
 interface PlantType {
@@ -10,10 +11,15 @@ interface PlantType {
 
 interface PlantTypeRowProps {
   plant: PlantType;
-  plants: { plantName: string }[]; 
+  plants: { plantName: string }[];
+  onSelectPlant: (typeName: string, plantName: string) => void;
 }
 
-const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, plants}) => {
+const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ 
+  plant, 
+  plants, 
+  onSelectPlant 
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -22,15 +28,20 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, plants}) => {
         Type: {plant.typeName} ({plant.wateringFrequency}x/week, {plant.dosage}ml)
       </div>
       <div className="plant-box">
-      <div className="plants-list">
-          {plants.map((plant, index) => (
-          <PotCard key={index} plantName={plant.plantName} />
+        <div className="plants-list">
+          {plants.map((pot, index) => (
+            <PotCard 
+              key={index} 
+              plantName={pot.plantName} 
+              onClick={() => onSelectPlant(plant.typeName, pot.plantName)}
+            />
           ))}
         </div>
         <div className="add-pot-container">
-          <button className="add-pot-button" onClick={() =>
-            navigate(`/addplant/${plant.typeName}`)
-          }>
+          <button 
+            className="add-pot-button" 
+            onClick={() => navigate(`/addplant/${plant.typeName}`)}
+          >
             +
           </button>
           <div className="add-pot-text">New</div>

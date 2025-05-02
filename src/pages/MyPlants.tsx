@@ -1,14 +1,28 @@
+// pages/MyPlants.tsx
 import React, { useState, useEffect } from "react";
 import PlantTypeRow from "../components/MyPlants/PlantTypeRow";
 import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
+import PlantDetails from "../components/MyPlants/PlantDetails";
 import "./MyPlants.css";
-import { getPlantTypes, addPlantType, addPotToPlantType } from "../services/plantPotsRepo";
+import { 
+  getPlantTypes, 
+  addPlantType, 
+  getPlantPotDetails,
+  deletePlantPot
+} from "../services/plantPotsRepo";
 
 interface PlantType {
   typeName: string;
   wateringFrequency: number;
   dosage: number;
   plants?: { plantName: string }[];
+}
+
+interface SelectedPlantDetails {
+  plantName: string;
+  typeName: string;
+  wateringFrequency: number;
+  dosage: number;
 }
 
 const MyPlants: React.FC = () => {
@@ -18,6 +32,9 @@ const MyPlants: React.FC = () => {
   const [dosage, setDosage] = useState("");
   const [error, setError] = useState("");
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
+  
+  // New state for selected plant
+  const [selectedPlant, setSelectedPlant] = useState<SelectedPlantDetails | null>(null);
 
   useEffect(() => {
     const fetchPlantTypes = async () => {
@@ -62,6 +79,31 @@ const MyPlants: React.FC = () => {
     setError("");
   };
 
+  // New function to handle selecting a plant
+  const handleSelectPlant = async (typeName: string, plantName: string) => {
+    const details = await getPlantPotDetails(typeName, plantName);
+    if (details) {
+      setSelectedPlant(details);
+    }
+  };
+
+  // New function to handle closing plant details
+  const handleClosePlantDetails = () => {
+    setSelectedPlant(null);
+    // Refresh the plant list
+    getPlantTypes().then(setPlantTypes);
+  };
+
+  // New function to handle deleting a plant
+  const handleDeletePlant = async () => {
+    if (selectedPlant) {
+      await deletePlantPot(selectedPlant.typeName, selectedPlant.plantName);
+      setSelectedPlant(null);
+      // Refresh the plant list
+      const plants = await getPlantTypes();
+      setPlantTypes(plants);
+    }
+  };
 
   return (
     <div className="plants-page">
@@ -69,10 +111,11 @@ const MyPlants: React.FC = () => {
 
       <div className="plants-list">
         {plantTypes.map((plant, index) => (
-          <PlantTypeRow 
-          key={index} 
-          plant={plant} 
-          plants={plant.plants || []}
+          <PlantTypeRow
+            key={index}
+            plant={plant}
+            plants={plant.plants || []}
+            onSelectPlant={handleSelectPlant}
           />
         ))}
       </div>
@@ -92,6 +135,17 @@ const MyPlants: React.FC = () => {
           error={error}
           handleContinue={handleContinue}
           handleCancel={handleCancel}
+        />
+      )}
+
+      {selectedPlant && (
+        <PlantDetails
+          plantName={selectedPlant.plantName}
+          typeName={selectedPlant.typeName}
+          wateringFrequency={selectedPlant.wateringFrequency}
+          dosage={selectedPlant.dosage}
+          onClose={handleClosePlantDetails}
+          onDelete={handleDeletePlant}
         />
       )}
     </div>
