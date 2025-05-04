@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getPotsByEnvironment, addPlantPot } from "../services/plantPotsApi";
-import { PlantPotResponse , AddPlantPotRequest} from "../types/plantPotTypes";
+import { PlantPotResponse , AddPlantPotRequest} from "../types/addPlantPotApiTypes";
 
 export const usePlantPots = (environmentId: string) => {
   const [plantTypes, setPlantTypes] = useState([] as PlantPotResponse[]);

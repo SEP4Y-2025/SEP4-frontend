@@ -1,16 +1,13 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PotCard from "./PotCard";
+import { PlantType} from "../../types";
 
-interface PlantType {
-  typeName: string;
-  wateringFrequency: number;
-  dosage: number;
-}
 
-interface PlantTypeRowProps {
+
+export interface PlantTypeRowProps {
   plant: PlantType;
-  plants: { plantName: string }[]; 
+  plants: {id: string, plantName: string }[]; 
 }
 
 const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, plants}) => {
@@ -24,7 +21,7 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, plants}) => {
       <div className="plant-box">
       <div className="plants-list">
           {plants.map((plant, index) => (
-          <PotCard key={index} plantName={plant.plantName} />
+          <PotCard key={index} id={plant.id} plantName={plant.plantName} />
           ))}
         </div>
         <div className="add-pot-container">

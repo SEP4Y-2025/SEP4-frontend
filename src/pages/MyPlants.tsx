@@ -3,13 +3,9 @@ import PlantTypeRow from "../components/MyPlants/PlantTypeRow";
 import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import "./MyPlants.css";
 import { getPlantTypes, addPlantType, addPotToPlantType } from "../services/plantPotsRepo";
+import { PlantType } from "../types";
 
-interface PlantType {
-  typeName: string;
-  wateringFrequency: number;
-  dosage: number;
-  plants?: { plantName: string }[];
-}
+
 
 const MyPlants: React.FC = () => {
   const [open, setOpen] = useState(false);

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AddPlantPotRequest, PlantPotResponse } from "../types/plantPotTypes";
+import { AddPlantPotRequest, PlantPotResponse } from "../types/addPlantPotApiTypes";
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
