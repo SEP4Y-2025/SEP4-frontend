@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 import PlantTypeSection from "../components/MyPlants/PlantTypeRow";
 import AddPlantModal from "../components/MyPlants/AddPlantModal";
+import EnvironmentSelector from "../components/MyPlants/EnvironmentSelector";
+
 import "./MyPlants.css";
+
+interface Environment {
+  name: string;
+  windowState: "open" | "closed";
+  airHumidity: number;
+  temperature: number;
+}
 
 interface PlantType {
   typeName: string;
   wateringFrequency: number;
   dosage: number;
+  environmentName: string;
 }
 
 const MyPlants: React.FC = () => {
@@ -16,6 +26,11 @@ const MyPlants: React.FC = () => {
   const [dosage, setDosage] = useState("");
   const [error, setError] = useState("");
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
+  const [environments, setEnvironments] = useState<Environment[]>([
+    { name: "Living Room", windowState: "open", airHumidity: 50, temperature: 22 },
+    { name: "Bedroom", windowState: "closed", airHumidity: 40, temperature: 20 },
+  ]);
+  const [selectedEnvironmentName, setSelectedEnvironmentName] = useState<string>("");
 
 
   const handleContinue = () => {
@@ -36,8 +51,11 @@ const MyPlants: React.FC = () => {
       typeName,
       wateringFrequency: watering,
       dosage: dose,
+      environmentName: selectedEnvironmentName,
     };
 
+
+   
     setPlantTypes([...plantTypes, newPlant]);
     setTypeName("");
     setWateringFrequency("");
@@ -53,13 +71,25 @@ const MyPlants: React.FC = () => {
 
   return (
     <div className="plants-page">
-      <h1 className="page-title">My Plants - SpaceName</h1>
+      <h1 className="page-title">
+      My Plants {selectedEnvironmentName ? `- ${selectedEnvironmentName}` : ""}
+      </h1>
+
+
+      <EnvironmentSelector
+      environments={environments}
+      selectedEnvironmentName={selectedEnvironmentName}
+      onSelect={setSelectedEnvironmentName}
+      />
 
       <div className="plants-list">
-        {plantTypes.map((plant, index) => (
-          <PlantTypeSection key={index} plant={plant} />
-        ))}
+        {plantTypes
+          .filter((plant) => plant.environmentName === selectedEnvironmentName)
+          .map((plant, index) => (
+            <PlantTypeSection key={index} plant={plant} />
+          ))}
       </div>
+
 
       <button className="add-type-button" onClick={() => setOpen(true)}>
         Add new type
