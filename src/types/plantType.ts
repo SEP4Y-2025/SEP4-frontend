@@ -1,6 +1,7 @@
-export interface PlantType {
-  typeName: string;
-  wateringFrequency: number;
-  dosage: number;
-  plants?: { id: string, plantName: string }[];
+export type PlantType = {
+  _id:string;
+  name: string;
+  water_frequency: number;
+  water_dosage: number;
+  // plants?: { id: string, plantName: string }[];
 }

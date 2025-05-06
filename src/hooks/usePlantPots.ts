@@ -3,14 +3,14 @@ import { getPotsByEnvironment, addPlantPot } from "../services/plantPotsApi";
 import { PlantPotResponse , AddPlantPotRequest} from "../types/addPlantPotApiTypes";
 
 export const usePlantPots = (environmentId: string) => {
-  const [plantTypes, setPlantTypes] = useState([] as PlantPotResponse[]);
+  const [pots, setPots] = useState<PlantPotResponse[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPots = async () => {
       try {
         const pots = await getPotsByEnvironment(environmentId);
-        setPlantTypes(pots);
+        //setPots(pots);
       } catch (err) {
         setError("Failed to fetch pots.");
       }
@@ -23,11 +23,11 @@ export const usePlantPots = (environmentId: string) => {
     try {
       await addPlantPot(newPlant);
       const updatedPots = await getPotsByEnvironment(environmentId);
-      setPlantTypes(updatedPots);
+      //setPots(updatedPots);
     } catch (err) {
       setError("Failed to add plant.");
     }
   };
 
-  return { plantTypes, addPlant, error };
+  return { pots, addPlant, error };
 };

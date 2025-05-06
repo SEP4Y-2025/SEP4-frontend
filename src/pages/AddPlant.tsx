@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { addPotToPlantType } from "../services/plantPotsRepo";
+// import { addPotToPlantType } from "../services/plantPotsRepo";
 import "./AddPlant.css";
 
 const AddPlant: React.FC = () => {
@@ -16,7 +16,7 @@ const AddPlant: React.FC = () => {
       setError("Please enter a plant name");
       return;
     }
-    await addPotToPlantType(typeName || "", plantName);
+    // await addPotToPlantType(typeName || "", plantName);
 
     // Navigate back to MyPlants page
     navigate("/plants");

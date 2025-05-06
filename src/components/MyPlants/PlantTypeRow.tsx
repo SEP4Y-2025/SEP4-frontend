@@ -7,26 +7,26 @@ import { PlantType} from "../../types";
 
 export interface PlantTypeRowProps {
   plant: PlantType;
-  plants: {id: string, plantName: string }[]; 
+  pots: {id: string, potName: string }[]; 
 }
 
-const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, plants}) => {
+const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots}) => {
   const navigate = useNavigate();
 
   return (
     <div className="plant-type-section">
       <div className="plant-type-title">
-        Type: {plant.typeName} ({plant.wateringFrequency}x/week, {plant.dosage}ml)
+        Type: {plant.name} ({plant.water_frequency}x/week, {plant.water_dosage}ml)
       </div>
       <div className="plant-box">
       <div className="plants-list">
-          {plants.map((plant, index) => (
-          <PotCard key={index} id={plant.id} plantName={plant.plantName} />
+          {pots.map((plant, index) => (
+          <PotCard key={index} id={plant.id} plantName={plant.potName} />
           ))}
         </div>
         <div className="add-pot-container">
           <button className="add-pot-button" onClick={() =>
-            navigate(`/addplant/${plant.typeName}`)
+            navigate(`/addplant/${plant.name}`)
           }>
             +
           </button>

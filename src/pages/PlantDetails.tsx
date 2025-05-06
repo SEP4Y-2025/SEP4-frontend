@@ -122,7 +122,7 @@ const PlantDetails: React.FC = () => {
     }
     
     const pots: Pot[] = JSON.parse(storedPots);
-    const foundPot = pots.find(p => p._id === id);
+    const foundPot = pots.find(p => p.potId === id);
     
     if (!foundPot) {
       console.error("Pot not found with ID:", id);
@@ -133,20 +133,20 @@ const PlantDetails: React.FC = () => {
         if (parts.length >= 2) {
           const plantTypeId = parts[1];
           // Create a virtual pot
-          const virtualPot: Pot = {
-            _id: id,
-            plant_type_id: plantTypeId,
-            environment_id: localStorage.getItem("currentEnvironment") || "env_greenhouse",
-            water_tank_id: "tank_virtual",
-            soil_humidity: 50 // Default value
-          };
-          setPot(virtualPot);
+          // const virtualPot: Pot = {
+          //   potId: id,
+          //   plantTypeId: plantTypeId,
+             // environmentId: localStorage.getItem("currentEnvironment") || "env_greenhouse",
+             // water_tank_id: "tank_virtual",
+             // soil_humidity: 50 // Default value
+          // };
+          // setPot(virtualPot);
           
           // Also load the plant type
           const storedPlantTypes = localStorage.getItem("plantTypes");
           if (storedPlantTypes) {
             const plantTypes: PlantType[] = JSON.parse(storedPlantTypes);
-            const foundType = plantTypes.find(type => type.typeName === plantTypeId);
+            const foundType = plantTypes.find(type => type.name === plantTypeId);
             if (foundType) {
               setPlantType(foundType);
             }
@@ -167,10 +167,10 @@ const PlantDetails: React.FC = () => {
     }
     
     const plantTypes: PlantType[] = JSON.parse(storedPlantTypes);
-    const foundType = plantTypes.find(type => type.typeName === foundPot.plant_type_id);
+    const foundType = plantTypes.find(type => type.name === foundPot.plantTypeId);
     
     if (!foundType) {
-      console.error("Plant type not found:", foundPot.plant_type_id);
+      console.error("Plant type not found:", foundPot.plantTypeId);
       return;
     }
     
@@ -195,7 +195,7 @@ const PlantDetails: React.FC = () => {
     
     // Remove the pot
     const pots: Pot[] = JSON.parse(storedPots);
-    const updatedPots = pots.filter(p => p._id !== id);
+    const updatedPots = pots.filter(p => p.potId!== id);
     
     // Update localStorage
     localStorage.setItem("pots", JSON.stringify(updatedPots));
@@ -242,22 +242,22 @@ const PlantDetails: React.FC = () => {
           <div className="plant-info-section">
             <div className="info-row">
               <label>Name</label>
-              <span>{pot._id.includes("pot_") ? pot._id.split("_").slice(2).join(" ") : pot._id}</span>
+              <span>{pot.potId.includes("pot_") ? pot.potId.split("_").slice(2).join(" ") : pot.potId}</span>
             </div>
             
             <div className="info-row">
               <label>Type Details</label>
-              <span>{plantType.typeName} ▼</span>
+              <span>{plantType.name} ▼</span>
             </div>
             
             <div className="info-row">
               <label>Watering Frequency</label>
-              <span>{plantType.wateringFrequency}</span>
+              <span>{plantType.water_frequency}</span>
             </div>
             
             <div className="info-row">
               <label>Dosage ml</label>
-              <span>{plantType.dosage}</span>
+              <span>{plantType.water_dosage}</span>
             </div>
           </div>
         </div>
@@ -271,7 +271,8 @@ const PlantDetails: React.FC = () => {
           />
           
           <CircleGauge 
-            value={pot.soil_humidity} 
+          //pot.soil_humidity
+            value={12} 
             maxValue={100} 
             unit="%" 
             label="Soil humidity:" 

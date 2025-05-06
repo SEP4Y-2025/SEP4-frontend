@@ -7,7 +7,7 @@ export interface AddPlantPotRequest {
     waterDosage: number;
 }
 
-export interface PlantPotResponse {
+export type PlantPotResponse = {
     message: string;
     potId: string;
     plantPotLabel: string;
