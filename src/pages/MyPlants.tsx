@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import PlantTypeRow from "../components/MyPlants/PlantTypeRow";
 import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import "./MyPlants.css";
-import { getPlantTypes, addPlantType, addPotToPlantType } from "../services/plantPotsRepo";
+import { getPlantTypes, addPotToPlantType } from "../services/plantPotsRepo";
 import { PlantType } from "../types";
+import { addPlantType } from "../services/plantPotsRepo";
+
 
 
 
@@ -24,34 +26,44 @@ const MyPlants: React.FC = () => {
     fetchPlantTypes();
   }, []);
 
-  const handleContinue = () => {
-    if (!typeName || !wateringFrequency || !dosage) {
-      setError("Please fill out all fields.");
-      return;
-    }
+  const handleContinue = async () => {
+  if (!typeName || !wateringFrequency || !dosage) {
+    setError("Please fill out all fields.");
+    return;
+  }
 
-    const watering = parseInt(wateringFrequency, 10);
-    const dose = parseInt(dosage, 10);
+  const watering = parseInt(wateringFrequency, 10);
+  const dose = parseInt(dosage, 10);
 
-    if (watering < 0 || dose < 0) {
-      setError("Values cannot be negative.");
-      return;
-    }
+  if (watering < 0 || dose < 0) {
+    setError("Values cannot be negative.");
+    return;
+  }
 
-    const newPlant: PlantType = {
-      typeName,
-      wateringFrequency: watering,
-      dosage: dose,
-      plants: [],
-    };
+  const environmentId = "680f8359688cb5341f9f9c19"; // ✅ Move this here
 
-    setPlantTypes([...plantTypes, newPlant]);
+  try {
+    await addPlantType(environmentId, {
+      plant_type_name: typeName,
+      watering_freq: watering,
+      water_dosage: dose,
+    });
+
+    // ✅ Re-fetch plant types to update UI from backend
+    const updated = await getPlantTypes();
+    setPlantTypes(updated);
+
+    // Reset modal state
     setTypeName("");
     setWateringFrequency("");
     setDosage("");
     setError("");
     setOpen(false);
-  };
+  } catch (err) {
+    setError("Failed to add plant type.");
+  }
+};
+
 
   const handleCancel = () => {
     setOpen(false);

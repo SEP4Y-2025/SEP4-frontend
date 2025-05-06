@@ -1,5 +1,7 @@
 import { PlantType } from "../types/plantType";
 import { v4 as uuidv4 } from 'uuid';
+export { addPlantType } from "./plantTypesApi";
+
 
 const plantTypes: PlantType[] = [
   { typeName: "Cactus", wateringFrequency: 1, dosage: 50, plants: [{ id: "1", plantName: "Pot 1" }] },
@@ -21,7 +23,8 @@ export const getPotsByPlantType = async (typeName: string): Promise<{ plantName:
   });
 };
 
-export const addPlantType = async (newPlant: PlantType): Promise<void> => {
+/*
+export const addPlantType = async (environmentId: string, p0: { plant_type_name: string; watering_freq: number; water_dosage: number; }, newPlant: PlantType): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       plantTypes.push(newPlant);
@@ -29,6 +32,8 @@ export const addPlantType = async (newPlant: PlantType): Promise<void> => {
     }, 500);
   });
 };
+*/
+
 
 export const addPotToPlantType = async (typeName: string, newPotName: string): Promise<void> => {
     return new Promise((resolve) => {
