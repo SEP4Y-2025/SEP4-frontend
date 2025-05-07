@@ -13,3 +13,18 @@ export const getPotsByEnvironment = async (environmentId: string): Promise<Pot[]
   const response = await axios.get(`${BASE_URL}/environments/${environmentId}/pots`);
   return response.data.pots as Pot[];
 };
+// src/services/plantPotsApi.ts (add these functions)
+
+export const getPotById = async (potId: string, environmentId: string = "680f8359688cb5341f9f9c19") => {
+  try {
+    const response = await fetch(`/api/environments/${environmentId}/pots/${potId}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch pot details');
+    }
+    const data = await response.json();
+    return data.pot;
+  } catch (error) {
+    console.error('Error fetching pot details:', error);
+    throw error;
+  }
+};
