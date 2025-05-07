@@ -18,6 +18,14 @@
   margin-bottom: 30px;
 }
 
+.details-card h2 {
+  color: #333;
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
 .plant-icon {
   margin-bottom: 20px;
 }
@@ -41,6 +49,38 @@
 .with-arrow {
   display: flex;
   align-items: center;
+}
+
+/* Water tank visualization */
+.water-tank-visual {
+  margin-top: 20px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.water-tank-container {
+  width: 60px;
+  height: 120px;
+  border: 2px solid #6cb66c;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  background-color: #f8f8f8;
+}
+
+.water-tank-level {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #6cb66c;
+  transition: height 0.5s ease;
+}
+
+.water-tank-percentage {
+  margin-left: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
 }
 
 .button-container {
