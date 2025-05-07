@@ -4,13 +4,13 @@ import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import "./MyPlants.css";
 
 import { PlantType } from "../types";
-import { addPlantType } from "../services/plantTypesApi";
+import { addPlantType, getTypesByEnvironment } from "../services/plantTypesApi";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { Flex } from "../Styles/Flex";
 import { StyledMyPlantsContainer } from "../Styles/MyPlants.style";
 
 const MyPlants: React.FC = () => {
-  const { plantTypes, pots, loading, environmnentName, error } =
+  const { plantTypes, pots, loading, environmnentName, error, setPlantTypes } =
     useEnvironmentCtx();
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
