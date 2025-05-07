@@ -2,6 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Pot from "../../assets/pot.svg";
 import "./PotCard.css";
+import { StyledPot } from "../../Styles/MyPlants.style";
+import Icon from "../common/Icon";
+
 
 
 interface PotCardProps {
@@ -13,10 +16,10 @@ interface PotCardProps {
 const PotCard: React.FC<PotCardProps> = ({id, plantName }) => {
     const navigate = useNavigate();
     return (
-        <button className="pot-card" onClick={() => navigate(`/plant-details/${id}`)}>
-            <img src={Pot} alt="Plant Icon" className="pot-icon" />
-            <div className="pot-name">{plantName}</div>
-        </button>
+        <StyledPot  onClick={() => navigate(`/plant-details/${id}`)}>
+            <Icon source={Pot} summary="Plant Icon" />
+            {plantName}
+        </StyledPot>
     );
 };
 

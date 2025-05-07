@@ -4,21 +4,18 @@ import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import "./MyPlants.css";
 
 import { PlantType } from "../types";
-import { addPlantType } from "../services/plantTypesApi";
+import { addPlantType, getTypesByEnvironment } from "../services/plantTypesApi";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
-import { getTypesByEnvironment } from "../services/plantTypesApi";
-
-
-
+import { Flex } from "../Styles/Flex";
+import { StyledMyPlantsContainer } from "../Styles/MyPlants.style";
 
 const MyPlants: React.FC = () => {
-  const {plantTypes, pots, loading, setPlantTypes, environmnentName, error} = useEnvironmentCtx();
+  const { plantTypes, pots, loading, environmnentName, error, setPlantTypes } =
+    useEnvironmentCtx();
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
-
-
 
   // useEffect(() => {
   //   const fetchPlantTypes = async () => {
@@ -72,27 +69,24 @@ const MyPlants: React.FC = () => {
     //setError("");
   };
 
-
   return (
-    <div className="plants-page">
-      <h1 className="page-title">My Plants - {environmnentName}</h1>
+    <StyledMyPlantsContainer>
+      <h1 className="title">My Plants - {environmnentName}</h1>
 
-      <div className="plants-list">
-  {plantTypes.map((plant, index) => (
-    <PlantTypeRow 
-      key={index} 
-      plant={plant} 
-      pots={pots
-        .filter(pot => pot.plantTypeId === plant._id)
-        .map(pot => ({
-          id: pot.potId,
-          potName: pot.name 
-        }))}
-    />
-  ))}
-</div>
+        {plantTypes.map((plant, index) => (
+          <PlantTypeRow
+            key={index}
+            plant={plant}
+            pots={pots
+              .filter((pot) => pot.plantTypeId === plant._id)
+              .map((pot) => ({
+                id: pot.potId,
+                potName: pot.name,
+              }))}
+          />
+        ))}
 
-      <button className="add-type-button" onClick={() => setOpen(true)}>
+      <button className="addType" onClick={() => setOpen(true)}>
         Add new type
       </button>
 
@@ -109,7 +103,7 @@ const MyPlants: React.FC = () => {
           handleCancel={handleCancel}
         />
       )}
-    </div>
+    </StyledMyPlantsContainer>
   );
 };
 

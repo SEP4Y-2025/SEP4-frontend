@@ -1,6 +1,7 @@
 import React from "react";
 import { LogEntry } from "../types/logTypes";
 import SensorDisplay from "./SensorDisplay";
+import { Flex } from "../Styles/Flex";
 
 interface LogTableProps {
   logs: String[];
@@ -8,21 +9,23 @@ interface LogTableProps {
 
 const LogTable: React.FC<LogTableProps> = ({ logs }) => {
   return (
-    <div className="max-w-3xl mx-auto mt-6">
+    <Flex $dir="column">
       <h2 className="text-2xl font-semibold mb-4">📜 Plant Logs</h2>
 
       {logs.length === 0 ? (
         <p className="text-gray-500">No logs available.</p>
       ) : (
-        <div className="space-y-6">
-          {logs.map((log, index) => (
-            <div key={index} className="p-4 border rounded-lg bg-gray-100 shadow-md">
-              <h3>{log}</h3>
-            </div>
-          ))}
-        </div>
+        <Flex $dir="column">
+          <ul className="list-group">
+            {logs.map((log, index) => (
+              <li key={index} className="list-group-item">
+                {log}
+              </li>
+            ))}
+          </ul>
+        </Flex>
       )}
-    </div>
+    </Flex>
   );
 };
 
