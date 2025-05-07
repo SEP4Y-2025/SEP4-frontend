@@ -5,6 +5,7 @@ import Navbar from "./components/common/Navbar";
 import MyPlants from "./pages/MyPlants";
 import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
+import PlantDetails from './pages/PlantDetails';
 import { EnvironmentProvider } from "./contexts/EnvironmentContext";
 
 const App: React.FC = () => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
           <Route path="/" element={<LogsPage />} />
           <Route path="/plants" element={<EnvironmentProvider><MyPlants /></EnvironmentProvider>} />
           <Route path="/addplant/:typeName" element={<EnvironmentProvider><AddPlant /></EnvironmentProvider>} />
+          <Route path="/plant-details/:id" element={<EnvironmentProvider><PlantDetails /></EnvironmentProvider>} />
         </Routes>
       </Container>
     </Router>
