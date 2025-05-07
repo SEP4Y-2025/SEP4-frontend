@@ -6,6 +6,8 @@ import MyPlants from "./pages/MyPlants";
 import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
 import { EnvironmentProvider } from "./contexts/EnvironmentContext";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const App: React.FC = () => {
   return (

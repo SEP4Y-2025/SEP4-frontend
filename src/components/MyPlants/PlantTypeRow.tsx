@@ -1,39 +1,41 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PotCard from "./PotCard";
-import { PlantType} from "../../types";
-
-
+import { PlantType } from "../../types";
+import { Flex } from "../../Styles/Flex";
+import { StyledRow } from "../../Styles/MyPlants.style";
 
 export interface PlantTypeRowProps {
   plant: PlantType;
-  pots: {id: string, potName: string }[]; 
+  pots: { id: string; potName: string }[];
 }
 
-const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots}) => {
+const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="plant-type-section">
-      <div className="plant-type-title">
-        Type: {plant.name} ({plant.water_frequency}x/week, {plant.water_dosage}ml)
-      </div>
-      <div className="plant-box">
-      <div className="plants-list">
+    <Flex $dir="column" $alignI="center">
+      <Flex>
+        Type: {plant.name} ({plant.water_frequency}x/week, {plant.water_dosage}
+        ml)
+      </Flex>
+      <Flex
+        $dir="row"
+        $justifyC="space-between"
+        $alignI="center"
+        $background="#f2fdf8"
+      >
+        <StyledRow>
           {pots.map((plant, index) => (
-          <PotCard key={index} id={plant.id} plantName={plant.potName} />
+            <PotCard key={index} id={plant.id} plantName={plant.potName} />
           ))}
-        </div>
-        <div className="add-pot-container">
-          <button className="add-pot-button" onClick={() =>
-            navigate(`/addplant/${plant.name}`)
-          }>
-            +
-          </button>
-          <div className="add-pot-text">New</div>
-        </div>
-      </div>
-    </div>
+        </StyledRow>
+        <i
+          className="bi bi-plus-circle"
+          onClick={() => navigate(`/addplant/${plant.name}`)}
+        ></i>
+      </Flex>
+    </Flex>
   );
 };
 
