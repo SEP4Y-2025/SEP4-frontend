@@ -21,14 +21,17 @@ import { v4 as uuidv4 } from 'uuid';
 //   });
 // };
 
-// export const addPlantType = async (newPlant: PlantType): Promise<void> => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       plantTypes.push(newPlant);
-//       resolve();
-//     }, 500);
-//   });
-// };
+/*
+export const addPlantType = async (environmentId: string, p0: { plant_type_name: string; watering_freq: number; water_dosage: number; }, newPlant: PlantType): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      plantTypes.push(newPlant);
+      resolve();
+    }, 500);
+  });
+};
+*/
+
 
 // export const addPotToPlantType = async (typeName: string, newPotName: string): Promise<void> => {
 //     return new Promise((resolve) => {

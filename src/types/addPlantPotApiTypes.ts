@@ -1,5 +1,3 @@
-// models/plant_pot.ts
-
 export interface AddPlantPotRequest {
     plantPotLabel: string;
     potId: string;
@@ -9,8 +7,9 @@ export interface AddPlantPotRequest {
 
 export type PlantPotResponse = {
     message: string;
-    potId: string;
-    plantPotLabel: string;
-    wateringFrequency: number;
-    waterDosage: number;
-}
+    pot_id: string;
+    plant_pot_label: string;
+    watering_frequency: number;
+    water_dosage: number;
+  }
+  
