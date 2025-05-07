@@ -1,308 +1,166 @@
-import React, { useState, useEffect } from "react";
+// src/pages/PlantDetails.tsx
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import "./PlantDetails.css";
-import { Pot, PlantType } from "../types";
-
-
-// Visual Circle Gauge Component
-const CircleGauge: React.FC<{
-  value: number;
-  maxValue: number;
-  unit: string;
-  label: string;
-}> = ({ value, maxValue, unit, label }) => {
-  const percentage = Math.min(100, Math.max(0, (value / maxValue) * 100));
-  const circumference = 2 * Math.PI * 40; // Circle radius is 40
-  const dashOffset = circumference - (percentage / 100) * circumference;
-
-  return (
-    <div className="gauge-container">
-      <h3>{label}</h3>
-      <div className="gauge">
-        <svg width="100" height="100" viewBox="0 0 100 100">
-          {/* Background circle */}
-          <circle
-            cx="50"
-            cy="50"
-            r="40"
-            fill="none"
-            stroke="#e0e0e0"
-            strokeWidth="10"
-          />
-          {/* Foreground circle */}
-          <circle
-            cx="50"
-            cy="50"
-            r="40"
-            fill="none"
-            stroke="#8bc34a"
-            strokeWidth="10"
-            strokeDasharray={circumference}
-            strokeDashoffset={dashOffset}
-            strokeLinecap="round"
-            transform="rotate(-90 50 50)"
-          />
-          <text
-            x="50"
-            y="50"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize="16"
-            fontWeight="bold"
-          >
-            {value}
-            {unit}
-          </text>
-        </svg>
-      </div>
-    </div>
-  );
-};
-
-// Temperature Gauge Component
-const TemperatureGauge: React.FC<{ temperature: number }> = ({ temperature }) => {
-  return (
-    <div className="gauge-container">
-      <h3>Temperature:</h3>
-      <div className="gauge">
-        <svg width="100" height="100" viewBox="0 0 100 100">
-          {/* Thermometer background */}
-          <rect x="45" y="20" width="10" height="60" rx="5" fill="#e0e0e0" />
-          <circle cx="50" cy="80" r="10" fill="#e0e0e0" />
-          
-          {/* Thermometer fill */}
-          <rect 
-            x="45" 
-            y={80 - Math.min(60, Math.max(0, (temperature / 40) * 60))} 
-            width="10" 
-            height={Math.min(60, Math.max(0, (temperature / 40) * 60))} 
-            rx="5" 
-            fill={temperature > 30 ? "#f44336" : temperature > 20 ? "#8bc34a" : "#2196f3"} 
-          />
-          <circle cx="50" cy="80" r="10" fill={temperature > 30 ? "#f44336" : temperature > 20 ? "#8bc34a" : "#2196f3"} />
-          
-          <text
-            x="50"
-            y="50"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize="16"
-            fontWeight="bold"
-            fill="#333"
-          >
-            {temperature}°C
-          </text>
-        </svg>
-      </div>
-    </div>
-  );
-};
 
 const PlantDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  
-  const [pot, setPot] = useState<Pot | null>(null);
-  const [plantType, setPlantType] = useState<PlantType | null>(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [tankLevel, setTankLevel] = useState(85); // Default tank level (%)
-  const [temperature, setTemperature] = useState(22); // Default temperature (°C)
-  
-  // Load pot and plant type data
-  useEffect(() => {
-    console.log("Loading plant details for ID:", id);
-    
-    if (!id) return;
-    
-    // Load pot data from localStorage
-    const storedPots = localStorage.getItem("pots");
-    if (!storedPots) {
-      console.error("No pots found in localStorage");
-      return;
-    }
-    
-    const pots: Pot[] = JSON.parse(storedPots);
-    const foundPot = pots.find(p => p.potId === id);
-    
-    if (!foundPot) {
-      console.error("Pot not found with ID:", id);
-      // If ID doesn't exist in pots, try to create a virtual pot based on plant name
-      // This is for handling plants that don't have a real pot yet
-      if (id.includes("pot_")) {
-        const parts = id.split("_");
-        if (parts.length >= 2) {
-          const plantTypeId = parts[1];
-          // Create a virtual pot
-          // const virtualPot: Pot = {
-          //   potId: id,
-          //   plantTypeId: plantTypeId,
-             // environmentId: localStorage.getItem("currentEnvironment") || "env_greenhouse",
-             // water_tank_id: "tank_virtual",
-             // soil_humidity: 50 // Default value
-          // };
-          // setPot(virtualPot);
-          
-          // Also load the plant type
-          const storedPlantTypes = localStorage.getItem("plantTypes");
-          if (storedPlantTypes) {
-            const plantTypes: PlantType[] = JSON.parse(storedPlantTypes);
-            const foundType = plantTypes.find(type => type.name === plantTypeId);
-            if (foundType) {
-              setPlantType(foundType);
-            }
-          }
-        }
-      }
-      return;
-    }
-    
-    console.log("Found pot:", foundPot);
-    setPot(foundPot);
-    
-    // Load plant type data from localStorage
-    const storedPlantTypes = localStorage.getItem("plantTypes");
-    if (!storedPlantTypes) {
-      console.error("No plant types found in localStorage");
-      return;
-    }
-    
-    const plantTypes: PlantType[] = JSON.parse(storedPlantTypes);
-    const foundType = plantTypes.find(type => type.name === foundPot.plantTypeId);
-    
-    if (!foundType) {
-      console.error("Plant type not found:", foundPot.plantTypeId);
-      return;
-    }
-    
-    console.log("Found plant type:", foundType);
-    setPlantType(foundType);
-    
-    // Simulate loading random tank level and temperature
-    // In a real app, these would come from sensors or API
-    setTankLevel(Math.floor(Math.random() * 30) + 70); // Random between 70-100
-    setTemperature(Math.floor(Math.random() * 10) + 18); // Random between 18-28
-  }, [id]);
+  const { pots, plantTypes, loading, error } = useEnvironmentCtx();
 
-  // Handle delete pot
-  const handleDelete = () => {
-    if (!pot || !id) return;
-    
-    console.log("Deleting pot:", id);
-    
-    // Get current pots from localStorage
-    const storedPots = localStorage.getItem("pots");
-    if (!storedPots) return;
-    
-    // Remove the pot
-    const pots: Pot[] = JSON.parse(storedPots);
-    const updatedPots = pots.filter(p => p.potId!== id);
-    
-    // Update localStorage
-    localStorage.setItem("pots", JSON.stringify(updatedPots));
-    console.log("Pot deleted, remaining pots:", updatedPots.length);
-    
-    // Close modal
-    setShowDeleteConfirm(false);
-    
+  // Find the pot and its plant type
+  const pot = pots.find(p => p.potId === id);
+  const plantType = pot ? plantTypes.find(type => type._id === pot.plantTypeId) : null;
+
+  const handleSave = () => {
     // Navigate back to plants page
     navigate("/plants");
   };
 
-  // Handle save (stub)
-  const handleSave = () => {
-    console.log("Saving plant data...");
-    // Here you would update the pot data in localStorage
-    // For now, just show a confirmation
-    alert("Plant data saved!");
+  const handleDelete = () => {
+    // Placeholder for delete functionality
+    alert("Delete functionality would go here");
+    // After deletion, navigate back to plants page
+    // navigate("/plants");
   };
 
-  if (!pot || !plantType) {
-    return (
-      <div className="plant-details-container">
-        <h1>Plant Details</h1>
-        <p>Loading plant information...</p>
-        <button className="back-button" onClick={() => navigate("/plants")}>Back to Plants</button>
-      </div>
-    );
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!pot || !plantType) return <div>Plant not found</div>;
+
+  // Safely extract values - these approaches avoid TypeScript errors
+  const getStateValue = (stateArray: any): number => {
+    if (stateArray && Array.isArray(stateArray) && stateArray.length > 1) {
+      return Number(stateArray[1]);
+    }
+    return 0;
+  };
+
+  // Get values for display
+  const temperatureValue = getStateValue(pot.state.temperature);
+  const soilHumidityValue = getStateValue(pot.state.soilHumidity);
+  const airHumidityValue = getStateValue(pot.state.airHumidity);
+  
+  // Calculate water tank percentage
+  const waterPercentage = Math.round(
+    (pot.waterTank.currentLevelMl / pot.waterTank.capacityMl) * 100
+  );
 
   return (
-    <div className="plant-details-container">
+    <div className="plant-details-page">
       <h1>Plant Details</h1>
       
-      <div className="plant-info-main">
-        <div className="plant-info-card">
-          <div className="plant-icon">
-            <svg viewBox="0 0 24 24" width="40" height="40">
-              <circle cx="12" cy="12" r="10" fill="#e8f5e9" stroke="#66bb6a" strokeWidth="1.5" />
-              <path d="M12,2 C16.42,2 20,5.58 20,10 C20,16 12,22 12,22 C12,22 4,16 4,10 C4,5.58 7.58,2 12,2 Z" fill="none" stroke="#66bb6a" strokeWidth="1.5" />
-            </svg>
-          </div>
-          
-          <div className="plant-info-section">
-            <div className="info-row">
-              <label>Name</label>
-              <span>{pot.potId.includes("pot_") ? pot.potId.split("_").slice(2).join(" ") : pot.potId}</span>
+      <div className="details-card">
+        <div className="plant-icon">
+          <svg viewBox="0 0 24 24" width="32" height="32">
+            <circle cx="12" cy="12" r="8" fill="none" stroke="#6cb66c" strokeWidth="2"/>
+            <circle cx="12" cy="12" r="3" fill="#6cb66c"/>
+          </svg>
+        </div>
+        
+        <div className="detail-row">
+          <span className="detail-label">Name</span>
+          <span className="detail-value">{pot.name}</span>
+        </div>
+        
+        <div className="detail-row">
+          <span className="detail-label">Type Details</span>
+          <span className="detail-value with-arrow">{plantType.name} ▼</span>
+        </div>
+        
+        <div className="detail-row">
+          <span className="detail-label">Watering Frequency</span>
+          <span className="detail-value">{plantType.water_frequency}</span>
+        </div>
+        
+        <div className="detail-row">
+          <span className="detail-label">Dosage ml</span>
+          <span className="detail-value">{plantType.water_dosage}</span>
+        </div>
+      </div>
+      
+      {/* Plant Metrics with Graphics */}
+      <div className="metrics-container">
+        <div className="metric-box">
+          <h3>Temperature:</h3>
+          <div className="circular-metric temperature">
+            <div className="metric-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <rect x="11" y="3" width="2" height="14" rx="1" fill="#6cb66c"/>
+                <circle cx="12" cy="17" r="4" fill="#6cb66c"/>
+                <circle cx="12" cy="17" r="6" fill="none" stroke="#6cb66c" strokeWidth="1"/>
+              </svg>
             </div>
-            
-            <div className="info-row">
-              <label>Type Details</label>
-              <span>{plantType.name} ▼</span>
-            </div>
-            
-            <div className="info-row">
-              <label>Watering Frequency</label>
-              <span>{plantType.water_frequency}</span>
-            </div>
-            
-            <div className="info-row">
-              <label>Dosage ml</label>
-              <span>{plantType.water_dosage}</span>
-            </div>
+            <div className="metric-value">{temperatureValue}°C</div>
           </div>
         </div>
         
-        <div className="plant-gauges">
-          <CircleGauge 
-            value={tankLevel} 
-            maxValue={100} 
-            unit="%" 
-            label="Tank level:" 
-          />
-          
-          <CircleGauge 
-          //pot.soil_humidity
-            value={12} 
-            maxValue={100} 
-            unit="%" 
-            label="Soil humidity:" 
-          />
-          
-          <TemperatureGauge temperature={temperature} />
+        <div className="metric-box">
+          <h3>Soil humidity:</h3>
+          <div className="circular-metric soil">
+            <div className="metric-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M12,3 C8,9 5,14 5,17 C5,20.866 8.134,24 12,24 C15.866,24 19,20.866 19,17 C19,14 16,9 12,3 Z" 
+                  fill="none" stroke="#6cb66c" strokeWidth="1.5"/>
+                <path d="M12,21 C10.343,21 9,19.657 9,18 C9,16.5 10,15 12,13 C14,15 15,16.5 15,18 C15,19.657 13.657,21 12,21 Z" 
+                  fill="#6cb66c"/>
+              </svg>
+            </div>
+            <div className="metric-value">{soilHumidityValue}%</div>
+          </div>
+        </div>
+        
+        <div className="metric-box">
+          <h3>Air humidity:</h3>
+          <div className="circular-metric air">
+            <div className="metric-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M3,15 C3,11.686 5.686,9 9,9 C11.28,9 13.28,10.28 14.4,12.16 C14.92,12.06 15.46,12 16,12 C19.314,12 22,14.686 22,18 C22,21.314 19.314,24 16,24 L9,24 C5.686,24 3,21.314 3,18 L3,15 Z" 
+                  fill="none" stroke="#6cb66c" strokeWidth="1.5"/>
+                <path d="M17,16 C16.44,16 16,16.44 16,17 C16,17.56 16.44,18 17,18 C17.56,18 18,17.56 18,17 C18,16.44 17.56,16 17,16 Z M14,19 C13.44,19 13,19.44 13,20 C13,20.56 13.44,21 14,21 C14.56,21 15,20.56 15,20 C15,19.44 14.56,19 14,19 Z M9,17 C8.44,17 8,17.44 8,18 C8,18.56 8.44,19 9,19 C9.56,19 10,18.56 10,18 C10,17.44 9.56,17 9,17 Z" 
+                  fill="#6cb66c"/>
+              </svg>
+            </div>
+            <div className="metric-value">{airHumidityValue}%</div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Water Tank Status Card */}
+      <div className="details-card">
+        <h2>Water Tank Status</h2>
+        
+        <div className="detail-row">
+          <span className="detail-label">Current Level</span>
+          <span className="detail-value">{pot.waterTank.currentLevelMl} ml</span>
+        </div>
+        
+        <div className="detail-row">
+          <span className="detail-label">Total Capacity</span>
+          <span className="detail-value">{pot.waterTank.capacityMl} ml</span>
+        </div>
+        
+        <div className="detail-row">
+          <span className="detail-label">Status</span>
+          <span className="detail-value">{pot.waterTank.status}</span>
+        </div>
+        
+        <div className="water-tank-visual">
+          <div className="water-tank-container">
+            <div 
+              className="water-tank-level" 
+              style={{ height: `${waterPercentage}%` }}
+            ></div>
+          </div>
+          <span className="water-tank-percentage">{waterPercentage}%</span>
         </div>
       </div>
       
       <div className="button-container">
-        <button className="save-button" onClick={handleSave}>
-          Save
-        </button>
-        <button className="delete-button" onClick={() => setShowDeleteConfirm(true)}>
-          Delete Plant
-        </button>
+        <button className="save-button" onClick={handleSave}>Save</button>
+        <button className="delete-button" onClick={handleDelete}>Delete Plant</button>
       </div>
-      
-      {showDeleteConfirm && (
-        <div className="delete-confirm-modal">
-          <div className="modal-content">
-            <h3>Confirm Deletion</h3>
-            <p>Are you sure you want to delete this plant pot?</p>
-            <div className="button-row">
-              <button onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
-              <button onClick={handleDelete} className="delete-button">Delete</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
