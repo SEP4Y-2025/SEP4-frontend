@@ -1,11 +1,12 @@
 // src/pages/PlantDetails.tsx
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import "./PlantDetails.css";
 
 const PlantDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { pots, plantTypes, loading, error } = useEnvironmentCtx();
 
   // Find the pot and its plant type
@@ -13,13 +14,15 @@ const PlantDetails: React.FC = () => {
   const plantType = pot ? plantTypes.find(type => type._id === pot.plantTypeId) : null;
 
   const handleSave = () => {
-    // Placeholder for save functionality
-    alert("Save functionality would go here");
+    // Navigate back to plants page
+    navigate("/plants");
   };
 
   const handleDelete = () => {
     // Placeholder for delete functionality
     alert("Delete functionality would go here");
+    // After deletion, navigate back to plants page
+    // navigate("/plants");
   };
 
   if (loading) return <div>Loading...</div>;
