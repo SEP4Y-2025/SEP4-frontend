@@ -8,11 +8,8 @@
     "@mui/material": "^6.4.7",
     "@tailwindcss/postcss": "^4.0.12",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.126",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "axios": "^1.8.2",
@@ -32,7 +29,7 @@
     "start": "react-scripts start",
     "start-watch": "WATCHPACK_POOLING=true react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "vitest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -54,6 +51,11 @@
     ]
   },
   "devDependencies": {
-    "@types/uuid": "^10.0.0"
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^22.15.14",
+    "@types/uuid": "^10.0.0",
+    "jsdom": "^26.1.0",
+    "vitest": "^3.1.3"
   }
 }
