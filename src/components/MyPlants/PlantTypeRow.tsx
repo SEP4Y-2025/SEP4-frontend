@@ -32,6 +32,8 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
         </StyledRow>
         <i
           className="bi bi-plus-circle"
+          role="button"
+          aria-label="Add plant"
           onClick={() => navigate(`/addplant/${plant.name}`)}
         ></i>
       </Flex>
