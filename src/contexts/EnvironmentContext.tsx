@@ -11,6 +11,7 @@ type EnvironmentContextType = {
   error: string;
   setEnvironmentName: (newName: string) => void;
   setEnvironmentID: (search: string) => void;
+  setPlantTypes: (newTypes: PlantType[]) => void;
 };
 const EnvironmentContext = createContext<EnvironmentContextType | undefined>(
   undefined
@@ -70,6 +71,7 @@ const EnvironmentProvider = ({ children }: Props) => {
         pots,
         setEnvironmentID,
         setEnvironmentName,
+        setPlantTypes
       }}
     >
       {children}

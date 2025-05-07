@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import PlantTypeRow from "../components/MyPlants/PlantTypeRow";
 import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import "./MyPlants.css";
-import { getPlantTypes, addPotToPlantType } from "../services/plantPotsRepo";
+
 import { PlantType } from "../types";
-import { addPlantType } from "../services/plantPotsRepo";
+import { addPlantType } from "../services/plantTypesApi";
+import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
+import { getTypesByEnvironment } from "../services/plantTypesApi";
 
 
 
 
 const MyPlants: React.FC = () => {
-  const {plantTypes, pots, loading, environmnentName, error} = useEnvironmentCtx();
+  const {plantTypes, pots, loading, setPlantTypes, environmnentName, error} = useEnvironmentCtx();
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
@@ -29,7 +31,7 @@ const MyPlants: React.FC = () => {
 
   const handleContinue = async () => {
   if (!typeName || !wateringFrequency || !dosage) {
-    setError("Please fill out all fields.");
+    //setError("Please fill out all fields.");
     return;
   }
 
@@ -50,8 +52,7 @@ const MyPlants: React.FC = () => {
       water_dosage: dose,
     });
 
-    // ✅ Re-fetch plant types to update UI from backend
-    const updated = await getPlantTypes();
+    const updated = await getTypesByEnvironment(environmentId);
     setPlantTypes(updated);
 
     // Reset modal state
@@ -61,7 +62,7 @@ const MyPlants: React.FC = () => {
     //setError("");
     setOpen(false);
   } catch (err) {
-    setError("Failed to add plant type.");
+    //setError("Failed to add plant type.");
   }
 };
 
