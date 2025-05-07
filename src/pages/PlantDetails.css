@@ -51,7 +51,55 @@
   align-items: center;
 }
 
-/* Water tank visualization */
+/* New fancy metrics styling */
+.metrics-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.metric-box {
+  text-align: center;
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  padding: 15px;
+  flex: 1;
+  min-width: 120px;
+  margin: 0 5px 10px;
+}
+
+.metric-box h3 {
+  color: #333;
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.circular-metric {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.metric-icon {
+  margin-bottom: 5px;
+}
+
+.metric-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Water tank visualization (unchanged) */
 .water-tank-visual {
   margin-top: 20px;
   display: flex;
