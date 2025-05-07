@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { PlantPotResponse, PlantType, Pot } from "../types";
+import {  PlantType, Pot } from "../types";
 import { getPotsByEnvironment } from "../services/plantPotsApi";
 import { getTypesByEnvironment } from "../services/plantTypesApi";
 

@@ -44,8 +44,8 @@ const MyPlants: React.FC = () => {
 
   try {
     await addPlantType(environmentId, {
-      plant_type_name: typeName,
-      watering_freq: watering,
+      name: typeName,
+      water_frequency: watering,
       water_dosage: dose,
     });
 
