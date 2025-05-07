@@ -2,17 +2,17 @@ import React from "react";
 
 interface AddPlantModalProps {
   typeName: string;
-  setTypeName: (value: string) => void;
+  setTypeName: (val: string) => void;
   wateringFrequency: string;
-  setWateringFrequency: (value: string) => void;
+  setWateringFrequency: (val: string) => void;
   dosage: string;
-  setDosage: (value: string) => void;
+  setDosage: (val: string) => void;
   error: string;
   handleContinue: () => void;
   handleCancel: () => void;
 }
 
-const AddPlantModal: React.FC<AddPlantModalProps> = ({
+const AddPlantTypeModal: React.FC<AddPlantModalProps> = ({
   typeName,
   setTypeName,
   wateringFrequency,
@@ -34,9 +34,12 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
         </div>
 
         <div className="modal-body">
+          {error && <p className="error">{error}</p>}
+
           <div className="input-group">
-            <label>Type</label>
+            <label htmlFor="type-name-input">Type</label>
             <input
+              id="type-name-input"
               className="input"
               placeholder="Type name"
               value={typeName}
@@ -46,9 +49,12 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
 
           <div className="input-row-group">
             <div className="input-mini-group">
-              <label>Watering frequency</label>
+              <label htmlFor="watering-frequency-input">
+                Watering frequency
+              </label>
               <div className="input-with-unit">
                 <input
+                  id="watering-frequency-input"
                   className="input-short"
                   type="number"
                   min="0"
@@ -61,9 +67,10 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
             </div>
 
             <div className="input-mini-group">
-              <label>Dosage</label>
+              <label htmlFor="dosage-input">Dosage</label>
               <div className="input-with-unit">
                 <input
+                  id="dosage-input"
                   className="input-short"
                   type="number"
                   min="0"
@@ -75,8 +82,6 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
               </div>
             </div>
           </div>
-
-          {error && <div className="error-message">{error}</div>}
 
           <div className="modal-footer">
             <button className="cancel-button" onClick={handleCancel}>
@@ -92,4 +97,4 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
   );
 };
 
-export default AddPlantModal;
+export default AddPlantTypeModal;
