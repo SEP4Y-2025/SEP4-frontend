@@ -1,15 +1,15 @@
-name: Frontend CI
+name: Build and Test App
 
 on:
   push:
-    branches: [master]
+    branches: [master] 
   pull_request:
     branches: [master]
-  workflow_dispatch:
+  workflow_dispatch: 
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
 
     steps:
       - name: Checkout code
@@ -24,13 +24,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test -- --watchAll=false
-
-      - name: Build the project
+        run: npx vitest
+        
+      - name: Build the app
         run: npm run build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          path: build/
