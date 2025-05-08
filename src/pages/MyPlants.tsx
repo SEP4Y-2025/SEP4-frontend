@@ -1,146 +1,109 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PlantTypeRow from "../components/MyPlants/PlantTypeRow";
+import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import "./MyPlants.css";
 
-interface PlantType {
-  typeName: string;
-  wateringFrequency: number;
-  dosage: number;
-}
+import { PlantType } from "../types";
+import { addPlantType, getTypesByEnvironment } from "../services/plantTypesApi";
+import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
+import { Flex } from "../Styles/Flex";
+import { StyledMyPlantsContainer } from "../Styles/MyPlants.style";
 
 const MyPlants: React.FC = () => {
+  const { plantTypes, pots, loading, environmnentName, error, setPlantTypes } =
+    useEnvironmentCtx();
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
-  const [error, setError] = useState("");
-  const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
 
-  const handleContinue = () => {
-    if (!typeName || !wateringFrequency || !dosage) {
-      setError("Please fill out all fields.");
-      return;
-    }
+  // useEffect(() => {
+  //   const fetchPlantTypes = async () => {
+  //     const plants = await getPlantTypes();
+  //     setPlantTypes(plants);
+  //   };
 
-    const watering = parseInt(wateringFrequency, 10);
-    const dose = parseInt(dosage, 10);
+  //   fetchPlantTypes();
+  // }, []);
+
+  const handleContinue = async () => {
+  if (!typeName || !wateringFrequency || !dosage) {
+    //setError("Please fill out all fields.");
+    return;
+  }
+
+  const watering = parseInt(wateringFrequency, 10);
+  const dose = parseInt(dosage, 10);
 
     if (watering < 0 || dose < 0) {
-      setError("Values cannot be negative.");
+      //setError("Values cannot be negative.");
       return;
     }
 
-    const newPlant: PlantType = {
-      typeName,
-      wateringFrequency: watering,
-      dosage: dose,
-    };
+  const environmentId = "680f8359688cb5341f9f9c19"; // ✅ Move this here
 
-    setPlantTypes([...plantTypes, newPlant]);
+  try {
+    await addPlantType(environmentId, {
+      name: typeName,
+      water_frequency: watering,
+      water_dosage: dose,
+    });
+
+    const updated = await getTypesByEnvironment(environmentId);
+    setPlantTypes(updated);
+
+    // Reset modal state
     setTypeName("");
     setWateringFrequency("");
     setDosage("");
-    setError("");
+    //setError("");
     setOpen(false);
-  };
+  } catch (err) {
+    //setError("Failed to add plant type.");
+  }
+};
+
 
   const handleCancel = () => {
     setOpen(false);
-    setError("");
+    //setError("");
   };
 
   return (
-    <div className="plants-page">
-      <h1 className="page-title">My Plants - SpaceName</h1>
+    <StyledMyPlantsContainer>
+      <h1 className="title">My Plants - {environmnentName}</h1>
 
-      <div className="plants-list">
         {plantTypes.map((plant, index) => (
-          <div key={index} className="plant-type-section">
-            <div className="plant-type-title">
-              Type: {plant.typeName} ({plant.wateringFrequency}x/week,{" "}
-              {plant.dosage}ml)
-            </div>
-            <div className="plant-box">
-              <div className="add-pot-container">
-                <button className="add-pot-button">+</button>
-                <div className="add-pot-text">New</div>
-              </div>
-            </div>
-          </div>
+          <PlantTypeRow
+            key={index}
+            plant={plant}
+            pots={pots
+              .filter((pot) => pot.plantTypeId === plant._id)
+              .map((pot) => ({
+                id: pot.potId,
+                potName: pot.name,
+              }))}
+          />
         ))}
-      </div>
 
-      <button className="add-type-button" onClick={() => setOpen(true)}>
+      <button className="addType" onClick={() => setOpen(true)}>
         Add new type
       </button>
 
       {open && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <span role="img" aria-label="leaf">
-                🌿
-              </span>
-              <h2>Add new type</h2>
-            </div>
-
-            <div className="modal-body">
-              <div className="input-group">
-                <label>Type</label>
-                <input
-                  className="input"
-                  placeholder="Type name"
-                  value={typeName}
-                  onChange={(e) => setTypeName(e.target.value)}
-                />
-              </div>
-
-              <div className="input-row-group">
-                <div className="input-mini-group">
-                  <label>Watering frequency</label>
-                  <div className="input-with-unit">
-                    <input
-                      className="input-short"
-                      type="number"
-                      min="0"
-                      placeholder="0"
-                      value={wateringFrequency}
-                      onChange={(e) => setWateringFrequency(e.target.value)}
-                    />
-                    <span className="unit-text">times/week</span>
-                  </div>
-                </div>
-
-                <div className="input-mini-group">
-                  <label>Dosage</label>
-                  <div className="input-with-unit">
-                    <input
-                      className="input-short"
-                      type="number"
-                      min="0"
-                      placeholder="0"
-                      value={dosage}
-                      onChange={(e) => setDosage(e.target.value)}
-                    />
-                    <span className="unit-text">ml</span>
-                  </div>
-                </div>
-              </div>
-
-              {error && <div className="error-message">{error}</div>}
-
-              <div className="modal-footer">
-                <button className="cancel-button" onClick={handleCancel}>
-                  Cancel
-                </button>
-                <button className="continue-button" onClick={handleContinue}>
-                  Continue
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AddPlantTypeModal
+          typeName={typeName}
+          setTypeName={setTypeName}
+          wateringFrequency={wateringFrequency}
+          setWateringFrequency={setWateringFrequency}
+          dosage={dosage}
+          setDosage={setDosage}
+          error={error}
+          handleContinue={handleContinue}
+          handleCancel={handleCancel}
+        />
       )}
-    </div>
+    </StyledMyPlantsContainer>
   );
 };
 

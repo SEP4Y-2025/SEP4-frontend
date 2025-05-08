@@ -1,10 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LogsPage from "./pages/LogsPage";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/common/Navbar";
 import MyPlants from "./pages/MyPlants";
 import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
+import PlantDetails from './pages/PlantDetails';
+import { EnvironmentProvider } from "./contexts/EnvironmentContext";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const App: React.FC = () => {
   return (
@@ -13,8 +17,9 @@ const App: React.FC = () => {
       <Container>
         <Routes>
           <Route path="/" element={<LogsPage />} />
-          <Route path="/plants" element={<MyPlants />} />
-          <Route path="/addplant/:typeName" element={<AddPlant />} />
+          <Route path="/plants" element={<EnvironmentProvider><MyPlants /></EnvironmentProvider>} />
+          <Route path="/addplant/:typeName" element={<EnvironmentProvider><AddPlant /></EnvironmentProvider>} />
+          <Route path="/plant-details/:id" element={<EnvironmentProvider><PlantDetails /></EnvironmentProvider>} />
         </Routes>
       </Container>
     </Router>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchLogs } from "../services/api";
 import LogTable from "../components/LogTable";
 import { LogEntry } from "../types/logTypes";
+import { Flex } from "../Styles/Flex";
 
 const LogsPage: React.FC = () => {
   const [logs, setLogs] = useState<String[]>([]);
@@ -23,7 +24,7 @@ const LogsPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="p-6">
+    <Flex $dir="column" $justifyC="center">
       <h1 className="text-3xl font-bold mb-4">📡 MQTT Logs</h1>
 
       {loading ? (
@@ -33,7 +34,7 @@ const LogsPage: React.FC = () => {
       ) : (
         <LogTable logs={logs} />
       )}
-    </div>
+    </Flex>
   );
 };
 

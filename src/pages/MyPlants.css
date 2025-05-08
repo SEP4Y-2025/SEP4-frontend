@@ -14,9 +14,10 @@
 
 .plants-list {
   width: 100%;
-  max-width: 600px;
+  min-width: 650px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 2rem;
 }
 
@@ -51,7 +52,6 @@
   height: 60px;
   cursor: pointer;
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 .add-pot-container {
