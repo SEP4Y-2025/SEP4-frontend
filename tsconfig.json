@@ -23,5 +23,5 @@
   },
   "include": [
     "src"
-, "tests/PlantTypeRow.test.tsx"  ]
+, "tests/components/PlantTypeRow.test.tsx"  ]
 }

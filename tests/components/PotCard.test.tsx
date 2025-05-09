@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
-import PotCard from "../src/components/MyPlants/PotCard";
+import PotCard from "../../src/components/MyPlants/PotCard";
 import "@testing-library/jest-dom";
 import { describe, expect, it, vi } from "vitest";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
-import PlantTypeRow, { PlantTypeRowProps } from "../src/components/MyPlants/PlantTypeRow";
+import PlantTypeRow, { PlantTypeRowProps } from "../../src/components/MyPlants/PlantTypeRow";
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
 
