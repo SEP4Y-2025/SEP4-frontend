@@ -10,6 +10,7 @@ interface Props {
   $width?: string;
   $background?:string;
   $colour?:string;
+  $margin?:string;
 }
 
 export const Flex = styled.div<Props>`
@@ -21,6 +22,7 @@ export const Flex = styled.div<Props>`
   gap: ${(p) => p.$gap || "0"};
   overflow: ${(p) => p.$overflow || "hidden"};
   flex-direction: ${(p) => p.$dir || "row"};
+  margin: ${(p) => p.$margin || ""};
 `;
 
 

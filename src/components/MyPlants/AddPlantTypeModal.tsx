@@ -1,18 +1,21 @@
 import React from "react";
+import { StyledTypeContent } from "../../Styles/MyPlants.style";
+import { Flex } from "../../Styles/Flex";
+import { Input } from "../../Styles/Input.style";
 
 interface AddPlantModalProps {
   typeName: string;
-  setTypeName: (val: string) => void;
+  setTypeName: (value: string) => void;
   wateringFrequency: string;
-  setWateringFrequency: (val: string) => void;
+  setWateringFrequency: (value: string) => void;
   dosage: string;
-  setDosage: (val: string) => void;
+  setDosage: (value: string) => void;
   error: string;
   handleContinue: () => void;
   handleCancel: () => void;
 }
 
-const AddPlantTypeModal: React.FC<AddPlantModalProps> = ({
+const AddPlantModal: React.FC<AddPlantModalProps> = ({
   typeName,
   setTypeName,
   wateringFrequency,
@@ -25,37 +28,40 @@ const AddPlantTypeModal: React.FC<AddPlantModalProps> = ({
 }) => {
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
+      <StyledTypeContent>
+        <Flex
+          $background="#f1f8e9"
+          $alignI="center"
+          $gap="0.5rem"
+          $colour="black"
+        >
           <span role="img" aria-label="leaf">
             🌿
           </span>
           <h2>Add new type</h2>
-        </div>
+        </Flex>
 
-        <div className="modal-body">
-          {error && <p className="error">{error}</p>}
+        <Flex $dir="column" $gap="1rem" $overflow="visible" $colour="green">
+          <label>Type</label>
+          <Input
+            $width="100%"
+            $border="1px solid #ccc"
+            $padding="0.5rem"
+            $borderR="0.5rem"
+            placeholder="Type name"
+            value={typeName}
+            onChange={(e) => setTypeName(e.target.value)}
+          />
 
-          <div className="input-group">
-            <label htmlFor="type-name-input">Type</label>
-            <input
-              id="type-name-input"
-              className="input"
-              placeholder="Type name"
-              value={typeName}
-              onChange={(e) => setTypeName(e.target.value)}
-            />
-          </div>
-
-          <div className="input-row-group">
-            <div className="input-mini-group">
-              <label htmlFor="watering-frequency-input">
-                Watering frequency
-              </label>
-              <div className="input-with-unit">
-                <input
-                  id="watering-frequency-input"
-                  className="input-short"
+          <Flex $justifyC="space-between" >
+            <Flex $dir="column" $alignI="center" $colour="green">
+              <label>Watering frequency</label>
+              <Flex $alignI="center" $justifyC="center">
+                <Input
+                  $width="80px"
+                  $border="1px solid #ccc"
+                  $padding="0.5rem"
+                  $borderR="0.5rem"
                   type="number"
                   min="0"
                   placeholder="0"
@@ -63,15 +69,17 @@ const AddPlantTypeModal: React.FC<AddPlantModalProps> = ({
                   onChange={(e) => setWateringFrequency(e.target.value)}
                 />
                 <span className="unit-text">times/week</span>
-              </div>
-            </div>
+              </Flex>
+            </Flex>
 
-            <div className="input-mini-group">
-              <label htmlFor="dosage-input">Dosage</label>
-              <div className="input-with-unit">
-                <input
-                  id="dosage-input"
-                  className="input-short"
+            <Flex $dir="column" $alignI="center" $colour="green">
+              <label>Dosage</label>
+              <Flex $alignI="center" $justifyC="center">
+                <Input
+                  $width="80px"
+                  $border="1px solid #ccc"
+                  $padding="0.5rem"
+                  $borderR="0.5rem"
                   type="number"
                   min="0"
                   placeholder="0"
@@ -79,22 +87,28 @@ const AddPlantTypeModal: React.FC<AddPlantModalProps> = ({
                   onChange={(e) => setDosage(e.target.value)}
                 />
                 <span className="unit-text">ml</span>
-              </div>
-            </div>
-          </div>
+              </Flex>
+            </Flex>
+          </Flex>
 
-          <div className="modal-footer">
+          {error && (
+            <Flex $colour="red" $alignI="center" $justifyC="center">
+              {error}lala
+            </Flex>
+          )}
+
+          <Flex $justifyC="space-between" $margin="1rem">
             <button className="cancel-button" onClick={handleCancel}>
               Cancel
             </button>
             <button className="continue-button" onClick={handleContinue}>
               Continue
             </button>
-          </div>
-        </div>
-      </div>
+          </Flex>
+        </Flex>
+      </StyledTypeContent>
     </div>
   );
 };
 
-export default AddPlantTypeModal;
+export default AddPlantModal;
