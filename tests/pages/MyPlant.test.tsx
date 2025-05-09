@@ -1,17 +1,17 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import MyPlants from "./MyPlants";
-import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
-import { addPlantType, getTypesByEnvironment } from "../services/plantTypesApi";
+import MyPlants from "../../src/pages/MyPlants";
+import { useEnvironmentCtx } from "../../src/contexts/EnvironmentContext";
+import { addPlantType, getTypesByEnvironment } from "../../src/services/plantTypesApi";
 import { MemoryRouter } from "react-router-dom";
-import { vi } from "vitest";
+import {describe, expect, it, vi } from "vitest";
 
 // Mock dependencies
-vi.mock("../contexts/EnvironmentContext", () => ({
+vi.mock("../../src/contexts/EnvironmentContext", () => ({
   useEnvironmentCtx: vi.fn(),
 }));
 
-vi.mock("../services/plantTypesApi", () => ({
+vi.mock("../../src/services/plantTypesApi", () => ({
   addPlantType: vi.fn(),
   getTypesByEnvironment: vi.fn(),
 }));
@@ -19,8 +19,8 @@ vi.mock("../services/plantTypesApi", () => ({
 const mockedUseEnvCtx = useEnvironmentCtx as unknown as ReturnType<
   typeof vi.fn
 >;
-const mockedAddPlantType = addPlantType as unknown as jest.Mock;
-const mockedGetTypes = getTypesByEnvironment as unknown as jest.Mock;
+const mockedAddPlantType = addPlantType as unknown as vi.Mock;
+const mockedGetTypes = getTypesByEnvironment as unknown as vi.Mock;
 
 describe("MyPlants - Add Type Creation", () => {
   it("adds a new plant type correctly", async () => {
@@ -55,7 +55,7 @@ describe("MyPlants - Add Type Creation", () => {
     fireEvent.click(screen.getByText("Add new type"));
 
     // Fill out the form
-    fireEvent.change(screen.getByLabelText(/^Type$/i), {
+    fireEvent.change(screen.getByLabelText("Type"), {
       target: { value: "Basil" },
     });
     fireEvent.change(screen.getByLabelText(/Watering Frequency/i), {
