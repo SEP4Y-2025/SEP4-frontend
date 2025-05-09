@@ -7,20 +7,20 @@
 //   soil_humidity: number;
 // }
 
-export type State ={
-  airHumidity: [];
-  temperature: [];
-  soilHumidity: [];
+export interface State {
+  temperature: [string, string];
+  soilHumidity: [string, string];
+  airHumidity: [string, string];
 }
-export type Pot ={
+export type Pot = {
   potId: string;
   name: string;
-  state:State
+  state: State;
   plantTypeId: string;
-  waterTank:WaterTank;
-}
-export type WaterTank={
-  capacityMl:number;
-  currentLevelMl:number;
-  status:string;
-}
+  waterTank: WaterTank;
+};
+export type WaterTank = {
+  capacityMl: number;
+  currentLevelMl: number;
+  status: string;
+};
