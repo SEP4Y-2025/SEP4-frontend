@@ -55,7 +55,7 @@ describe("MyPlants - Add Type Creation", () => {
     fireEvent.click(screen.getByText("Add new type"));
 
     // Fill out the form
-    fireEvent.change(screen.getByLabelText("Type"), {
+    fireEvent.change(screen.getByLabelText(/Type/i), {
       target: { value: "Basil" },
     });
     fireEvent.change(screen.getByLabelText(/Watering Frequency/i), {

@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LogsPage from "./pages/LogsPage";
 import Navbar from "./components/common/Navbar";
 import MyPlants from "./pages/MyPlants";
-import { Container, ThemeProvider } from "@mui/material";
+import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
 import PlantDetails from "./pages/PlantDetails";
 import { EnvironmentProvider } from "./contexts/EnvironmentContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { darkTheme, lightTheme } from "./Styles/Themes";
+import { ThemeProvider } from "styled-components";
 
 const App: React.FC = () => {
   const[darkMode, setDarkmode] = useState(false);

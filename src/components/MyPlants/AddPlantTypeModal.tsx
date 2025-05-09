@@ -42,8 +42,9 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
         </Flex>
 
         <Flex $dir="column" $gap="1rem" $overflow="visible" $colour="green">
-          <label>Type</label>
+          <label htmlFor="type-name-input">Type</label>
           <Input
+            id="type-name-input"
             $width="100%"
             $border="1px solid #ccc"
             $padding="0.5rem"
@@ -55,9 +56,10 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
 
           <Flex $justifyC="space-between" >
             <Flex $dir="column" $alignI="center" $colour="green">
-              <label>Watering frequency</label>
+              <label  htmlFor="water-frequency-input">Watering frequency</label>
               <Flex $alignI="center" $justifyC="center">
                 <Input
+                  id="water-frequency-input"
                   $width="80px"
                   $border="1px solid #ccc"
                   $padding="0.5rem"
@@ -73,9 +75,10 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
             </Flex>
 
             <Flex $dir="column" $alignI="center" $colour="green">
-              <label>Dosage</label>
+              <label htmlFor="dosage-input">Dosage</label>
               <Flex $alignI="center" $justifyC="center">
                 <Input
+                  id="dosage-input"
                   $width="80px"
                   $border="1px solid #ccc"
                   $padding="0.5rem"
