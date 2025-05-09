@@ -8,7 +8,6 @@ import { vi } from "vitest";
 
 const mockNavigate = vi.fn();
 
-// Partially mock `react-router-dom` to preserve `BrowserRouter` and mock `useNavigate`
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual<typeof import("react-router-dom")>("react-router-dom");
   return {
