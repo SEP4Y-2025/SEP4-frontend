@@ -7,6 +7,7 @@ import { PlantType } from "../types";
 import { addPlantType, getTypesByEnvironment } from "../services/plantTypesApi";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { StyledMyPlantsContainer } from "../Styles/MyPlants.style";
+import { Button } from "../Styles/Button.style";
 
 const MyPlants: React.FC = () => {
   const { plantTypes, pots, loading, environmentName, error, setPlantTypes } =
@@ -60,9 +61,9 @@ const MyPlants: React.FC = () => {
         />
       ))}
 
-      <button className="addType" onClick={() => setOpen(true)}>
+      <Button onClick={() => setOpen(true)}>
         Add new type
-      </button>
+      </Button>
 
       {open && (
         <AddPlantTypeModal

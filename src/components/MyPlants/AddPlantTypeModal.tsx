@@ -2,6 +2,7 @@ import React from "react";
 import { StyledTypeContent } from "../../Styles/MyPlants.style";
 import { Flex } from "../../Styles/Flex";
 import { Input } from "../../Styles/Input.style";
+import { ErrorLabel } from "../../Styles/ErrorLabel";
 
 interface AddPlantModalProps {
   typeName: string;
@@ -94,10 +95,10 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
             </Flex>
           </Flex>
 
-          {error && (
-            <Flex $colour="red" $alignI="center" $justifyC="center">
-              {error}lala
-            </Flex>
+          {true && (
+            <ErrorLabel>
+              {error}
+            </ErrorLabel>
           )}
 
           <Flex $justifyC="space-between" $margin="1rem">

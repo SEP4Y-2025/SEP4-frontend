@@ -73,7 +73,7 @@ export const UserContextProvider = ({ children }: Props) => {
           localStorage.setItem("user", JSON.stringify(userObj));
           setToken(res?.data.token!);
           setUser(userObj!);
-          toast.success("Registration succesfull");
+          toast.success("Login succesfull");
           navigate("/plants");
         }
       })
@@ -88,7 +88,8 @@ export const UserContextProvider = ({ children }: Props) => {
     localStorage.removeItem("user")
     setUser(null)
     setToken(null);
-    navigate("/")
+    navigate("/login")
+    
   }
 
   return(
