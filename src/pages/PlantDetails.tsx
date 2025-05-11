@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
+import EditPlantPotLabel from "../components/MyPlants/EditPlantPotLabel";
 import "./PlantDetails.css";
 
 const PlantDetails: React.FC = () => {
@@ -35,8 +36,11 @@ const PlantDetails: React.FC = () => {
 
       <div className="details-card">
         <div className="detail-row">
-          <span className="detail-label">Name</span>
-          <span className="detail-value">{pot.name}</span>
+        <span className="detail-label">Name</span>
+        <EditPlantPotLabel
+          potName={pot.name}
+          onSave={(newName) => { pot.name = newName; }}
+        />
         </div>
         <div className="detail-row">
           <span className="detail-label">Type Details</span>
