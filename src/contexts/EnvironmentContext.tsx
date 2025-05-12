@@ -43,13 +43,13 @@ const EnvironmentProvider = ({ children }: Props) => {
         setLoading(true);
 
         const fetchedTypes = await getTypesByEnvironment(
-          "680f8359688cb5341f9f9c19"
+          "6821f0b6165667e2b2a2173c"
         );
         console.log(fetchedTypes);
         setPlantTypes(fetchedTypes);
 
         const fetchedPots = await getPotsByEnvironment(
-          "680f8359688cb5341f9f9c19"
+          "6821f0b6165667e2b2a2173c"
         );
         setPots(fetchedPots);
       } catch (er) {

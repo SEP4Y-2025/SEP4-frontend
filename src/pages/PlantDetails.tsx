@@ -2,6 +2,7 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
+import {deletePot} from "../services/plantPotsApi";
 import "./PlantDetails.css";
 
 const PlantDetails: React.FC = () => {
@@ -15,7 +16,19 @@ const PlantDetails: React.FC = () => {
     : null;
 
   const handleSave = () => navigate("/plants");
-  const handleDelete = () => alert("Delete functionality would go here");
+  const handleDelete = async () => {
+  const environmentId = "6821f0b6165667e2b2a2173c"; 
+  //Hardcoded environment ID for now
+  if (window.confirm("Are you sure you want to delete this plant?")) {
+    try {
+      await deletePot(id!, environmentId); 
+      navigate("/plants");
+       window.location.reload();
+    } catch (error) {
+      alert("Failed to delete plant.");
+    }
+  }
+};
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

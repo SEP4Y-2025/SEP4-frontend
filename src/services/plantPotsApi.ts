@@ -14,8 +14,19 @@ export const getPotsByEnvironment = async (environmentId: string): Promise<Pot[]
   return response.data.pots as Pot[];
 };
 
+export const deletePot = async (potId: string, environmentId: string) => {
+  try {
+    const response = await axios.delete(
+      `${BASE_URL}/environments/${environmentId}/pots/${potId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to delete pot:", error);
+    throw error;
+  }
+};
 
-export const getPotById = async (potId: string, environmentId: string = "680f8359688cb5341f9f9c19") => {
+export const getPotById = async (potId: string, environmentId: string = "6821f0b6165667e2b2a2173c") => {
   try {
     const response = await fetch(`/api/environments/${environmentId}/pots/${potId}`);
     if (!response.ok) {

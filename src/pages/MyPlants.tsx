@@ -23,12 +23,12 @@ const MyPlants: React.FC = () => {
     if (watering < 0 || dose < 0) return;
 
     try {
-      await addPlantType("680f8359688cb5341f9f9c19", {
+      await addPlantType("6821f0b6165667e2b2a2173c", {
         name: typeName,
         water_frequency: watering,
         water_dosage: dose,
       });
-      const updated = await getTypesByEnvironment("680f8359688cb5341f9f9c19");
+      const updated = await getTypesByEnvironment("6821f0b6165667e2b2a2173c");
       setPlantTypes(updated);
       setTypeName("");
       setWateringFrequency("");
