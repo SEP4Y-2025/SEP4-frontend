@@ -15,6 +15,7 @@ type EnvironmentContextType = {
   environmentName: string;
   loading: boolean;
   error: string | null;
+  environmentID:string;
   setEnvironmentName: (newName: string) => void;
   setEnvironmentID: (search: string) => void;
   setPlantTypes: (newTypes: PlantType[]) => void;
@@ -32,7 +33,7 @@ const EnvironmentProvider = ({ children }: Props) => {
   const [pots, setPots] = useState<Pot[]>([]);
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
   const [environmentName, setEnvironmentName] = useState<string>("");
-  const [environmentID, setEnvironmentID] = useState<string>("");
+  const [environmentID, setEnvironmentID] = useState<string>("680f8359688cb5341f9f9c19");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -43,12 +44,12 @@ const EnvironmentProvider = ({ children }: Props) => {
         setLoading(true);
 
         const fetchedTypes = await getTypesByEnvironment(
-          "680f8359688cb5341f9f9c19"
+          environmentID
         );
         setPlantTypes(fetchedTypes);
 
         const fetchedPots = await getPotsByEnvironment(
-          "680f8359688cb5341f9f9c19"
+          environmentID
         );
         setPots(fetchedPots);
       } catch (er) {
@@ -75,6 +76,7 @@ const EnvironmentProvider = ({ children }: Props) => {
         environmentName,
         plantTypes,
         pots,
+        environmentID,
         setEnvironmentID,
         setEnvironmentName,
         setPlantTypes,
