@@ -1,15 +1,4 @@
 /* src/pages/PlantDetails.css */
-.plant-details-page {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.plant-details-page h1 {
-  color: #333;
-  font-size: 40px;
-  margin-bottom: 30px;
-}
 
 .details-card {
   background-color: #f2f2f2;
@@ -30,22 +19,7 @@
   margin-bottom: 20px;
 }
 
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  font-size: 18px;
-}
 
-.detail-label {
-  color: #333;
-  font-weight: normal;
-  
-}
-
-.detail-value {
-  font-weight: bold;
-}
 
 .with-arrow {
   display: flex;

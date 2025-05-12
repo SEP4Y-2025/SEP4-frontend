@@ -2,6 +2,10 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import EditPlantPotLabel from "../components/MyPlants/EditPlantPotLabel";
+import {StyledRow} from "../Styles/PlantDetails.style";
+import {StyledLabel} from "../Styles/PlantDetails.style";
+import {Page} from "../Styles/PlantDetails.style";
+
 import "./PlantDetails.css";
 
 const PlantDetails: React.FC = () => {
@@ -31,29 +35,30 @@ const PlantDetails: React.FC = () => {
   const temperatureValue = getStateValue(pot.state.temperature);
 
   return (
-    <div className="plant-details-page">
+    <Page>
       <h1>Plant Details</h1>
-
       <div className="details-card">
-        <div className="detail-row">
-        <span className="detail-label">Name</span>
-        <EditPlantPotLabel
-          potName={pot.name}
-          onSave={(newName) => { pot.name = newName; }}
-        />
-        </div>
-        <div className="detail-row">
-          <span className="detail-label">Type Details</span>
-          <span className="detail-value with-arrow">{plantType.name} ▼</span>
-        </div>
-        <div className="detail-row">
-          <span className="detail-label">Watering Frequency</span>
-          <span className="detail-value">{plantType.water_frequency}</span>
-        </div>
-        <div className="detail-row">
-          <span className="detail-label">Dosage ml</span>
-          <span className="detail-value">{plantType.water_dosage}</span>
-        </div>
+        <StyledRow>
+        <StyledLabel>Name</StyledLabel>
+        <span className="value">
+          <EditPlantPotLabel
+            potName={pot.name}
+            onSave={(newName) => { pot.name = newName; }}
+          />
+        </span>
+        </StyledRow>
+        <StyledRow>
+          <StyledLabel>Type Details</StyledLabel>
+          <span className="value">{plantType.name} ▼</span>
+        </StyledRow>
+        <StyledRow>
+          <StyledLabel>Watering Frequency</StyledLabel>
+          <span className="value">{plantType.water_frequency}</span>
+        </StyledRow>
+        <StyledRow>
+          <StyledLabel>Dosage ml</StyledLabel>
+          <span className="value">{plantType.water_dosage}</span>
+        </StyledRow>
       </div>
 
       <div className="metrics-container">
@@ -75,7 +80,7 @@ const PlantDetails: React.FC = () => {
           Delete Plant
         </button>
       </div>
-    </div>
+    </Page>
   );
 };
 
