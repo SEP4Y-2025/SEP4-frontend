@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { UserContextProvider } from "./contexts/UserAuthContext";
 import Register from "./pages/Auth/Register";
 import ProfilePage from "./pages/NavBar/Profile";
+import AddAssistant from "./pages/AddAssistant";
 //-----------------------------------------------------
 const App: React.FC = () => {
   const [darkMode, setDarkmode] = useState(false);
@@ -70,7 +71,17 @@ const App: React.FC = () => {
                       <ProfilePage />
                   </ProtectedRoute>
                 }
+                />
+                <Route  path="//plants/invite"
+                element={
+                  <ProtectedRoute>
+                    <EnvironmentProvider>
+                      <AddAssistant />
+                    </EnvironmentProvider>
+                  </ProtectedRoute>
+                }
               />
+              
               <Route path="/login" element={<Login />}/>
               <Route path="/register" element={<Register />}/>
             </Routes>
