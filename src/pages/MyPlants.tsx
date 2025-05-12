@@ -7,15 +7,16 @@ import { PlantType } from "../types";
 import { addPlantType, getTypesByEnvironment } from "../services/plantTypesApi";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { StyledMyPlantsContainer } from "../Styles/MyPlants.style";
+import { useNavigate } from "react-router-dom";
 
 const MyPlants: React.FC = () => {
-  const { plantTypes, pots, loading, environmentName, error, setPlantTypes } =
+  const { plantTypes, pots,environmentID, loading, environmentName, error, setPlantTypes } =
     useEnvironmentCtx();
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
-
+  const navigate = useNavigate();
   const handleContinue = async () => {
     if (!typeName || !wateringFrequency || !dosage) return;
     const watering = parseInt(wateringFrequency, 10);
@@ -23,12 +24,12 @@ const MyPlants: React.FC = () => {
     if (watering < 0 || dose < 0) return;
 
     try {
-      await addPlantType("680f8359688cb5341f9f9c19", {
+      await addPlantType(environmentID, {
         name: typeName,
         water_frequency: watering,
         water_dosage: dose,
       });
-      const updated = await getTypesByEnvironment("680f8359688cb5341f9f9c19");
+      const updated = await getTypesByEnvironment(environmentID);
       setPlantTypes(updated);
       setTypeName("");
       setWateringFrequency("");
@@ -42,10 +43,14 @@ const MyPlants: React.FC = () => {
   const handleCancel = () => {
     setOpen(false);
   };
+  const handleOnInvite =() =>{
+    navigate("/plants/invite")
+  }
 
   return (
     <StyledMyPlantsContainer>
       <h1 className="title">My Plants - {environmentName}</h1>
+      <button onClick={handleOnInvite}>Invite assistants</button>
 
       {plantTypes.map((plant: PlantType, index: number) => (
         <PlantTypeRow

@@ -11,9 +11,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { darkTheme, lightTheme } from "./Styles/Themes";
 import { ThemeProvider } from "styled-components";
+import AddAssistant from "./pages/AddAssistant";
 
 const App: React.FC = () => {
-  const[darkMode, setDarkmode] = useState(false);
+  const [darkMode, setDarkmode] = useState(false);
 
   return (
     <Router>
@@ -43,6 +44,14 @@ const App: React.FC = () => {
               element={
                 <EnvironmentProvider>
                   <PlantDetails />
+                </EnvironmentProvider>
+              }
+            />
+            <Route
+              path="/plants/invite"
+              element={
+                <EnvironmentProvider>
+                  <AddAssistant />
                 </EnvironmentProvider>
               }
             />
