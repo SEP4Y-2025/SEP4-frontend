@@ -22,7 +22,6 @@ import ProfilePage from "./pages/NavBar/Profile";
 //-----------------------------------------------------
 const App: React.FC = () => {
   const [darkMode, setDarkmode] = useState(false);
-  const [darkMode, setDarkmode] = useState(false);
 
   return (
     <Router>
