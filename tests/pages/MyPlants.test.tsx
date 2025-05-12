@@ -9,6 +9,11 @@ vi.mock("../../src/contexts/EnvironmentContext", () => ({
     useEnvironmentCtx: vi.fn(),
 }));
 
+vi.mock("../../src/services/plantTypesApi", () => ({
+    addPlantType: vi.fn(),
+    getTypesByEnvironment: vi.fn(),
+}));
+
 it("renders the page correctly", () => {
     (useEnvironmentCtx as Mock).mockReturnValue({
         plantTypes: [
@@ -50,11 +55,6 @@ it("opens the modal when 'Add new type' is clicked", () => {
     fireEvent.click(screen.getByText("Add new type"));
     expect(screen.getByText("Add new Type")).toBeInTheDocument();
 });
-
-vi.mock("../../src/services/plantTypesApi", () => ({
-    addPlantType: vi.fn(),
-    getTypesByEnvironment: vi.fn(),
-}));
 
 it("adds a new plant type correctly", async () => {
     (useEnvironmentCtx as Mock).mockReturnValue({
