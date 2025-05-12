@@ -29,7 +29,7 @@
     "start": "react-scripts start",
     "start-watch": "WATCHPACK_POOLING=true react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "vitest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

@@ -3,13 +3,11 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import PlantDetails from "../../src/pages/PlantDetails";
 import { useEnvironmentCtx } from "../../src/contexts/EnvironmentContext";
-import "@testing-library/jest-dom";
+import { beforeEach, describe, vi } from "vitest";
 
+const mockNavigate = vi.fn();
 
-// Mock the `useNavigate` function and `useEnvironmentCtx`
-const mockNavigate = jest.fn();
-
-jest.mock("react-router-dom", async () => {
+vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual<typeof import("react-router-dom")>("react-router-dom");
   return {
     ...actual,
@@ -71,7 +69,7 @@ describe("PlantDetails", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByTestId("temperature")).toHaveTextContent("22.3Â°C");
+    expect(screen.getByTestId("temperature")).toHaveTextContent("22.3°C");
   });
 
   it("displays 'Plant not found' if the pot is missing", () => {
