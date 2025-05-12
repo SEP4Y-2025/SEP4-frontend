@@ -1,6 +1,8 @@
+
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
+import {deletePot} from "../services/plantPotsApi";
 import "./PlantDetails.css";
 
 const PlantDetails: React.FC = () => {
@@ -14,7 +16,19 @@ const PlantDetails: React.FC = () => {
     : null;
 
   const handleSave = () => navigate("/plants");
-  const handleDelete = () => alert("Delete functionality would go here");
+  const handleDelete = async () => {
+  const environmentId = "680f8359688cb5341f9f9c19"; 
+  //Hardcoded environment ID for now
+  if (window.confirm("Are you sure you want to delete this plant?")) {
+    try {
+      await deletePot(id!, environmentId); 
+      navigate("/plants");
+       window.location.reload();
+    } catch (error) {
+      alert("Failed to delete plant.");
+    }
+  }
+};
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -28,6 +42,13 @@ const PlantDetails: React.FC = () => {
   };
 
   const temperatureValue = getStateValue(pot.state.temperature);
+  const soilHumidityValue = getStateValue(pot.state.soilHumidity);
+  const airHumidityValue = getStateValue(pot.state.airHumidity);
+  
+  
+  const waterPercentage = Math.round(
+    (pot.waterTank.currentLevelMl / pot.waterTank.capacityMl) * 100
+  );
 
   return (
     <div className="plant-details-page">
@@ -61,11 +82,63 @@ const PlantDetails: React.FC = () => {
             </div>
           </div>
         </div>
+        
+        <div className="metric-box">
+          <h3>Soil Humidity:</h3>
+          <div className="circular-metric soil">
+            <div className="metric-value" data-testid="soil-humidity">
+              {soilHumidityValue}%
+            </div>
+          </div>
+        </div>
+        
+        <div className="metric-box">
+          <h3>Air Humidity:</h3>
+          <div className="circular-metric air">
+            <div className="metric-value" data-testid="air-humidity">
+              {airHumidityValue}%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {}
+      <div className="details-card">
+        <h2>Water Tank Status</h2>
+        
+        <div className="detail-row">
+          <span className="detail-label">Current Level</span>
+          <span className="detail-value">{pot.waterTank.currentLevelMl} ml</span>
+        </div>
+        
+        <div className="detail-row">
+          <span className="detail-label">Total Capacity</span>
+          <span className="detail-value">{pot.waterTank.capacityMl} ml</span>
+        </div>
+        
+        <div className="detail-row">
+          <span className="detail-label">Status</span>
+          <span className="detail-value">{pot.waterTank.status}</span>
+        </div>
+        
+        <div className="water-tank-visual">
+          <div className="water-tank-container">
+            <div 
+              className="water-tank-level" 
+              style={{ width: `${waterPercentage}%` }}
+            ></div>
+          </div>
+          <div className="water-tank-percentage">{waterPercentage}%</div>
+          <div className="tank-labels">
+            <span>0 ml</span>
+            <span>{pot.waterTank.capacityMl} ml</span>
+          </div>
+        </div>
       </div>
 
       <div className="button-container">
         <button className="save-button" onClick={handleSave}>
-          Save
+          Go Back
         </button>
         <button className="delete-button" onClick={handleDelete}>
           Delete Plant

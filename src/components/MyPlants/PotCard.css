@@ -1,6 +1,6 @@
-/* PotCard.css */
+
 .pot-card {
-    background-color: #f2fdf8; /* very light green */
+    background-color: #f2fdf8;
     border: none;
     padding: 20px;
     display: flex;
@@ -23,6 +23,6 @@
   .pot-name {
     font-size: 18px;
     font-weight: 500;
-    color: #1f2937; /* gray-800 from Tailwind */
+    color: #1f2937; 
   }
   
