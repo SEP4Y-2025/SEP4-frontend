@@ -1,14 +1,15 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { describe, it, expect, vi } from "vitest";
 import PlantDetails from "../../src/pages/PlantDetails";
 import { useEnvironmentCtx } from "../../src/contexts/EnvironmentContext";
+import "@testing-library/jest-dom";
+
 
 // Mock the `useNavigate` function and `useEnvironmentCtx`
-const mockNavigate = vi.fn();
+const mockNavigate = jest.fn();
 
-vi.mock("react-router-dom", async () => {
+jest.mock("react-router-dom", async () => {
   const actual = await vi.importActual<typeof import("react-router-dom")>("react-router-dom");
   return {
     ...actual,
@@ -55,7 +56,7 @@ describe("PlantDetails", () => {
     setPlantTypes: vi.fn(),
   };
 
-  const mockedUseEnvironmentCtx = useEnvironmentCtx as vi.Mock;
+  const mockedUseEnvironmentCtx = useEnvironmentCtx as jest.Mock;
 
   beforeEach(() => {
     mockedUseEnvironmentCtx.mockReturnValue(mockProps);
@@ -70,7 +71,7 @@ describe("PlantDetails", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByTestId("temperature")).toHaveTextContent("22.3°C");
+    expect(screen.getByTestId("temperature")).toHaveTextContent("22.3Â°C");
   });
 
   it("displays 'Plant not found' if the pot is missing", () => {
