@@ -26,7 +26,7 @@ export const deletePot = async (potId: string, environmentId: string) => {
   }
 };
 
-export const getPotById = async (potId: string, environmentId: string = "6821f0b6165667e2b2a2173c") => {
+export const getPotById = async (potId: string, environmentId: string = "680f8359688cb5341f9f9c19") => {
   try {
     const response = await fetch(`/api/environments/${environmentId}/pots/${potId}`);
     if (!response.ok) {

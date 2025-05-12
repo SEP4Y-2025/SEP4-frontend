@@ -17,7 +17,7 @@ const PlantDetails: React.FC = () => {
 
   const handleSave = () => navigate("/plants");
   const handleDelete = async () => {
-  const environmentId = "6821f0b6165667e2b2a2173c"; 
+  const environmentId = "680f8359688cb5341f9f9c19"; 
   //Hardcoded environment ID for now
   if (window.confirm("Are you sure you want to delete this plant?")) {
     try {
