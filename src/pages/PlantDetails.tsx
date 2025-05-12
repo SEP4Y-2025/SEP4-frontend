@@ -1,4 +1,4 @@
-// src/pages/PlantDetails.tsx
+
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
@@ -32,7 +32,7 @@ const PlantDetails: React.FC = () => {
   const soilHumidityValue = getStateValue(pot.state.soilHumidity);
   const airHumidityValue = getStateValue(pot.state.airHumidity);
   
-  // Calculate water tank percentage
+  
   const waterPercentage = Math.round(
     (pot.waterTank.currentLevelMl / pot.waterTank.capacityMl) * 100
   );

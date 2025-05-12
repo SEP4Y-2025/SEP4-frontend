@@ -13,7 +13,7 @@ export const getPotsByEnvironment = async (environmentId: string): Promise<Pot[]
   const response = await axios.get(`${BASE_URL}/environments/${environmentId}/pots`);
   return response.data.pots as Pot[];
 };
-// src/services/plantPotsApi.ts (add these functions)
+
 
 export const getPotById = async (potId: string, environmentId: string = "680f8359688cb5341f9f9c19") => {
   try {
