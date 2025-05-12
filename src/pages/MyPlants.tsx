@@ -16,12 +16,19 @@ const MyPlants: React.FC = () => {
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleContinue = async () => {
-    if (!typeName || !wateringFrequency || !dosage) return;
+    if (!typeName || !wateringFrequency || !dosage) {
+      setErrorMessage("Please fill in all fields");
+      return;
+    }
     const watering = parseInt(wateringFrequency, 10);
     const dose = parseInt(dosage, 10);
-    if (watering < 0 || dose < 0) return;
+    if (watering < 0 || dose < 0) {
+      setErrorMessage("Values must be positive");
+      return;
+    }
 
     try {
       await addPlantType("680f8359688cb5341f9f9c19", {

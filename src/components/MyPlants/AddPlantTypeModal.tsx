@@ -39,7 +39,7 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
           <span role="img" aria-label="leaf">
             🌿
           </span>
-          <h2>Add new type</h2>
+          <h2>Add new Type</h2>
         </Flex>
 
         <Flex $dir="column" $gap="1rem" $overflow="visible" $colour="green">
@@ -57,7 +57,7 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
 
           <Flex $justifyC="space-between" >
             <Flex $dir="column" $alignI="center" $colour="green">
-              <label  htmlFor="water-frequency-input">Watering frequency</label>
+              <label htmlFor="water-frequency-input">Watering frequency</label>
               <Flex $alignI="center" $justifyC="center">
                 <Input
                   id="water-frequency-input"
@@ -95,7 +95,7 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
             </Flex>
           </Flex>
 
-          {true && (
+          {error && (
             <ErrorLabel>
               {error}
             </ErrorLabel>

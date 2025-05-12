@@ -95,7 +95,7 @@ describe("PlantDetails", () => {
       </MemoryRouter>
     );
 
-    const saveButton = screen.getByText("Save");
+    const saveButton = screen.getByText("Go Back");
     saveButton.click();
 
     expect(mockNavigate).toHaveBeenCalledWith("/plants");
