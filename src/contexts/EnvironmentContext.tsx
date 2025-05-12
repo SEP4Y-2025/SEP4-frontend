@@ -45,7 +45,6 @@ const EnvironmentProvider = ({ children }: Props) => {
         const fetchedTypes = await getTypesByEnvironment(
           "680f8359688cb5341f9f9c19"
         );
-        console.log(fetchedTypes);
         setPlantTypes(fetchedTypes);
 
         const fetchedPots = await getPotsByEnvironment(
@@ -65,7 +64,7 @@ const EnvironmentProvider = ({ children }: Props) => {
   }, [environmentID]);
 
   useEffect(() => {
-    console.log("Updated types:", plantTypes);
+
   }, [plantTypes]);
 
   return (

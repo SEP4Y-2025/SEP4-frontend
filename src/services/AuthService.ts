@@ -1,35 +1,24 @@
 import axios from "axios";
-import { UserProfileToken } from "../types/User";
+import { RegisterResponse, UserProfileToken } from "../types/User";
 
-const API_URL = process.env.REACT_APP_API_URL || "LOREM IPSUm"; //TODO LOREM IPSUM
-
-type AxiosMockResponse<T> = {
-  data: T;
-};
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export const loginAPI = async (username: string, password: string) => {
-  //   try {
-  //     const data = await axios.post<UserProfileToken>(API_URL + "/auth/login", {
-  //       username: username,
-  //       password: password,
-  //     });
-  //     return data;
-  //   } catch (err) {
-  //     //TODO proper error handler for global usage
-  //     console.log(err);
-  //   }
-  return new Promise<AxiosMockResponse<UserProfileToken>>((resolve) => {
-    setTimeout(() => {
-      resolve({
-        data: {
-          token: "mock-token-456",
-          userName: username,
-          email: "lalala",
-        },
-      });
-      console.log("auth service")
-    }, 500);
-  });
+  try {
+    const params = new URLSearchParams();
+    params.append("username", username);
+    params.append("password", password);
+    const data = await axios.post(API_URL + "/auth/login", params, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    return data;
+  } catch (err) {
+    //TODO proper error handler for global usage
+    console.log(err);
+  }
 };
 
 export const registerAPI = async (
@@ -37,30 +26,15 @@ export const registerAPI = async (
   password: string,
   email: string
 ) => {
-  // try {
-  //   const data = await axios.post<UserProfileToken>(
-  //     API_URL + "/auth/register",
-  //     {
-  //       email: email,
-  //       username: username,
-  //       password: password,
-  //     }
-  //   );
-  //   return data;
-  // } catch (err) {
-  //   //TODO proper error handler for global usage
-  //   console.log(err);
-  // }
-  return new Promise<AxiosMockResponse<UserProfileToken>>((resolve) => {
-    setTimeout(() => {
-      resolve({
-        data: {
-          token: "mock-token-456",
-          userName: username,
-          email: "lalala",
-        },
-      });
-      console.log("auth service")
-    }, 500);
-  });
+  try {
+    const data = await axios.post(API_URL + "/auth/register", {
+      username: username,
+      password: password,
+      email: email,
+    });
+    return data;
+  } catch (err) {
+    //TODO proper error handler for global usage
+    console.log(err);
+  }
 };

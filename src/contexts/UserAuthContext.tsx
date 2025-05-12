@@ -31,7 +31,7 @@ export const UserContextProvider = ({ children }: Props) => {
     if (user && token) {
       setUser(JSON.parse(user));
       setToken(token);
-      axios.defaults.headers.common['Authorization'] = "Bearer " +token;
+      axios.defaults.headers.common["Authorization"] = "bearer " + token;
     }
     setIsReady(true);
   }, []);
@@ -44,35 +44,30 @@ export const UserContextProvider = ({ children }: Props) => {
     await registerAPI(email, username, password)
       .then((res) => {
         if (res) {
-          localStorage.setItem("token", res?.data.token);
+
           const userObj = {
-            userName: res?.data.userName,
-            email: res?.data.email,
+            user_id: res?.data.user_id,
+            message: res?.data.message,
           };
-          localStorage.setItem("user", JSON.stringify(userObj));
-          setToken(res?.data.token!);
-          setUser(userObj!);
-          toast.success("Registration succesfull");
-          navigate("/plants");
+          localStorage.setItem("user", JSON.stringify(userObj.user_id));
+          setUser(userObj.user_id!);
+          toast.success(userObj.message);
+          navigate("/");
         }
       })
       .catch((e) => toast.warning("Server error occured"));
   };
-    const loginUser = async (
-    username: string,
-    password: string
-  ) => {
-    await loginAPI( username, password)
+  const loginUser = async (username: string, password: string) => {
+    await loginAPI(username, password)
       .then((res) => {
         if (res) {
-          localStorage.setItem("token", res?.data.token);
+          localStorage.setItem("token", res?.data.access_token);
           const userObj = {
-            userName: res?.data.userName,
-            email: res?.data.email,
+            userName: res?.data.user_id,
           };
-          localStorage.setItem("user", JSON.stringify(userObj));
+          localStorage.setItem("user", JSON.stringify(userObj.userName));
           setToken(res?.data.token!);
-          setUser(userObj!);
+          setUser(userObj.userName!);
           toast.success("Login succesfull");
           navigate("/plants");
         }
@@ -80,23 +75,24 @@ export const UserContextProvider = ({ children }: Props) => {
       .catch((e) => toast.warning("Server error occured"));
   };
 
-  const isLoggedIn = () =>{
+  const isLoggedIn = () => {
     return !!user;
   };
-  const logout = () =>{
-    localStorage.removeItem("token")
-    localStorage.removeItem("user")
-    setUser(null)
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
     setToken(null);
-    navigate("/login")
-    
-  }
+    navigate("/login");
+  };
 
-  return(
-    <UserContext.Provider value={{loginUser, user, token, logout, isLoggedIn,registerUser}}>
-        {isReady ? children :null}
+  return (
+    <UserContext.Provider
+      value={{ loginUser, user, token, logout, isLoggedIn, registerUser }}
+    >
+      {isReady ? children : null}
     </UserContext.Provider>
-  )
+  );
 };
 
-export const useAuth =() =>React.useContext(UserContext);
+export const useAuth = () => React.useContext(UserContext);
