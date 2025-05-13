@@ -4,9 +4,8 @@ import MyPlants from "../../src/pages/MyPlants";
 import { useEnvironmentCtx } from "../../src/contexts/EnvironmentContext";
 import { addPlantType, getTypesByEnvironment } from "../../src/services/plantTypesApi";
 import { MemoryRouter } from "react-router-dom";
-import {describe, expect, it, vi } from "vitest";
+import { describe, expect, it, Mock, vi } from "vitest";
 
-// Mock dependencies
 vi.mock("../../src/contexts/EnvironmentContext", () => ({
   useEnvironmentCtx: vi.fn(),
 }));
@@ -19,8 +18,8 @@ vi.mock("../../src/services/plantTypesApi", () => ({
 const mockedUseEnvCtx = useEnvironmentCtx as unknown as ReturnType<
   typeof vi.fn
 >;
-const mockedAddPlantType = addPlantType as unknown as vi.Mock;
-const mockedGetTypes = getTypesByEnvironment as unknown as vi.Mock;
+const mockedAddPlantType = addPlantType as unknown as Mock;
+const mockedGetTypes = getTypesByEnvironment as unknown as Mock;
 
 describe("MyPlants - Add Type Creation", () => {
   it("adds a new plant type correctly", async () => {
