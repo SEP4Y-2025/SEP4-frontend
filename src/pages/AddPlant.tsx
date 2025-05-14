@@ -1,29 +1,44 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-// import { addPotToPlantType } from "../services/plantPotsRepo";
+import { addPlantPot } from "../services/plantPotsApi";
+import { AddPlantPotRequest } from "../types/addPlantPotApiTypes";
 import "./AddPlant.css";
 
 const AddPlant: React.FC = () => {
-  const { typeName } = useParams<{ typeName: string }>();
+  const { environmentId, plantTypeId, typeName } = useParams<{
+    environmentId: string;
+    plantTypeId: string;
+    typeName: string;
+  }>();
+
   const navigate = useNavigate();
-  
   const [plantName, setPlantName] = useState("");
+  const [potId, setPotId] = useState("");
   const [error, setError] = useState("");
 
   const handleSave = async () => {
-    
-    if (!plantName.trim()) {
-      setError("Please enter a plant name");
+    if (!plantName.trim() || !potId.trim()) {
+      setError("Please enter both plant name and pot ID");
       return;
     }
-    // await addPotToPlantType(typeName || "", plantName);
 
-    // Navigate back to MyPlants page
-    navigate("/plants");
+    try {
+      const request: AddPlantPotRequest = {
+        pot_id: potId,
+        plant_pot_label: plantName,
+        plant_type_id: plantTypeId!,
+      };
+
+      await addPlantPot(environmentId!, request);
+      navigate("/plants");
+    } catch (e: any) {
+      console.error(e);
+      setError("Failed to add plant. Please try again.");
+    }
   };
 
   const handleCancel = () => {
-    navigate(-1); // Go back to previous page
+    navigate(-1);
   };
 
   return (
@@ -31,10 +46,20 @@ const AddPlant: React.FC = () => {
       <div className="modal-content">
         <div className="modal-header">
           <span role="img" aria-label="leaf">🌿</span>
-          <h2>Add new Plant</h2>
+          <h2>Add New Plant</h2>
         </div>
 
         <div className="modal-body">
+          <div className="input-group">
+            <label>Arduino ID</label>
+            <input
+              className="input"
+              placeholder="Enter arduino ID"
+              value={potId}
+              onChange={(e) => setPotId(e.target.value)}
+            />
+          </div>
+
           <div className="input-group">
             <label>Name</label>
             <input
@@ -53,12 +78,8 @@ const AddPlant: React.FC = () => {
           {error && <div className="error-message">{error}</div>}
 
           <div className="modal-footer">
-            <button className="cancel-button" onClick={handleCancel}>
-              Cancel
-            </button>
-            <button className="save-button" onClick={handleSave}>
-              Save
-            </button>
+            <button className="cancel-button" onClick={handleCancel}>Cancel</button>
+            <button className="save-button" onClick={handleSave}>Save</button>
           </div>
         </div>
       </div>
