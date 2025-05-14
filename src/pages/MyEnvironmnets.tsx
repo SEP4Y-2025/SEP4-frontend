@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import plantsIcon from "../assets/plants.png"
+import plantsIcon from "../assets/plants.png";
 import { useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { FetchMyEnvironments } from "../hooks/FetchMyEnvironmnets";
@@ -21,7 +21,7 @@ const MyEnvironmnets = () => {
       fetchAllEnvironments(user.userName);
     }
   }, [user]);
-  const handleSwitch = (envId: string, own:boolean) => {
+  const handleSwitch = (envId: string, own: boolean) => {
     setEnvironmentID(envId);
     setIsOwner(own);
     navigate("/plants");
@@ -53,7 +53,11 @@ const MyEnvironmnets = () => {
             <Card
               key={environment.environment_id}
               onClick={() => handleSwitch(environment.environment_id, false)}
-            ></Card>
+            >
+              {" "}
+              <img src={plantsIcon} alt="XD" />
+              {environment.environment_id} XD
+            </Card>
           ))}
       </Grid>
     </div>
