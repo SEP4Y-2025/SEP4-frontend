@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/UserAuthContext";
 import { useAddPlantType } from "../hooks/useAddPlantType";
 import { toast } from "react-toastify";
+import { Flex } from "../Styles/common/Flex";
 
 const MyPlants = () => {
   const {
@@ -69,7 +70,26 @@ const MyPlants = () => {
   return (
     <StyledMyPlantsContainer>
       <h1 className="title">My Plants - {environmentName}</h1>
-      <Button onClick={handleOnInvite}>Invite assistants</Button>
+
+      <Flex $dir="row" $width="35rem" $justifyC="space-between" $alignI="center">
+        <Button onClick={handleOnInvite}>Invite assistants</Button>
+
+        <Button onClick={() => setOpen(true)}>Add new type</Button>
+        {open && (
+          <AddPlantTypeModal
+            typeName={typeName}
+            setTypeName={setTypeName}
+            wateringFrequency={wateringFrequency}
+            setWateringFrequency={setWateringFrequency}
+            dosage={dosage}
+            setDosage={setDosage}
+            error={error ?? ""}
+            handleContinue={handleContinue}
+            handleCancel={handleCancel}
+          />
+        )}
+      </Flex>
+
 
       {plantTypes.map((plant: PlantType, index: number) => (
         <PlantTypeRow
@@ -84,20 +104,6 @@ const MyPlants = () => {
         />
       ))}
 
-      <Button onClick={() => setOpen(true)}>Add new type</Button>
-      {open && (
-        <AddPlantTypeModal
-          typeName={typeName}
-          setTypeName={setTypeName}
-          wateringFrequency={wateringFrequency}
-          setWateringFrequency={setWateringFrequency}
-          dosage={dosage}
-          setDosage={setDosage}
-          error={error ?? ""}
-          handleContinue={handleContinue}
-          handleCancel={handleCancel}
-        />
-      )}
     </StyledMyPlantsContainer>
   );
 };
