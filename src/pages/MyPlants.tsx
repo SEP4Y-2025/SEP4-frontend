@@ -6,8 +6,8 @@ import "./MyPlants.css";
 import { PlantType } from "../types";
 import { addPlantType, getTypesByEnvironment } from "../services/plantTypesApi";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
-import { StyledMyPlantsContainer } from "../Styles/MyPlants.style";
-import { Button } from "../Styles/Button.style";
+import { StyledMyPlantsContainer } from "../Styles/pages/MyPlants.style";
+import { Button } from "../Styles/common/Button.style";
 import { useNavigate } from "react-router-dom";
 
 const MyPlants: React.FC = () => {

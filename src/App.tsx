@@ -9,7 +9,7 @@ import PlantDetails from "./pages/PlantDetails";
 import { EnvironmentProvider } from "./contexts/EnvironmentContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { darkTheme, lightTheme } from "./Styles/Themes";
+import { darkTheme, lightTheme } from "./Styles/themes/Themes";
 import { ThemeProvider } from "styled-components";
 import Login from "./pages/Auth/Login";
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -18,7 +18,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContextProvider } from "./contexts/UserAuthContext";
 import Register from "./pages/Auth/Register";
-import ProfilePage from "./pages/NavBar/Profile";
+import ProfilePage from "./pages/Profile";
 import AddAssistant from "./pages/AddAssistant";
 //-----------------------------------------------------
 const App: React.FC = () => {
@@ -64,15 +64,15 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-               <Route
+              <Route
                 path="/profile"
                 element={
                   <ProtectedRoute>
-                      <ProfilePage />
+                    <ProfilePage />
                   </ProtectedRoute>
                 }
-                />
-                <Route  path="//plants/invite"
+              />
+              <Route path="//plants/invite"
                 element={
                   <ProtectedRoute>
                     <EnvironmentProvider>
@@ -81,9 +81,9 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              
-              <Route path="/login" element={<Login />}/>
-              <Route path="/register" element={<Register />}/>
+
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
             </Routes>
           </Container>
         </ThemeProvider>

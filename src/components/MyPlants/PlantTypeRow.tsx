@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PotCard from "./PotCard";
 import { PlantType } from "../../types";
-import { Flex } from "../../Styles/Flex";
-import { StyledRow } from "../../Styles/MyPlants.style";
+import { Flex } from "../../Styles/common/Flex";
+import { StyledRow } from "../../Styles/pages/MyPlants.style";
 
 export interface PlantTypeRowProps {
   plant: PlantType;

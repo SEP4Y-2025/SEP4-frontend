@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Flex } from "../../Styles/Flex";
-import { Input } from "../../Styles/Input.style";
-import { Button } from "../../Styles/Button.style";
-import { ErrorLabel } from "../../Styles/ErrorLabel";
-import { Label } from "../../Styles/Label.style";
-import { Title } from "../../Styles/Title.style"
+import { Flex } from "../../Styles/common/Flex";
+import { Input } from "../../Styles/common/Input.style";
+import { Button } from "../../Styles/common/Button.style";
+import { ErrorLabel } from "../../Styles/common/ErrorLabel";
+import { Label } from "../../Styles/common/Label.style";
+import { Title } from "../../Styles/common/Title.style"
 import { useAuth } from "../../contexts/UserAuthContext";
 import { useNavigate } from "react-router-dom";
 

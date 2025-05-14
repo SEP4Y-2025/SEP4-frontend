@@ -1,8 +1,8 @@
 import React from "react";
-import { StyledTypeContent } from "../../Styles/MyPlants.style";
-import { Flex } from "../../Styles/Flex";
-import { Input } from "../../Styles/Input.style";
-import { ErrorLabel } from "../../Styles/ErrorLabel";
+import { StyledTypeContent } from "../../Styles/pages/MyPlants.style";
+import { Flex } from "../../Styles/common/Flex";
+import { Input } from "../../Styles/common/Input.style";
+import { ErrorLabel } from "../../Styles/common/ErrorLabel";
 
 interface AddPlantModalProps {
   typeName: string;
