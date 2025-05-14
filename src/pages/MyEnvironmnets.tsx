@@ -13,9 +13,9 @@ const MyEnvironmnets = () => {
   const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments();
   const navigate = useNavigate();
   useEffect(() => {
-    if (user?.userName) {
+    if (user?.user_id) {
       console.log("fetch call");
-      fetchAllEnvironments(user.userName);
+      fetchAllEnvironments(user.user_id);
     }
   }, [user]);
   const handleSwitch = (id: string) => {

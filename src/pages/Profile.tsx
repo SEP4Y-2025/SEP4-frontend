@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Flex } from "../Styles/common/Flex";
 import { Button } from "../Styles/common/Button.style";
@@ -8,31 +8,27 @@ import { InfoBlock, Value } from "../Styles/pages/Profile.style";
 import { useAuth } from "../contexts/UserAuthContext";
 import EditPasswordModal from "../components/common/EditPasswordModal";
 import { useNavigate } from "react-router-dom";
+import { useChangePassword } from "../hooks/useChangePassword";
+import { toast } from "react-toastify";
 
 const ProfilePage: React.FC = () => {
-    const { logout } = useAuth();
+    const { logout, user } = useAuth();
     const [showModal, setShowModal] = useState(false);
+    const { changePassword, loading, error, success } = useChangePassword();
 
-    const [user, setUser] = useState<{ userName: string; email: string }>({
-        userName: "",
-        email: "",
-    });
-
-    const handlePasswordChange = (oldPass: string, newPass: string) => {
+    const handlePasswordChange = async (oldPass: string, newPass: string) => {
         console.log("Password updated:", oldPass, newPass);
-        // API call here
+        if (!user?.userName) {
+            console.error("User not found");
+            return;
+        }
+        await changePassword(user?.userName, oldPass, newPass);
     };
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            setUser({
-                userName: parsedUser.userName || "Unknown",
-                email: parsedUser.email || "Unknown",
-            });
-        }
-    }, []);
+        if (success) toast.success(success);
+        if (error) toast.error(error);
+    }, [success, error]);
 
     return (
         <Flex $justifyC="center">
@@ -41,12 +37,12 @@ const ProfilePage: React.FC = () => {
 
                 <InfoBlock>
                     <Label $fontWeight="600">Username</Label>
-                    <Value>{user.userName}</Value>
+                    <Value>{user?.userName}</Value>
                 </InfoBlock>
 
                 <InfoBlock>
                     <Label $fontWeight="600">Email</Label>
-                    <Value>{user.email}</Value>
+                    <Value>{user?.email}</Value>
                 </InfoBlock>
 
                 <Flex $dir="column" $margin="20px 0" $width="100%">

@@ -1,13 +1,15 @@
 export type UserProfileToken = {
-  username: string;
-  // email:string;
-  token: string;
+    username: string;
+    // email:string;
+    token: string;
 };
 export type UserProfile = {
-  userName: string;
+    userName: string;
+    email: string;
+    user_id: string;
 };
 
 export type RegisterResponse = {
-  message: string;
-  user_id: string;
+    message: string;
+    user_id: string;
 };

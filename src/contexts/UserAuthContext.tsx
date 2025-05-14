@@ -30,7 +30,7 @@ export const UserContextProvider = ({ children }: Props) => {
     const storedUser = localStorage.getItem("user");
     const storedToken = localStorage.getItem("token");
     if (storedUser && storedToken) {
-      setUser({ userName: JSON.parse(storedUser) });
+      setUser(JSON.parse(storedUser));
       setToken(token);
       axios.defaults.headers.common["Authorization"] = "bearer " + token;
     }
@@ -50,8 +50,8 @@ export const UserContextProvider = ({ children }: Props) => {
       });
 
       if (res.data?.user_id) {
-        const newUser: UserProfile = { userName: res.data.user_id };
-        localStorage.setItem("user", JSON.stringify(newUser.userName));
+        const newUser: UserProfile = { userName: username, email, user_id: res.data.user_id };
+        localStorage.setItem("user", JSON.stringify(newUser));
         setUser(newUser);
         toast.success(res.data.message || "Registration successful");
         navigate("/");
@@ -75,10 +75,12 @@ export const UserContextProvider = ({ children }: Props) => {
       });
 
       if (res.data?.access_token && res.data?.user_id) {
-        const newUser: UserProfile = { userName: res.data.user_id };
+
+        const f = await axios.get(`${API_URL}/users/${res.data.user_id}`);
+        const newUser: UserProfile = { userName: f.data.username, email: f.data.email, user_id: res.data.user_id };
 
         localStorage.setItem("token", res.data.access_token);
-        localStorage.setItem("user", JSON.stringify(newUser.userName));
+        localStorage.setItem("user", JSON.stringify(newUser));
 
         setToken(res.data.access_token);
         setUser(newUser);
@@ -108,7 +110,7 @@ export const UserContextProvider = ({ children }: Props) => {
     navigate("/login");
   };
 
-   return (
+  return (
     <UserContext.Provider
       value={{ loginUser, registerUser, user, token, logout, isLoggedIn }}
     >
