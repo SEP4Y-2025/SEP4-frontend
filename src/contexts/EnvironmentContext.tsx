@@ -7,6 +7,7 @@ import {
 } from "react";
 import { PlantType, Pot } from "../types";
 import axios from "axios";
+import { useGetPotsByEnvironment } from "../hooks/useGetPotsByEnvironment";
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
@@ -33,44 +34,20 @@ interface Props {
 }
 
 const EnvironmentProvider = ({ children }: Props) => {
-  const [pots, setPots] = useState<Pot[]>([]);
   const [ownerID, setOwnerID] = useState("");
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
   const [environmentName, setEnvironmentName] = useState<string>("");
-  const [environmentID, setEnvironmentID] = useState<string>("");
+  const [environmentID, setEnvironmentID] = useState<string>("680f8359688cb5341f9f9c19");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-<<<<<<< HEAD
 
-  useEffect(() => {
-    const fetchEnvironment = async () => {
-      try {
-        setError(null);
-        setLoading(true);
+  // Use the hook to get pots by environment
+  const { pots, error: potsError } = useGetPotsByEnvironment(environmentID);
 
-        const fetchedTypes = await getTypesByEnvironment(
-          environmentID
-        );
-        console.log('Fetched plant types:', fetchedTypes);
-        setPlantTypes(fetchedTypes);
-
-        const fetchedPots = await getPotsByEnvironment(
-          environmentID
-        );
-        console.log('Fetched pots:', fetchedPots);
-        setPots(fetchedPots);
-      } catch (er) {
-        er instanceof Error
-          ? setError(er.message)
-          : setError("Unknown error occurred");
-      } finally {
-        setLoading(false);
-=======
-  const fetchEnvironment = async () => {
+  const fetchPlantTypes = async () => {
     try {
       if (!environmentID) {
         return;
->>>>>>> Sprint4
       }
       setError(null);
       setLoading(true);
@@ -79,11 +56,6 @@ const EnvironmentProvider = ({ children }: Props) => {
         `${BASE_URL}/environments/${environmentID}/plant_types`
       );
       setPlantTypes(typesResponse.data.PlantTypes);
-
-      const response = await axios.get(
-        `${BASE_URL}/environments/${environmentID}/pots`
-      );
-      setPots(response.data.pots);
     } catch (er) {
       er instanceof Error
         ? setError(er.message)
@@ -92,18 +64,23 @@ const EnvironmentProvider = ({ children }: Props) => {
       setLoading(false);
     }
   };
+
+  const refreshEnvironmentData = async () => {
+    await fetchPlantTypes();
+    // Pots will be refetched automatically by the hook when environmentID changes
+  };
+
   useEffect(() => {
-    fetchEnvironment();
+    fetchPlantTypes();
   }, [environmentID]);
 
-<<<<<<< HEAD
+  // Update error state if there's an error from the pots hook
   useEffect(() => {
-    // Debug: log when plant types change
-    console.log('Plant types updated:', plantTypes);
-  }, [plantTypes]);
+    if (potsError) {
+      setError(potsError.message);
+    }
+  }, [potsError]);
 
-=======
->>>>>>> Sprint4
   return (
     <EnvironmentContext.Provider
       value={{
@@ -112,9 +89,9 @@ const EnvironmentProvider = ({ children }: Props) => {
         ownerID,
         environmentName,
         plantTypes,
-        pots,
+        pots, // This now comes from the hook
         environmentID,
-        refreshEnvironmentData: fetchEnvironment,
+        refreshEnvironmentData,
         setEnvironmentID,
         setEnvironmentName,
         setPlantTypes,

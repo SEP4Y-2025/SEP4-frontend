@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { Pot } from "../types";
 
-export const useGetPotById = (potId: string, environmentId: string = "680f8359688cb5341f9f9c19") => {
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+
+export const useGetPotById = (potId: string, environmentId: string) => {
   const [pot, setPot] = useState<Pot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -9,21 +12,41 @@ export const useGetPotById = (potId: string, environmentId: string = "680f835968
   useEffect(() => {
     const fetchPot = async () => {
       setLoading(true);
+      setError(null);
+      
       try {
-        const response = await fetch(`/api/environments/${environmentId}/pots/${potId}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch pot details");
+        console.log('Fetching pot details for:', potId, 'in environment:', environmentId);
+        
+        // Use the correct backend endpoint
+        const response = await axios.get(`${BASE_URL}/environments/${environmentId}/pots/${potId}`);
+        console.log('Raw pot response:', response.data);
+        
+        // Transform the pot data
+        if (response.data.pot) {
+          const transformedPot = {
+            pot_id: response.data.pot.pot_id?.$oid || response.data.pot.pot_id,
+            name: response.data.pot.name,
+            plant_type_id: response.data.pot.plant_type_id?.$oid || response.data.pot.plant_type_id,
+            state: response.data.pot.state
+          };
+          
+          console.log('Transformed pot:', transformedPot);
+          setPot(transformedPot);
+        } else {
+          console.log('No pot found in response');
+          setPot(null);
         }
-        const data = await response.json();
-        setPot(data.pot);
       } catch (err) {
+        console.error('Error fetching pot details:', err);
         setError(err as Error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (potId) fetchPot();
+    if (potId && environmentId) {
+      fetchPot();
+    }
   }, [potId, environmentId]);
 
   return { pot, loading, error };
