@@ -41,7 +41,7 @@ export const UserContextProvider = ({ children }: Props) => {
     username: string,
     password: string
   ) => {
-    await registerAPI(email, username, password)
+    await registerAPI( username, password, email)
       .then((res) => {
         if (res) {
 

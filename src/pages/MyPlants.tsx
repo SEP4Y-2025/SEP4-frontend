@@ -11,7 +11,7 @@ import { Button } from "../Styles/Button.style";
 import { useNavigate } from "react-router-dom";
 
 const MyPlants: React.FC = () => {
-  const { plantTypes, pots,environmentID, loading, environmentName, error, setPlantTypes } =
+  const { plantTypes, pots, environmentID, loading, environmentName, error, setPlantTypes } =
     useEnvironmentCtx();
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
@@ -26,14 +26,14 @@ const MyPlants: React.FC = () => {
     const watering = parseInt(wateringFrequency, 10);
     const dose = parseInt(dosage, 10);
     if (watering < 0 || dose < 0) {
-     // setErrorMessage("Values must be positive");
+      // setErrorMessage("Values must be positive");
       return;
     }
 
     try {
       await addPlantType(environmentID, {
         name: typeName,
-        water_frequency: watering,
+        watering_frequency: watering,
         water_dosage: dose,
       });
       const updated = await getTypesByEnvironment(environmentID);
@@ -50,7 +50,7 @@ const MyPlants: React.FC = () => {
   const handleCancel = () => {
     setOpen(false);
   };
-  const handleOnInvite =() =>{
+  const handleOnInvite = () => {
     navigate("/plants/invite")
   }
 

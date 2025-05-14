@@ -15,7 +15,7 @@ type EnvironmentContextType = {
   environmentName: string;
   loading: boolean;
   error: string | null;
-  environmentID:string;
+  environmentID: string;
   setEnvironmentName: (newName: string) => void;
   setEnvironmentID: (search: string) => void;
   setPlantTypes: (newTypes: PlantType[]) => void;
