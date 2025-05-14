@@ -1,18 +1,26 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import {  PlantType, Pot } from "../types";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { PlantType, Pot } from "../types";
 import { getPotsByEnvironment } from "../services/plantPotsApi";
 import { getTypesByEnvironment } from "../services/plantTypesApi";
 
 type EnvironmentContextType = {
   pots: Pot[];
   plantTypes: PlantType[];
-  environmnentName: string;
+  environmentName: string;
   loading: boolean;
-  error: string;
+  error: string | null;
+  environmentID:string;
   setEnvironmentName: (newName: string) => void;
   setEnvironmentID: (search: string) => void;
   setPlantTypes: (newTypes: PlantType[]) => void;
 };
+
 const EnvironmentContext = createContext<EnvironmentContextType | undefined>(
   undefined
 );
@@ -24,41 +32,40 @@ interface Props {
 const EnvironmentProvider = ({ children }: Props) => {
   const [pots, setPots] = useState<Pot[]>([]);
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
-  const [environmnentName, setEnvironmentName] = useState<string>("");
-  const [environmnentID, setEnvironmentID] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [environmentName, setEnvironmentName] = useState<string>("");
+  const [environmentID, setEnvironmentID] = useState<string>("680f8359688cb5341f9f9c19");
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchEnvironment = async () => {
       try {
-        setError("");
+        setError(null);
         setLoading(true);
 
-        const fetchedTypes = await getTypesByEnvironment("680f8359688cb5341f9f9c19")
-        console.log(fetchedTypes)
+        const fetchedTypes = await getTypesByEnvironment(
+          environmentID
+        );
         setPlantTypes(fetchedTypes);
-        //TODO PLACEHOLDER ID
-        const fetchedPots = await getPotsByEnvironment("680f8359688cb5341f9f9c19");
 
+        const fetchedPots = await getPotsByEnvironment(
+          environmentID
+        );
         setPots(fetchedPots);
-
-
-
       } catch (er) {
         er instanceof Error
           ? setError(er.message)
-          : setError("Unkonown error occured");
+          : setError("Unknown error occurred");
       } finally {
         setLoading(false);
       }
     };
-    fetchEnvironment();
-  }, [environmnentID]);
 
+    fetchEnvironment();
+  }, [environmentID]);
 
   useEffect(() => {
-    console.log("Updated types:", plantTypes);
+
   }, [plantTypes]);
 
   return (
@@ -66,12 +73,13 @@ const EnvironmentProvider = ({ children }: Props) => {
       value={{
         loading,
         error,
-        environmnentName,
+        environmentName,
         plantTypes,
         pots,
+        environmentID,
         setEnvironmentID,
         setEnvironmentName,
-        setPlantTypes
+        setPlantTypes,
       }}
     >
       {children}
@@ -79,13 +87,15 @@ const EnvironmentProvider = ({ children }: Props) => {
   );
 };
 
-const useEnvironmentCtx = () =>{
-    const context = useContext(EnvironmentContext);
-    if(!context){
-        throw new Error("useWeather must be used within a WeatherProvider");
-    }
-    return context;
+const useEnvironmentCtx = () => {
+  const context = useContext(EnvironmentContext);
+  if (!context) {
+    throw new Error(
+      "useEnvironmentCtx must be used within an EnvironmentProvider"
+    );
+  }
+  return context;
 };
 
-export{EnvironmentProvider, useEnvironmentCtx};
+export { EnvironmentProvider, useEnvironmentCtx };
 export default EnvironmentContext;

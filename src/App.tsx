@@ -1,28 +1,95 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LogsPage from "./pages/LogsPage";
 import Navbar from "./components/common/Navbar";
 import MyPlants from "./pages/MyPlants";
 import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
-import PlantDetails from './pages/PlantDetails';
+import PlantDetails from "./pages/PlantDetails";
 import { EnvironmentProvider } from "./contexts/EnvironmentContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import { darkTheme, lightTheme } from "./Styles/Themes";
+import { ThemeProvider } from "styled-components";
+import Login from "./pages/Auth/Login";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+//POPUP STUFF for auth, subject to change
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserContextProvider } from "./contexts/UserAuthContext";
+import Register from "./pages/Auth/Register";
+import ProfilePage from "./pages/NavBar/Profile";
+import AddAssistant from "./pages/AddAssistant";
+//-----------------------------------------------------
 const App: React.FC = () => {
+  const [darkMode, setDarkmode] = useState(false);
+
   return (
     <Router>
-      <Navbar />
-      <Container>
-        <Routes>
-          <Route path="/" element={<LogsPage />} />
-          <Route path="/plants" element={<EnvironmentProvider><MyPlants /></EnvironmentProvider>} />
-          <Route path="/addplant/:typeName" element={<EnvironmentProvider><AddPlant /></EnvironmentProvider>} />
-          <Route path="/plant-details/:id" element={<EnvironmentProvider><PlantDetails /></EnvironmentProvider>} />
-        </Routes>
-      </Container>
+      <UserContextProvider>
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+          <Navbar />
+          <Container>
+            <ToastContainer />
+            <Routes>
+              <Route path="/" element={<ProtectedRoute><LogsPage />
+              </ProtectedRoute>} />
+              <Route
+                path="/plants"
+                element={
+                  <ProtectedRoute>
+                    <EnvironmentProvider>
+                      <MyPlants />
+                    </EnvironmentProvider>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/addplant/:typeName"
+                element={
+                  <ProtectedRoute>
+                    <EnvironmentProvider>
+                      <AddPlant />
+                    </EnvironmentProvider>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/plant-details/:id"
+                element={
+                  <ProtectedRoute>
+                    <EnvironmentProvider>
+                      <PlantDetails />
+                    </EnvironmentProvider>
+                  </ProtectedRoute>
+                }
+              />
+               <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                      <ProfilePage />
+                  </ProtectedRoute>
+                }
+                />
+                <Route  path="//plants/invite"
+                element={
+                  <ProtectedRoute>
+                    <EnvironmentProvider>
+                      <AddAssistant />
+                    </EnvironmentProvider>
+                  </ProtectedRoute>
+                }
+              />
+              
+              <Route path="/login" element={<Login />}/>
+              <Route path="/register" element={<Register />}/>
+            </Routes>
+          </Container>
+        </ThemeProvider>
+      </UserContextProvider>
     </Router>
+
   );
 };
 
