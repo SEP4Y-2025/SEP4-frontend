@@ -4,15 +4,27 @@ import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import "./MyPlants.css";
 
 import { PlantType } from "../types";
-import { addPlantType, getTypesByEnvironment } from "../services/plantTypesApi";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { StyledMyPlantsContainer } from "../Styles/MyPlants.style";
 import { Button } from "../Styles/Button.style";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/UserAuthContext";
+import { useAddPlantType } from "../hooks/useAddPlantType";
+import { toast } from "react-toastify";
 
-const MyPlants: React.FC = () => {
-  const { plantTypes, pots,environmentID, loading, environmentName, error, setPlantTypes } =
-    useEnvironmentCtx();
+const MyPlants = () => {
+  const {
+    plantTypes,
+    pots,
+    environmentID,
+    loading,
+    environmentName,
+    error,
+    refreshEnvironmentData,
+  } = useEnvironmentCtx();
+  const { addPlantType } = useAddPlantType();
+
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
@@ -20,39 +32,39 @@ const MyPlants: React.FC = () => {
   const navigate = useNavigate();
   const handleContinue = async () => {
     if (!typeName || !wateringFrequency || !dosage) {
+      toast.error("Please fill in all fields");
       //setErrorMessage("Please fill in all fields");
       return;
     }
     const watering = parseInt(wateringFrequency, 10);
     const dose = parseInt(dosage, 10);
-    if (watering < 0 || dose < 0) {
-     // setErrorMessage("Values must be positive");
+    if (watering <= 0 || dose <= 0) {
+      toast.error("Please set correct dosage and watering.");
       return;
     }
 
     try {
       await addPlantType(environmentID, {
         name: typeName,
-        water_frequency: watering,
+        watering_frequency: watering,
         water_dosage: dose,
       });
-      const updated = await getTypesByEnvironment(environmentID);
-      setPlantTypes(updated);
+      await refreshEnvironmentData();
       setTypeName("");
       setWateringFrequency("");
       setDosage("");
       setOpen(false);
     } catch (err) {
-      console.error("Failed to add plant type");
+      toast.error("Failed to add plant type");
     }
   };
 
   const handleCancel = () => {
     setOpen(false);
   };
-  const handleOnInvite =() =>{
-    navigate("/plants/invite")
-  }
+  const handleOnInvite = () => {
+    navigate("/plants/invite");
+  };
 
   return (
     <StyledMyPlantsContainer>
@@ -72,10 +84,7 @@ const MyPlants: React.FC = () => {
         />
       ))}
 
-      <Button onClick={() => setOpen(true)}>
-        Add new type
-      </Button>
-
+      <Button onClick={() => setOpen(true)}>Add new type</Button>
       {open && (
         <AddPlantTypeModal
           typeName={typeName}
