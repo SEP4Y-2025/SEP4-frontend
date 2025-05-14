@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { useEnvironmentCtx } from "../../src/contexts/EnvironmentContext";
 import MyPlants from "../../src/pages/MyPlants";
-import { vi, Mock } from "vitest";
+import { vi, Mock, it, expect } from "vitest";
 import { addPlantType, getTypesByEnvironment } from "../../src/services/plantTypesApi";
 
 vi.mock("../../src/contexts/EnvironmentContext", () => ({
@@ -22,6 +22,7 @@ it("renders the page correctly", () => {
         ],
         pots: [],
         environmentName: "Greenhouse",
+        environmentId: "680f8359688cb5341f9f9c19",
         loading: false,
         error: null,
     });
@@ -61,6 +62,7 @@ it("adds a new plant type correctly", async () => {
         plantTypes: [],
         pots: [],
         environmentName: "Greenhouse",
+        environmentID: "680f8359688cb5341f9f9c19",
         loading: false,
         error: null,
         setPlantTypes: vi.fn(),
@@ -90,7 +92,7 @@ it("adds a new plant type correctly", async () => {
     await waitFor(() => {
         expect(addPlantType).toHaveBeenCalledWith("680f8359688cb5341f9f9c19", {
             name: "Basil",
-            water_frequency: 5,
+            watering_frequency: 5,
             water_dosage: 100,
         });
         expect(getTypesByEnvironment).toHaveBeenCalledWith("680f8359688cb5341f9f9c19");
