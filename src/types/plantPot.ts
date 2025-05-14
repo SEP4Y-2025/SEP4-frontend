@@ -1,26 +1,14 @@
-// export type Pot ={
-//   _id: string;
-//   name: string;
-//   plant_type_id: string;
-//   environment_id: string;
-//   water_tank_id: string;
-//   soil_humidity: number;
-// }
-
-export interface State {
-  temperature: [string, string];
-  soilHumidity: [string, string];
-  airHumidity: [string, string];
-}
 export type Pot = {
-  potId: string;
+  pot_id: string;           // Changed from potId
   name: string;
-  state: State;
-  plantTypeId: string;
-  waterTank: WaterTank;
-};
-export type WaterTank = {
-  capacityMl: number;
-  currentLevelMl: number;
-  status: string;
+  plant_type_id: string;    // Changed from plantTypeId
+  state?: {
+    air_humidity?: number;
+    temperature?: number;
+    soil_humidity?: number;
+    light_intensity?: number;
+    water_level?: number;
+    water_tank_capacity?: number;
+    measured_at?: string;
+  };
 };

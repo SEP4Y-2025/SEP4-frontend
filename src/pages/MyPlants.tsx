@@ -59,18 +59,22 @@ const MyPlants: React.FC = () => {
       <h1 className="title">My Plants - {environmentName}</h1>
       <button onClick={handleOnInvite}>Invite assistants</button>
 
-      {plantTypes.map((plant: PlantType, index: number) => (
-        <PlantTypeRow
-          key={index}
-          plant={plant}
-          pots={pots
-            .filter((pot) => pot.plantTypeId === plant._id)
-            .map((pot) => ({
-              id: pot.potId,
+      {plantTypes.map((plant: PlantType, index: number) => {
+        // Add debugging to see what's being filtered
+        const filteredPots = pots.filter((pot) => pot.plant_type_id === plant._id);
+        console.log(`Plant ${plant.name} (${plant._id}):`, filteredPots);
+
+        return (
+          <PlantTypeRow
+            key={index}
+            plant={plant}
+            pots={filteredPots.map((pot) => ({
+              id: pot.pot_id,      // Changed from potId to pot_id
               potName: pot.name,
             }))}
-        />
-      ))}
+          />
+        );
+      })}
 
       <Button onClick={() => setOpen(true)}>
         Add new type

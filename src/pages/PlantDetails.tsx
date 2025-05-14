@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
@@ -10,45 +9,69 @@ const PlantDetails: React.FC = () => {
   const navigate = useNavigate();
   const { pots, plantTypes, loading, error } = useEnvironmentCtx();
 
-  const pot = pots.find((p) => p.potId === id);
+  // Debug logs to help troubleshoot
+  console.log('PlantDetails - Looking for pot with id:', id);
+  console.log('PlantDetails - Available pots:', pots);
+  console.log('PlantDetails - Available plant types:', plantTypes);
+
+  // Updated to use pot_id instead of potId
+  const pot = pots.find((p) => p.pot_id === id);
   const plantType = pot
-    ? plantTypes.find((type) => type._id === pot.plantTypeId)
+    ? plantTypes.find((type) => type._id === pot.plant_type_id)
     : null;
+
+  console.log('PlantDetails - Found pot:', pot);
+  console.log('PlantDetails - Found plant type:', plantType);
 
   const handleSave = () => navigate("/plants");
   const handleDelete = async () => {
-  const environmentId = "680f8359688cb5341f9f9c19"; 
-  //Hardcoded environment ID for now
-  if (window.confirm("Are you sure you want to delete this plant?")) {
-    try {
-      await deletePot(id!, environmentId); 
-      navigate("/plants");
-       window.location.reload();
-    } catch (error) {
-      alert("Failed to delete plant.");
+    const environmentId = "680f8359688cb5341f9f9c19"; 
+    //Hardcoded environment ID for now
+    if (window.confirm("Are you sure you want to delete this plant?")) {
+      try {
+        await deletePot(id!, environmentId); 
+        navigate("/plants");
+        window.location.reload();
+      } catch (error) {
+        alert("Failed to delete plant.");
+      }
     }
-  }
-};
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-  if (!pot || !plantType) return <div>Plant not found</div>;
+  if (!pot || !plantType) {
+    return (
+      <div>
+        <div>Plant not found</div>
+        <div>Debug info:</div>
+        <div>ID: {id}</div>
+        <div>Pot found: {pot ? 'Yes' : 'No'}</div>
+        <div>Plant type found: {plantType ? 'Yes' : 'No'}</div>
+        <div>Total pots: {pots.length}</div>
+        <div>Total plant types: {plantTypes.length}</div>
+      </div>
+    );
+  }
 
-  const getStateValue = (stateArray: any): number => {
-    if (stateArray && Array.isArray(stateArray) && stateArray.length > 1) {
-      return Number(stateArray[1]);
-    }
-    return 0;
+  // Updated to use the new state structure
+  const temperatureValue = pot.state?.temperature || 0;
+  const soilHumidityValue = pot.state?.soil_humidity || 0;
+  const airHumidityValue = pot.state?.air_humidity || 0;
+  
+  // Calculate water percentage using the new state fields
+  const waterLevel = pot.state?.water_level || 0;
+  const waterCapacity = pot.state?.water_tank_capacity || 1;
+  const waterPercentage = Math.round((waterLevel / waterCapacity) * 100);
+
+  // Determine water tank status based on percentage
+  const getWaterStatus = (percentage: number) => {
+    if (percentage < 20) return "Low";
+    if (percentage < 50) return "Medium";
+    return "Good";
   };
 
-  const temperatureValue = getStateValue(pot.state.temperature);
-  const soilHumidityValue = getStateValue(pot.state.soilHumidity);
-  const airHumidityValue = getStateValue(pot.state.airHumidity);
-  
-  
-  const waterPercentage = Math.round(
-    (pot.waterTank.currentLevelMl / pot.waterTank.capacityMl) * 100
-  );
+  const waterStatus = getWaterStatus(waterPercentage);
 
   return (
     <div className="plant-details-page">
@@ -102,23 +125,22 @@ const PlantDetails: React.FC = () => {
         </div>
       </div>
 
-      {}
       <div className="details-card">
         <h2>Water Tank Status</h2>
         
         <div className="detail-row">
           <span className="detail-label">Current Level</span>
-          <span className="detail-value">{pot.waterTank.currentLevelMl} ml</span>
+          <span className="detail-value">{waterLevel} ml</span>
         </div>
         
         <div className="detail-row">
           <span className="detail-label">Total Capacity</span>
-          <span className="detail-value">{pot.waterTank.capacityMl} ml</span>
+          <span className="detail-value">{waterCapacity} ml</span>
         </div>
         
         <div className="detail-row">
           <span className="detail-label">Status</span>
-          <span className="detail-value">{pot.waterTank.status}</span>
+          <span className="detail-value">{waterStatus}</span>
         </div>
         
         <div className="water-tank-visual">
@@ -131,7 +153,7 @@ const PlantDetails: React.FC = () => {
           <div className="water-tank-percentage">{waterPercentage}%</div>
           <div className="tank-labels">
             <span>0 ml</span>
-            <span>{pot.waterTank.capacityMl} ml</span>
+            <span>{waterCapacity} ml</span>
           </div>
         </div>
       </div>

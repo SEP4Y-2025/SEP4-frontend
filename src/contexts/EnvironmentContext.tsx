@@ -46,11 +46,13 @@ const EnvironmentProvider = ({ children }: Props) => {
         const fetchedTypes = await getTypesByEnvironment(
           environmentID
         );
+        console.log('Fetched plant types:', fetchedTypes);
         setPlantTypes(fetchedTypes);
 
         const fetchedPots = await getPotsByEnvironment(
           environmentID
         );
+        console.log('Fetched pots:', fetchedPots);
         setPots(fetchedPots);
       } catch (er) {
         er instanceof Error
@@ -65,7 +67,8 @@ const EnvironmentProvider = ({ children }: Props) => {
   }, [environmentID]);
 
   useEffect(() => {
-
+    // Debug: log when plant types change
+    console.log('Plant types updated:', plantTypes);
   }, [plantTypes]);
 
   return (

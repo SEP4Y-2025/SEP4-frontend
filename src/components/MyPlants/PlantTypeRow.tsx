@@ -26,8 +26,8 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
         $background="#f2fdf8"
       >
         <StyledRow>
-          {pots.map((plant, index) => (
-            <PotCard key={index} id={plant.id} plantName={plant.potName} />
+          {pots.map((pot, index) => (  // Changed from 'plant' to 'pot'
+            <PotCard key={index} id={pot.id} plantName={pot.potName} />
           ))}
         </StyledRow>
         <i
