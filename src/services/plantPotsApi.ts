@@ -4,7 +4,7 @@ import { Pot } from "../types";
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
-export const addPlantPot = async (pot: AddPlantPotRequest): Promise<PlantPotResponse> => {
+export const addPlantPot = async (environementId:string, pot: AddPlantPotRequest): Promise<PlantPotResponse> => {
   const response = await axios.post(`${BASE_URL}/pots`, pot);
   return response.data;
 };
