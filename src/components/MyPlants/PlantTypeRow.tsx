@@ -4,6 +4,7 @@ import PotCard from "./PotCard";
 import { PlantType } from "../../types";
 import { Flex } from "../../Styles/Flex";
 import { StyledRow } from "../../Styles/MyPlants.style";
+import { useEnvironmentCtx } from "../../contexts/EnvironmentContext";
 
 export interface PlantTypeRowProps {
   plant: PlantType;
@@ -12,6 +13,7 @@ export interface PlantTypeRowProps {
 
 const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
   const navigate = useNavigate();
+  const{isOwner} = useEnvironmentCtx();
 
   return (
     <Flex $dir="column" $alignI="center">
@@ -30,12 +32,12 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
             <PotCard key={index} id={plant.id} plantName={plant.potName} />
           ))}
         </StyledRow>
-        <i
+        {isOwner && <i
           className="bi bi-plus-circle"
           role="button"
           aria-label="Add plant"
           onClick={() => navigate(`/addplant/${plant.name}`)}
-        ></i>
+        ></i>}
       </Flex>
     </Flex>
   );

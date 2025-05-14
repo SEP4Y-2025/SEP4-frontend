@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Flex } from "../Styles/Flex";
+
 import plantsIcon from "../assets/plants.png"
 import { useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
@@ -11,7 +11,7 @@ import { Button } from "../Styles/Button.style";
 import { Title } from "../Styles/Title.style";
 
 const MyEnvironmnets = () => {
-  const { setEnvironmentID } = useEnvironmentCtx();
+  const { setEnvironmentID, setIsOwner } = useEnvironmentCtx();
   const { user } = useAuth();
   const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments();
   const navigate = useNavigate();
@@ -21,8 +21,9 @@ const MyEnvironmnets = () => {
       fetchAllEnvironments(user.userName);
     }
   }, [user]);
-  const handleSwitch = (id: string) => {
-    setEnvironmentID(id);
+  const handleSwitch = (envId: string, own:boolean) => {
+    setEnvironmentID(envId);
+    setIsOwner(own);
     navigate("/plants");
   };
 
@@ -36,7 +37,7 @@ const MyEnvironmnets = () => {
           .map((environment: EnvironmentBrief) => (
             <Card
               key={environment.environment_id}
-              onClick={() => handleSwitch(environment.environment_id)}
+              onClick={() => handleSwitch(environment.environment_id, true)}
             >
               <img src={plantsIcon} alt="XD" />
               {environment.environment_id} XD
@@ -51,7 +52,7 @@ const MyEnvironmnets = () => {
           .map((environment: EnvironmentBrief) => (
             <Card
               key={environment.environment_id}
-              onClick={() => handleSwitch(environment.environment_id)}
+              onClick={() => handleSwitch(environment.environment_id, false)}
             ></Card>
           ))}
       </Grid>
