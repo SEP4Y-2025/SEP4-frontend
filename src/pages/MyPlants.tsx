@@ -57,7 +57,7 @@ const MyPlants: React.FC = () => {
   return (
     <StyledMyPlantsContainer>
       <h1 className="title">My Plants - {environmentName}</h1>
-      <button onClick={handleOnInvite}>Invite assistants</button>
+      <Button onClick={handleOnInvite}>Invite assistants</Button>
 
       {plantTypes.map((plant: PlantType, index: number) => (
         <PlantTypeRow

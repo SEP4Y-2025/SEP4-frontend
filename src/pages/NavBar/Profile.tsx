@@ -44,7 +44,6 @@ const ProfilePage: React.FC = () => {
 
                 <Flex $dir="column" $margin="20px 0" $width="100%">
                     <Button $margin="0 0 10px 0">Edit Profile</Button>
-                    <Button $margin="0 0 10px 0">Invite a Friend</Button>
                     <Button onClick={logout} $margin="0 0 10px 0">Log Out</Button>
                 </Flex>
             </Flex>
