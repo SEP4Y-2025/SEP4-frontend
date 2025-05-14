@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { addPlantPot } from "../services/plantPotsApi";
+
 import { AddPlantPotRequest } from "../types/addPlantPotApiTypes";
 import "./AddPlant.css";
+import { useAddPlantPot } from "../hooks/useAddPlantPot";
 
 const AddPlant: React.FC = () => {
   const { environmentId, plantTypeId, typeName } = useParams<{
@@ -15,6 +16,7 @@ const AddPlant: React.FC = () => {
   const [plantName, setPlantName] = useState("");
   const [potId, setPotId] = useState("");
   const [error, setError] = useState("");
+  const { addPlantPot } = useAddPlantPot();
 
   const handleSave = async () => {
     if (!plantName.trim() || !potId.trim()) {
@@ -29,7 +31,7 @@ const AddPlant: React.FC = () => {
         plant_type_id: plantTypeId!,
       };
 
-      await addPlantPot(environmentId!, request);
+      await addPlantPot(request);
       navigate("/plants");
     } catch (e: any) {
       console.error(e);
@@ -45,7 +47,9 @@ const AddPlant: React.FC = () => {
     <div className="add-plant-modal">
       <div className="modal-content">
         <div className="modal-header">
-          <span role="img" aria-label="leaf">🌿</span>
+          <span role="img" aria-label="leaf">
+            🌿
+          </span>
           <h2>Add New Plant</h2>
         </div>
 
@@ -78,8 +82,12 @@ const AddPlant: React.FC = () => {
           {error && <div className="error-message">{error}</div>}
 
           <div className="modal-footer">
-            <button className="cancel-button" onClick={handleCancel}>Cancel</button>
-            <button className="save-button" onClick={handleSave}>Save</button>
+            <button className="cancel-button" onClick={handleCancel}>
+              Cancel
+            </button>
+            <button className="save-button" onClick={handleSave}>
+              Save
+            </button>
           </div>
         </div>
       </div>

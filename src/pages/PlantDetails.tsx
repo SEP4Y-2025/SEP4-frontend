@@ -1,11 +1,12 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
-import {deletePot} from "../services/plantPotsApi";
 import "./PlantDetails.css";
+import { useDeletePot } from "../hooks/useDeletePot";
 
 const PlantDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const {deletePot}=useDeletePot()
   const navigate = useNavigate();
   const { pots, plantTypes, loading, error } = useEnvironmentCtx();
 
