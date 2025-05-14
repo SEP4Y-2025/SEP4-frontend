@@ -20,6 +20,7 @@ import { UserContextProvider } from "./contexts/UserAuthContext";
 import Register from "./pages/Auth/Register";
 import ProfilePage from "./pages/Profile";
 import AddAssistant from "./pages/AddAssistant";
+import MyEnvironmnets from "./pages/MyEnvironmnets";
 //-----------------------------------------------------
 const App: React.FC = () => {
   const [darkMode, setDarkmode] = useState(false);
@@ -40,6 +41,16 @@ const App: React.FC = () => {
                   <ProtectedRoute>
                     <EnvironmentProvider>
                       <MyPlants />
+                    </EnvironmentProvider>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/environments"
+                element={
+                  <ProtectedRoute>
+                    <EnvironmentProvider>
+                      <MyEnvironmnets />
                     </EnvironmentProvider>
                   </ProtectedRoute>
                 }

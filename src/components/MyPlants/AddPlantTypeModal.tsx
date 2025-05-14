@@ -27,6 +27,7 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
   handleContinue,
   handleCancel,
 }) => {
+  
   return (
     <div className="modal-overlay">
       <StyledTypeContent>
