@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { Flex } from "../Styles/Flex";
-import { StyledRow } from "../Styles/MyPlants.style";
+import { Flex } from "../Styles/common/Flex";
+import { StyledRow } from "../Styles/pages/MyPlants.style";
 import { useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { FetchMyEnvironments } from "../hooks/FetchMyEnvironmnets";

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Flex } from "../Styles/common/Flex";
 import { Input } from "../Styles/common/Input.style";
-import { invitePlantAssistant } from "../services/assistantApi";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { useInvitePlantAssistant } from "../hooks/useInviteAssistant";
 
