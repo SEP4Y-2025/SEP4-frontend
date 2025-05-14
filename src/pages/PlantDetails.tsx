@@ -58,6 +58,7 @@ const PlantDetails: React.FC = () => {
   const temperatureValue = pot.state?.temperature || 0;
   const soilHumidityValue = pot.state?.soil_humidity || 0;
   const airHumidityValue = pot.state?.air_humidity || 0;
+  const lightIntensityValue = pot.state?.light_intensity || 0;
   
   // Calculate water percentage using the new state fields
   const waterLevel = pot.state?.water_level || 0;
@@ -120,6 +121,15 @@ const PlantDetails: React.FC = () => {
           <div className="circular-metric air">
             <div className="metric-value" data-testid="air-humidity">
               {airHumidityValue}%
+            </div>
+          </div>
+        </div>
+        
+        <div className="metric-box">
+          <h3>Light Intensity:</h3>
+          <div className="circular-metric light">
+            <div className="metric-value" data-testid="light-intensity">
+              {lightIntensityValue}%
             </div>
           </div>
         </div>
