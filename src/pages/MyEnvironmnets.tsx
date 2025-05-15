@@ -7,8 +7,8 @@ import { FetchMyEnvironments } from "../hooks/FetchMyEnvironmnets";
 import { useAuth } from "../contexts/UserAuthContext";
 import { EnvironmentBrief } from "../types/Environment";
 import { Grid, Card } from "../Styles/ViewEnvironments.style";
-import { Button } from "../Styles/Button.style";
-import { Title } from "../Styles/Title.style";
+import { Button } from "../Styles/common/Button.style";
+import { Title } from "../Styles/common/Title.style";
 
 const MyEnvironmnets = () => {
   const { setEnvironmentID, setIsOwner } = useEnvironmentCtx();
