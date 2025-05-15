@@ -4,13 +4,13 @@ import axios from "axios";
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
 export function useInvitePlantAssistant() {
-  const [error, setError] = useState("");
+  const [errorOnInvite, setErrorOnInvite] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [assistants, setAssistants] = useState([]);
 
   const invite = async (environmentId: string, userMail: string) => {
-    setError("");
+    setErrorOnInvite("");
     setMessage("");
     setLoading(true);
 
@@ -22,7 +22,7 @@ export function useInvitePlantAssistant() {
       setMessage(response.data.message);
       await getAssistants(environmentId);
     } catch (err: any) {
-      setError(err.response?.data?.error || "An error occurred");
+      setErrorOnInvite(err.response?.data?.error || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,7 @@ export function useInvitePlantAssistant() {
       );
       setAssistants(response.data.assistants);
     } catch (err: any) {
-      setError(err.response?.data?.error || "Could not fetch assistants");
+      setErrorOnInvite(err.response?.data?.error || "Could not fetch assistants");
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ export function useInvitePlantAssistant() {
       );
       await getAssistants(environmentId); // Refresh the list
     } catch (err: any) {
-      setError(err.response?.data?.error || "Could not delete assistant");
+      setErrorOnInvite(err.response?.data?.error || "Could not delete assistant");
     }
   };
 
@@ -60,7 +60,7 @@ export function useInvitePlantAssistant() {
     invite,
     getAssistants,
     deleteAssistant,
-    error,
+    errorOnInvite,
     message,
     loading,
     assistants,
