@@ -13,6 +13,9 @@ export const StyledNavBar = styled.nav<Props>`
     width: 80%;
     object-fit: contain;
     margin-right: 8px;
+    &:hover{
+      cursor: pointer;
+    }
   }
 
   button {

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Flex } from "../../Styles/Flex";
-import { Input } from "../../Styles/Input.style";
-import { Button } from "../../Styles/Button.style";
-import { ErrorLabel } from "../../Styles/ErrorLabel";
-import { Label } from "../../Styles/Label.style";
-import { Title } from "../../Styles/Title.style"
+import { Flex } from "../../Styles/common/Flex";
+import { Input } from "../../Styles/common/Input.style";
+import { Button } from "../../Styles/common/Button.style";
+import { ErrorLabel } from "../../Styles/common/ErrorLabel";
+import { Label } from "../../Styles/common/Label.style";
+import { Title } from "../../Styles/common/Title.style"
 import { useAuth } from "../../contexts/UserAuthContext";
 import { useNavigate } from "react-router-dom";
 
 
 const Register: React.FC = () => {
   const [error, setError] = useState("");
-  const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [repeatEmail, setRepeatEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +20,7 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    if (!name || !email || !repeatEmail || !password || !repeatPassword) {
+    if (!userName || !email || !repeatEmail || !password || !repeatPassword) {
       setError("Please fill in all fields");
       return;
     }
@@ -36,7 +36,7 @@ const Register: React.FC = () => {
     }
 
     try {
-      await registerUser(email, name, password);
+      await registerUser(email, userName, password);
     } catch (e) {
       setError("Invalid credentials or server error");
     }
@@ -48,13 +48,13 @@ const Register: React.FC = () => {
       <Flex $dir="column" $width="280px">
         <Title>Register</Title>
 
-        <Label>Name</Label>
+        <Label>Username</Label>
         <Input $border="2px solid #ccc"
           $borderR="6px"
           type="texr"
-          placeholder="Enter name"
-          value={name}
-          onChange={(e) => setName(e.target.value)} />
+          placeholder="Enter username"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)} />
 
         <Label>Email</Label>
         <Input $border="2px solid #ccc"

@@ -1,7 +1,7 @@
 import React from "react";
 import { LogEntry } from "../types/logTypes";
 import SensorDisplay from "./SensorDisplay";
-import { Flex } from "../Styles/Flex";
+import { Flex } from "../Styles/common/Flex";
 
 interface LogTableProps {
   logs: String[];
