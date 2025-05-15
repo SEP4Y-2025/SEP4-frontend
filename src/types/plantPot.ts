@@ -1,12 +1,3 @@
-// export type Pot ={
-//   _id: string;
-//   name: string;
-//   plant_type_id: string;
-//   environment_id: string;
-//   water_tank_id: string;
-//   soil_humidity: number;
-// }
-
 export type Pot = {
   pot_id: string;           
   name: string;
@@ -20,4 +11,14 @@ export type Pot = {
     water_tank_capacity?: number;
     measured_at?: string;
   };
+};
+
+export type SoilHumidityPrediction = {
+  plant_pot_id: string;
+  current_timestamp: string;
+  prediction_timestamp: string;
+  current_soil_humidity: number;
+  predicted_soil_humidity: number;
+  features_used: string[];
+  prediction_method: string;
 };
