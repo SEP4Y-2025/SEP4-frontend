@@ -7,6 +7,7 @@ export function useInvitePlantAssistant() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [assistants, setAssistants] = useState([]);
 
   const invite = async (environmentId: string, userMail: string) => {
     setError("");
@@ -16,11 +17,10 @@ export function useInvitePlantAssistant() {
     try {
       const response = await axios.put(
         `${BASE_URL}/environments/${environmentId}/assistants`,
-        {
-          user_email: userMail,
-        }
+        { user_email: userMail }
       );
       setMessage(response.data.message);
+      await getAssistants(environmentId);
     } catch (err: any) {
       setError(err.response?.data?.error || "An error occurred");
     } finally {
@@ -28,5 +28,41 @@ export function useInvitePlantAssistant() {
     }
   };
 
-  return { invite, error, message, loading };
+  const getAssistants = async (environmentId: string) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/environments/${environmentId}/assistants`
+      );
+      setAssistants(response.data.assistants);
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Could not fetch assistants");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteAssistant = async (
+    environmentId: string,
+    assistantId: string
+  ) => {
+    try {
+      await axios.delete(
+        `${BASE_URL}/environments/${environmentId}/assistants/${assistantId}`
+      );
+      await getAssistants(environmentId); // Refresh the list
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Could not delete assistant");
+    }
+  };
+
+  return {
+    invite,
+    getAssistants,
+    deleteAssistant,
+    error,
+    message,
+    loading,
+    assistants,
+  };
 }
