@@ -22,8 +22,8 @@ const MyPlants = () => {
     environmentName,
     error,
     refreshEnvironmentData,
-    isOwner
-  } = useEnvironmentCtx();
+    isOwner,
+    setPlantTypes  } = useEnvironmentCtx();
   const { addPlantType } = useAddPlantType();
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
@@ -71,18 +71,20 @@ const MyPlants = () => {
       <h1 className="title">My Plants - {environmentName}</h1>
       {isOwner && <button onClick={handleOnInvite}>Invite assistants</button>}
 
-      {plantTypes.map((plant: PlantType, index: number) => (
-        <PlantTypeRow
-          key={index}
-          plant={plant}
-          pots={pots
-            .filter((pot) => pot.plantTypeId === plant._id)
-            .map((pot) => ({
-              id: pot.potId,
-              potName: pot.name,
-            }))}
-        />
-      ))}
+   {plantTypes.map((plant: PlantType, index: number) => {
+    const filteredPots = pots.filter((pot) => pot.plant_type_id === plant._id);
+
+    return (
+      <PlantTypeRow
+        key={index}
+        plant={plant}
+        pots={filteredPots.map((pot) => ({
+          id: pot.pot_id,
+          potName: pot.name,
+        }))}
+      />
+    );
+  })}
 
       {isOwner && <Button onClick={() => setOpen(true)}>Add new type</Button>}
       {open && (

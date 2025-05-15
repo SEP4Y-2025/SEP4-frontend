@@ -6,7 +6,7 @@ import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { FetchMyEnvironments } from "../hooks/FetchMyEnvironmnets";
 import { useAuth } from "../contexts/UserAuthContext";
 import { EnvironmentBrief } from "../types/Environment";
-import { Grid, Card } from "../Styles/ViewEnvironments.style";
+import { Grid, Card } from "../Styles/pages/ViewEnvironments.style";
 import { Button } from "../Styles/common/Button.style";
 import { Title } from "../Styles/common/Title.style";
 

@@ -1,26 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Pot } from "../types";
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
-export const useGetPotsByEnvironment = (environmentId: string) => {
-  const [pots, setPots] = useState<Pot[]>([]);
+export const useGetPotsByEnvironment = () => {
+   const [error, setError] = useState<Error | null>(null);
+  const getPotsByEnvironment = async (environmentId: string): Promise<Pot[]> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/environments/${environmentId}/pots`);
+      return response.data.pots as Pot[];
+    } catch (error) {
+      console.error("Error fetching pots:", error);
+      throw error;
+    }
+  };
 
-  const [error, setError] = useState<null | Error>(null);
-
-  useEffect(() => {
-    const fetchPots = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/environments/${environmentId}/pots`);
-        setPots(response.data.pots);
-      } catch (err) {
-        setError(err as Error);
-      } 
-    };
-
-    fetchPots();
-  }, [environmentId]);
-
-  return { pots, error };
-};
+}

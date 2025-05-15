@@ -3,6 +3,7 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import "./PlantDetails.css";
+import { useWaterStatus } from "../hooks/useWaterStatus";
 import { useDeletePot } from "../hooks/useDeletePot";
 
 const PlantDetails: React.FC = () => {
@@ -11,15 +12,16 @@ const PlantDetails: React.FC = () => {
   const navigate = useNavigate();
   const { pots, plantTypes, loading, error } = useEnvironmentCtx();
 
-  const pot = pots.find((p) => p.potId === id);
+  const pot = pots.find((p) => p.pot_id === id);
   const plantType = pot
-    ? plantTypes.find((type) => type._id === pot.plantTypeId)
+    ? plantTypes.find((type) => type._id === pot.plant_type_id)
     : null;
 
   const handleSave = () => navigate("/plants");
   const handleDelete = async () => {
   const environmentId = "680f8359688cb5341f9f9c19"; 
   //Hardcoded environment ID for now
+
   if (window.confirm("Are you sure you want to delete this plant?")) {
     try {
       await deletePot(id!, environmentId); 
@@ -30,6 +32,11 @@ const PlantDetails: React.FC = () => {
     }
   }
 };
+
+  const { waterPercentage, status: waterStatus } = useWaterStatus(
+    pot?.state?.water_level || 0,
+    pot?.state?.water_tank_capacity || 1
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -42,16 +49,16 @@ const PlantDetails: React.FC = () => {
     return 0;
   };
 
-  const temperatureValue = getStateValue(pot.state.temperature);
-  const soilHumidityValue = getStateValue(pot.state.soilHumidity);
-  const airHumidityValue = getStateValue(pot.state.airHumidity);
-  
-  
-  const waterPercentage = Math.round(
-    (pot.waterTank.currentLevelMl / pot.waterTank.capacityMl) * 100
-  );
+  const temperatureValue = pot.state?.temperature || 0;
+  const soilHumidityValue = pot.state?.soil_humidity || 0;
+  const airHumidityValue = pot.state?.air_humidity || 0;
+  const lightIntensityValue = pot.state?.light_intensity || 0;
 
-  return (
+  const waterLevel = pot.state?.water_level || 0;
+  const waterCapacity = pot.state?.water_tank_capacity || 1;
+
+
+   return (
     <div className="plant-details-page">
       <h1>Plant Details</h1>
 
@@ -101,25 +108,33 @@ const PlantDetails: React.FC = () => {
             </div>
           </div>
         </div>
+        
+        <div className="metric-box">
+          <h3>Light Intensity:</h3>
+          <div className="circular-metric light">
+            <div className="metric-value" data-testid="light-intensity">
+              {lightIntensityValue}%
+            </div>
+          </div>
+        </div>
       </div>
 
-      {}
       <div className="details-card">
         <h2>Water Tank Status</h2>
         
         <div className="detail-row">
           <span className="detail-label">Current Level</span>
-          <span className="detail-value">{pot.waterTank.currentLevelMl} ml</span>
+          <span className="detail-value">{waterLevel} ml</span>
         </div>
         
         <div className="detail-row">
           <span className="detail-label">Total Capacity</span>
-          <span className="detail-value">{pot.waterTank.capacityMl} ml</span>
+          <span className="detail-value">{waterCapacity} ml</span>
         </div>
         
         <div className="detail-row">
           <span className="detail-label">Status</span>
-          <span className="detail-value">{pot.waterTank.status}</span>
+          <span className="detail-value">{waterStatus}</span>
         </div>
         
         <div className="water-tank-visual">
@@ -132,7 +147,7 @@ const PlantDetails: React.FC = () => {
           <div className="water-tank-percentage">{waterPercentage}%</div>
           <div className="tank-labels">
             <span>0 ml</span>
-            <span>{pot.waterTank.capacityMl} ml</span>
+            <span>{waterCapacity} ml</span>
           </div>
         </div>
       </div>
