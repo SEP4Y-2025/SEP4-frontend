@@ -117,6 +117,166 @@ export const StyledCircularMetric = styled.div`
   }
 `;
 
+// New Soil Humidity Prediction Section
+export const StyledSoilHumidityPrediction = styled.div`
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  h2 {
+    color: #333;
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-weight: 600;
+    border-bottom: 2px solid #8fd28f;
+    padding-bottom: 10px;
+  }
+`;
+
+export const StyledTestingNote = styled.p`
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 20px;
+`;
+
+export const StyledTimeSelector = styled.div`
+  margin-bottom: 20px;
+`;
+
+export const StyledTimeSelectorLabel = styled.label`
+  margin-right: 10px;
+  font-weight: 600;
+  color: #333;
+`;
+
+export const StyledTimeSelectorDropdown = styled.select`
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: #8fd28f;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #8fd28f;
+    box-shadow: 0 0 0 2px rgba(143, 210, 143, 0.2);
+  }
+`;
+
+export const StyledLoadingMessage = styled.div`
+  color: #666;
+  font-style: italic;
+  padding: 20px;
+  text-align: center;
+`;
+
+export const StyledErrorMessage = styled.div`
+  color: #e74c3c;
+  background-color: #fdf2f2;
+  border: 1px solid #f1c0c0;
+  border-radius: 6px;
+  padding: 15px;
+  margin: 10px 0;
+  font-weight: 500;
+`;
+
+export const StyledPredictionGraph = styled.div`
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  h3 {
+    color: #333;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .graph-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .graph-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 40px;
+    height: 200px;
+    margin-bottom: 15px;
+  }
+
+  .bar {
+    width: 60px;
+    min-height: 20px;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    transition: height 0.5s ease;
+  }
+
+  .current-bar {
+    background: linear-gradient(180deg, #8fd28f 0%, #6cb66c 100%);
+    box-shadow: 0 2px 8px rgba(143, 210, 143, 0.3);
+  }
+
+  .predicted-bar {
+    background: linear-gradient(180deg, #4a9eff 0%, #3a7bd5 100%);
+    box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
+  }
+
+  .bar-label {
+    position: absolute;
+    top: -35px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    background-color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .graph-labels {
+    display: flex;
+    gap: 100px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+  }
+
+  @media (max-width: 480px) {
+    .graph-bar {
+      gap: 20px;
+    }
+    
+    .graph-labels {
+      gap: 60px;
+    }
+    
+    .bar {
+      width: 50px;
+    }
+  }
+`;
+
 export const StyledWaterTankVisual = styled.div`
   margin-top: 30px;
   background-color: white;

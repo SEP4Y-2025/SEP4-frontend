@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { useWaterStatus } from "../hooks/useWaterStatus";
 import { useDeletePot } from "../hooks/useDeletePot";
+import { useSoilHumidityPrediction } from "../hooks/useSoilHumidityPrediction";
 import { 
   StyledPlantDetailsPage,
   StyledDetailsCard,
@@ -16,7 +17,15 @@ import {
   StyledWaterTankPercentage,
   StyledTankLabels,
   StyledSaveButton,
-  StyledDeleteButton
+  StyledDeleteButton,
+  StyledSoilHumidityPrediction,
+  StyledPredictionGraph,
+  StyledTestingNote,
+  StyledTimeSelector,
+  StyledTimeSelectorLabel,
+  StyledTimeSelectorDropdown,
+  StyledLoadingMessage,
+  StyledErrorMessage
 } from "../Styles/pages/PlantDetails.style";
 import { Title } from "../Styles/common/Title.style";
 import { Flex } from "../Styles/common/Flex";
@@ -26,11 +35,16 @@ const PlantDetails: React.FC = () => {
   const { deletePot } = useDeletePot();
   const navigate = useNavigate();
   const { pots, plantTypes, loading, error } = useEnvironmentCtx();
+  
+  // State for prediction time selection
+  const [predictionMinutes, setPredictionMinutes] = useState<number>(5);
 
   const pot = pots.find((p) => p.pot_id === id);
   const plantType = pot
     ? plantTypes.find((type) => type._id === pot.plant_type_id)
     : null;
+
+  const { prediction, loading: predictionLoading, error: predictionError } = useSoilHumidityPrediction(id || "", predictionMinutes);
 
   const handleSave = () => navigate("/plants");
   const handleDelete = async () => {
@@ -46,6 +60,11 @@ const PlantDetails: React.FC = () => {
         alert("Failed to delete plant.");
       }
     }
+  };
+
+  // Handle prediction time change
+  const handlePredictionTimeChange = (minutes: number) => {
+    setPredictionMinutes(minutes);
   };
 
   const { waterPercentage, status: waterStatus } = useWaterStatus(
@@ -88,6 +107,7 @@ const PlantDetails: React.FC = () => {
         </StyledDetailRow>
       </StyledDetailsCard>
 
+      {/* Metrics Container - Now includes Soil Humidity again */}
       <StyledMetricsContainer>
         <StyledMetricBox>
           <h3>Temperature:</h3>
@@ -125,6 +145,72 @@ const PlantDetails: React.FC = () => {
           </StyledCircularMetric>
         </StyledMetricBox>
       </StyledMetricsContainer>
+
+      {/* Soil Humidity Prediction Section */}
+      <StyledSoilHumidityPrediction>
+        <h2>Current Soil Humidity for {pot.name}</h2>
+        <StyledTestingNote>
+          (Currently displaying predictions for pot_1 for testing purposes)
+        </StyledTestingNote>
+        
+        {/* Time Selection for Predictions */}
+        <StyledTimeSelector>
+          <StyledTimeSelectorLabel>Prediction Time:</StyledTimeSelectorLabel>
+          <StyledTimeSelectorDropdown 
+            value={predictionMinutes} 
+            onChange={(e) => handlePredictionTimeChange(Number(e.target.value))}
+          >
+            <option value={5}>5 minutes</option>
+            <option value={10}>10 minutes</option>
+            <option value={11}>11 minutes</option>
+            <option value={15}>15 minutes</option>
+            <option value={30}>30 minutes</option>
+            <option value={60}>1 hour</option>
+          </StyledTimeSelectorDropdown>
+        </StyledTimeSelector>
+        
+        {predictionLoading && <StyledLoadingMessage>Loading prediction...</StyledLoadingMessage>}
+        {predictionError && <StyledErrorMessage>Error loading prediction: {predictionError}</StyledErrorMessage>}
+        
+        {prediction && (
+          <div>
+            <StyledDetailRow>
+              <span className="detail-label">Prediction for Pot ID</span>
+              <span className="detail-value">{prediction.plant_pot_id}</span>
+            </StyledDetailRow>
+            <StyledDetailRow>
+              <span className="detail-label">Current Soil Humidity</span>
+              <span className="detail-value">{prediction.current_soil_humidity}%</span>
+            </StyledDetailRow>
+            <StyledDetailRow>
+              <span className="detail-label">Predicted Soil Humidity ({predictionMinutes} min)</span>
+              <span className="detail-value">{prediction.predicted_soil_humidity}%</span>
+            </StyledDetailRow>
+            <StyledDetailRow>
+              <span className="detail-label">Prediction Method</span>
+              <span className="detail-value">{prediction.prediction_method}</span>
+            </StyledDetailRow>
+            
+            <StyledPredictionGraph>
+              <h3>Soil Humidity Prediction Graph ({predictionMinutes} minutes ahead)</h3>
+              <div className="graph-container">
+                <div className="graph-bar">
+                  <div className="bar current-bar" style={{ height: `${prediction.current_soil_humidity}%` }}>
+                    <span className="bar-label">Current: {prediction.current_soil_humidity}%</span>
+                  </div>
+                  <div className="bar predicted-bar" style={{ height: `${prediction.predicted_soil_humidity}%` }}>
+                    <span className="bar-label">Predicted: {prediction.predicted_soil_humidity}%</span>
+                  </div>
+                </div>
+                <div className="graph-labels">
+                  <span>Current</span>
+                  <span>{predictionMinutes} Min Prediction</span>
+                </div>
+              </div>
+            </StyledPredictionGraph>
+          </div>
+        )}
+      </StyledSoilHumidityPrediction>
 
       <StyledDetailsCard>
         <h2>Water Tank Status</h2>
