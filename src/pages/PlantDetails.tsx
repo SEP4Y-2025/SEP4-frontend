@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { useWaterStatus } from "../hooks/useWaterStatus";
 import { useDeletePot } from "../hooks/useDeletePot";
@@ -25,7 +26,9 @@ import {
   StyledTimeSelectorLabel,
   StyledTimeSelectorDropdown,
   StyledLoadingMessage,
-  StyledErrorMessage
+  StyledErrorMessage,
+  StyledCustomTooltip,
+  StyledTooltipValue
 } from "../Styles/pages/PlantDetails.style";
 import { Title } from "../Styles/common/Title.style";
 import { Flex } from "../Styles/common/Flex";
@@ -65,6 +68,44 @@ const PlantDetails: React.FC = () => {
   // Handle prediction time change
   const handlePredictionTimeChange = (minutes: number) => {
     setPredictionMinutes(minutes);
+  };
+
+  // Get time display text
+  const getTimeDisplayText = (minutes: number) => {
+    if (minutes < 60) return `${minutes} minutes`;
+    if (minutes < 1440) return `${minutes / 60} hour${minutes / 60 !== 1 ? 's' : ''}`;
+    return `${minutes / 1440} day${minutes / 1440 !== 1 ? 's' : ''}`;
+  };
+
+  // Prepare data for the chart
+  const chartData = prediction ? [
+    {
+      name: 'Current',
+      value: prediction.current_soil_humidity,
+      type: 'current'
+    },
+    {
+      name: `Predicted (${getTimeDisplayText(predictionMinutes)})`,
+      value: prediction.predicted_soil_humidity,
+      type: 'predicted'
+    }
+  ] : [];
+
+  // Custom tooltip for the chart
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0];
+      const color = data.payload.type === 'current' ? '#8fd28f' : '#4a9eff';
+      return (
+        <StyledCustomTooltip>
+          <p>{label}</p>
+          <StyledTooltipValue $color={color}>
+            {`Soil Humidity: ${data.value}%`}
+          </StyledTooltipValue>
+        </StyledCustomTooltip>
+      );
+    }
+    return null;
   };
 
   const { waterPercentage, status: waterStatus } = useWaterStatus(
@@ -107,7 +148,7 @@ const PlantDetails: React.FC = () => {
         </StyledDetailRow>
       </StyledDetailsCard>
 
-      {/* Metrics Container - Now includes Soil Humidity again */}
+      
       <StyledMetricsContainer>
         <StyledMetricBox>
           <h3>Temperature:</h3>
@@ -148,9 +189,9 @@ const PlantDetails: React.FC = () => {
 
       {/* Soil Humidity Prediction Section */}
       <StyledSoilHumidityPrediction>
-        <h2>Current Soil Humidity for {pot.name}</h2>
+        <h2> Soil Humidity Predictions {pot.name}</h2>
         <StyledTestingNote>
-          (Currently displaying predictions for pot_1 for testing purposes)
+          (Currently displaying predictions for pot_1 only, for testing purposes)
         </StyledTestingNote>
         
         {/* Time Selection for Predictions */}
@@ -160,12 +201,32 @@ const PlantDetails: React.FC = () => {
             value={predictionMinutes} 
             onChange={(e) => handlePredictionTimeChange(Number(e.target.value))}
           >
-            <option value={5}>5 minutes</option>
-            <option value={10}>10 minutes</option>
-            <option value={11}>11 minutes</option>
-            <option value={15}>15 minutes</option>
-            <option value={30}>30 minutes</option>
-            <option value={60}>1 hour</option>
+            <optgroup label="Minutes">
+              <option value={5}>5 minutes</option>
+              <option value={10}>10 minutes</option>
+              <option value={11}>11 minutes</option>
+              <option value={15}>15 minutes</option>
+              <option value={30}>30 minutes</option>
+              <option value={45}>45 minutes</option>
+            </optgroup>
+            <optgroup label="Hours">
+              <option value={60}>1 hour</option>
+              <option value={120}>2 hours</option>
+              <option value={180}>3 hours</option>
+              <option value={240}>4 hours</option>
+              <option value={360}>6 hours</option>
+              <option value={480}>8 hours</option>
+              <option value={720}>12 hours</option>
+            </optgroup>
+            <optgroup label="Days">
+              <option value={1440}>1 day</option>
+              <option value={2880}>2 days</option>
+              <option value={4320}>3 days</option>
+              <option value={7200}>5 days</option>
+              <option value={10080}>1 week</option>
+              <option value={20160}>2 weeks</option>
+              <option value={43200}>1 month</option>
+            </optgroup>
           </StyledTimeSelectorDropdown>
         </StyledTimeSelector>
         
@@ -192,20 +253,38 @@ const PlantDetails: React.FC = () => {
             </StyledDetailRow>
             
             <StyledPredictionGraph>
-              <h3>Soil Humidity Prediction Graph ({predictionMinutes} minutes ahead)</h3>
-              <div className="graph-container">
-                <div className="graph-bar">
-                  <div className="bar current-bar" style={{ height: `${prediction.current_soil_humidity}%` }}>
-                    <span className="bar-label">Current: {prediction.current_soil_humidity}%</span>
-                  </div>
-                  <div className="bar predicted-bar" style={{ height: `${prediction.predicted_soil_humidity}%` }}>
-                    <span className="bar-label">Predicted: {prediction.predicted_soil_humidity}%</span>
-                  </div>
-                </div>
-                <div className="graph-labels">
-                  <span>Current</span>
-                  <span>{predictionMinutes} Min Prediction</span>
-                </div>
+              <h3>Soil Humidity Prediction Graph ({getTimeDisplayText(predictionMinutes)})</h3>
+              <div className="chart-container">
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    data={chartData}
+                    margin={{
+                      top: 20,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                    barCategoryGap="20%"
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis 
+                      dataKey="name" 
+                      tick={{ fontSize: 14, fill: '#333' }}
+                      tickLine={{ stroke: '#ccc' }}
+                    />
+                    <YAxis 
+                      domain={[0, 100]}
+                      tick={{ fontSize: 14, fill: '#333' }}
+                      tickLine={{ stroke: '#ccc' }}
+                      label={{ value: 'Humidity (%)', angle: -90, position: 'insideLeft' }}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                      <Cell fill="#8fd28f" />
+                      <Cell fill="#4a9eff" />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </StyledPredictionGraph>
           </div>

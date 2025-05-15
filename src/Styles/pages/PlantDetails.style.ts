@@ -161,6 +161,7 @@ export const StyledTimeSelectorDropdown = styled.select`
   background-color: white;
   cursor: pointer;
   transition: border-color 0.2s ease;
+  min-width: 150px;
 
   &:hover {
     border-color: #8fd28f;
@@ -170,6 +171,16 @@ export const StyledTimeSelectorDropdown = styled.select`
     outline: none;
     border-color: #8fd28f;
     box-shadow: 0 0 0 2px rgba(143, 210, 143, 0.2);
+  }
+
+  optgroup {
+    font-weight: bold;
+    color: #333;
+    
+    option {
+      font-weight: normal;
+      padding: 5px;
+    }
   }
 `;
 
@@ -190,6 +201,26 @@ export const StyledErrorMessage = styled.div`
   font-weight: 500;
 `;
 
+export const StyledCustomTooltip = styled.div`
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  p {
+    margin: 0;
+    
+    &:first-child {
+      font-weight: bold;
+    }
+  }
+`;
+
+export const StyledTooltipValue = styled.p<{ $color: string }>`
+  color: ${props => props.$color} !important;
+`;
+
 export const StyledPredictionGraph = styled.div`
   background-color: white;
   border-radius: 8px;
@@ -206,73 +237,39 @@ export const StyledPredictionGraph = styled.div`
     text-align: center;
   }
 
-  .graph-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .chart-container {
+    width: 100%;
+    min-height: 300px;
   }
 
-  .graph-bar {
-    display: flex;
-    align-items: flex-end;
-    gap: 40px;
-    height: 200px;
-    margin-bottom: 15px;
+  /* Recharts custom styling */
+  .recharts-bar {
+    cursor: pointer;
   }
 
-  .bar {
-    width: 60px;
-    min-height: 20px;
-    border-radius: 8px 8px 0 0;
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    transition: height 0.5s ease;
+  .recharts-cartesian-grid-horizontal line,
+  .recharts-cartesian-grid-vertical line {
+    stroke-opacity: 0.5;
   }
 
-  .current-bar {
-    background: linear-gradient(180deg, #8fd28f 0%, #6cb66c 100%);
-    box-shadow: 0 2px 8px rgba(143, 210, 143, 0.3);
+  .recharts-xAxis .recharts-cartesian-axis-line,
+  .recharts-yAxis .recharts-cartesian-axis-line {
+    stroke: #ccc;
   }
 
-  .predicted-bar {
-    background: linear-gradient(180deg, #4a9eff 0%, #3a7bd5 100%);
-    box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
-  }
-
-  .bar-label {
-    position: absolute;
-    top: -35px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    white-space: nowrap;
-    background-color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .graph-labels {
-    display: flex;
-    gap: 100px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #555;
+  .recharts-tooltip-cursor {
+    fill: rgba(143, 210, 143, 0.1);
   }
 
   @media (max-width: 480px) {
-    .graph-bar {
-      gap: 20px;
+    padding: 15px;
+    
+    h3 {
+      font-size: 16px;
     }
     
-    .graph-labels {
-      gap: 60px;
-    }
-    
-    .bar {
-      width: 50px;
+    .chart-container {
+      min-height: 250px;
     }
   }
 `;
