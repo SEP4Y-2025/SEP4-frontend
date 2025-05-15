@@ -12,19 +12,16 @@ import { useAuth } from "../contexts/UserAuthContext";
 import { useAddPlantType } from "../hooks/useAddPlantType";
 import { toast } from "react-toastify";
 import { Flex } from "../Styles/common/Flex";
+import { useGetPotsByEnvironment } from "../hooks/useGetPotsByEnvironment";
+import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
 
 const MyPlants = () => {
-  const {
-    plantTypes,
-    pots,
-    environmentID,
-    loading,
-    environmentName,
-    error,
-    refreshEnvironmentData,
-    isOwner
-  } = useEnvironmentCtx();
-  const { addPlantType } = useAddPlantType();
+  const { environmentID, environmentName, isOwner } = useEnvironmentCtx();
+  const { pots, loadingPots, fetchPots } =
+    useGetPotsByEnvironment(environmentID);
+  const { types, loadingTypes, fetchTypes } =
+    useGetTypesByEnvironment(environmentID);
+  const { addPlantType } = useAddPlantType(fetchTypes);
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
@@ -49,7 +46,6 @@ const MyPlants = () => {
         watering_frequency: watering,
         water_dosage: dose,
       });
-      await refreshEnvironmentData();
       setTypeName("");
       setWateringFrequency("");
       setDosage("");
@@ -71,7 +67,7 @@ const MyPlants = () => {
       <h1 className="title">My Plants - {environmentName}</h1>
       {isOwner && <button onClick={handleOnInvite}>Invite assistants</button>}
 
-      {plantTypes.map((plant: PlantType, index: number) => (
+      {types.map((plant: PlantType, index: number) => (
         <PlantTypeRow
           key={index}
           plant={plant}
@@ -93,7 +89,7 @@ const MyPlants = () => {
           setWateringFrequency={setWateringFrequency}
           dosage={dosage}
           setDosage={setDosage}
-          error={error ?? ""}
+          error={""}
           handleContinue={handleContinue}
           handleCancel={handleCancel}
         />

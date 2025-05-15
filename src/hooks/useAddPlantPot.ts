@@ -4,7 +4,7 @@ import { AddPlantPotRequest, PlantPotResponse } from "../types/addPlantPotApiTyp
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
-export const useAddPlantPot = () => {
+export const useAddPlantPot = (onSuccess?:() => void) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -13,6 +13,7 @@ export const useAddPlantPot = () => {
     setError(null);
     try {
       const response = await axios.post(`${BASE_URL}/pots`, pot);
+      onSuccess && onSuccess();
       return response.data;
     } catch (err) {
       setError(err as Error);
