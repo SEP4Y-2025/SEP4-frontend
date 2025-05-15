@@ -25,14 +25,18 @@ export function useInvitePlantAssistant(environmentId: string) {
     setMessage("");
     setLoading(true);
     try {
+      const payload = {
+        user_email: userMail,
+        permission_level: "read",
+      };
       const response = await axios.put(
         `${BASE_URL}/environments/${environmentId}/assistants`,
-        { user_email: userMail }
+        payload
       );
       setMessage(response.data.message);
-      fetchAssistants(); // Refresh list after invite
+      fetchAssistants();
     } catch (err: any) {
-      setError(err.response?.data?.error || "An error occurred");
+      setError(err.response?.data?.detail || "An error occurred");
     } finally {
       setLoading(false);
     }
