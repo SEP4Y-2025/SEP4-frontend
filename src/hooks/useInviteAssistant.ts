@@ -4,12 +4,12 @@ import axios from "axios";
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
 export function useInvitePlantAssistant() {
-  const [error, setError] = useState("");
+  const [errorOnInvite, setErrorOnInvite] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const invite = async (environmentId: string, userMail: string) => {
-    setError("");
+    setErrorOnInvite("");
     setMessage("");
     setLoading(true);
 
@@ -22,11 +22,11 @@ export function useInvitePlantAssistant() {
       );
       setMessage(response.data.message);
     } catch (err: any) {
-      setError(err.response?.data?.error || "An error occurred");
+      setErrorOnInvite(err.response?.data?.error || "An error occurred");
     } finally {
       setLoading(false);
     }
   };
 
-  return { invite, error, message, loading };
+  return { invite, errorOnInvite: errorOnInvite, message, loading };
 }

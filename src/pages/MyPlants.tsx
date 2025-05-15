@@ -13,6 +13,8 @@ import { useAddPlantType } from "../hooks/useAddPlantType";
 import { toast } from "react-toastify";
 import { Flex } from "../Styles/common/Flex";
 import { useDeleteEnvironment } from "../hooks/useDeleteEnvironment";
+import { useInvitePlantAssistant } from "../hooks/useInviteAssistant";
+import AddAssistantModal from "../components/MyPlants/AddAssistantModal";
 
 const MyPlants = () => {
   const {
@@ -26,7 +28,8 @@ const MyPlants = () => {
     isOwner,
     setPlantTypes } = useEnvironmentCtx();
   const { addPlantType } = useAddPlantType();
-  const [open, setOpen] = useState(false);
+  const [openNewType, setOpenNewType] = useState(false);
+  const [openAddAssistant, setOpenAddAssistant] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
@@ -56,17 +59,16 @@ const MyPlants = () => {
       setTypeName("");
       setWateringFrequency("");
       setDosage("");
-      setOpen(false);
+      setOpenNewType(false);
     } catch (err) {
       toast.error("Failed to add plant type");
     }
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    setOpenNewType(false);
   };
   const handleOnInvite = () => {
-    navigate("/plants/invite");
   };
 
   useEffect(() => {
@@ -89,9 +91,9 @@ const MyPlants = () => {
     <StyledMyPlantsContainer>
       <h1 className="title">My Plants - {environmentName}</h1>
       <Flex $width="55rem" $justifyC="start" $gap="1rem">
-        {isOwner && <Button onClick={handleOnInvite}>Invite assistants</Button>}
-        {isOwner && <Button onClick={() => setOpen(true)}>Add new type</Button>}
-        {open && (
+        {isOwner && <Button onClick={() => setOpenAddAssistant(true)}>Invite Assistant</Button>}
+        {isOwner && <Button onClick={() => setOpenNewType(true)}>Add new type</Button>}
+        {openNewType && (
           <AddPlantTypeModal
             typeName={typeName}
             setTypeName={setTypeName}
@@ -104,9 +106,17 @@ const MyPlants = () => {
             handleCancel={handleCancel}
           />
         )}
-        <Flex $width="100%" $justifyC="end">
-          <DeleteButton onClick={handleDeleteEnvironment}>Delete</DeleteButton>
-        </Flex>
+        {openAddAssistant && (
+          <AddAssistantModal
+            onClose={() => setOpenAddAssistant(false)}
+          />
+        )}
+        {isOwner && (
+          <Flex $width="100%" $justifyC="end">
+            <DeleteButton onClick={handleDeleteEnvironment}>Delete</DeleteButton>
+          </Flex>
+        )}
+
       </Flex>
       {plantTypes.map((plant: PlantType, index: number) => {
         const filteredPots = pots.filter((pot) => pot.plant_type_id === plant._id);

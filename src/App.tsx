@@ -19,7 +19,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { UserContextProvider } from "./contexts/UserAuthContext";
 import Register from "./pages/Auth/Register";
 import ProfilePage from "./pages/Profile";
-import AddAssistant from "./pages/AddAssistant";
 import MyEnvironmnets from "./pages/MyEnvironmnets";
 //-----------------------------------------------------
 const App: React.FC = () => {
@@ -83,16 +82,6 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="//plants/invite"
-                element={
-                  <ProtectedRoute>
-                    <EnvironmentProvider>
-                      <AddAssistant />
-                    </EnvironmentProvider>
-                  </ProtectedRoute>
-                }
-              />
-
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>

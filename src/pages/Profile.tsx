@@ -6,7 +6,7 @@ import { Title } from "../Styles/common/Title.style";
 import { Label } from "../Styles/common/Label.style";
 import { InfoBlock, Value } from "../Styles/pages/Profile.style";
 import { useAuth } from "../contexts/UserAuthContext";
-import EditPasswordModal from "../components/common/EditPasswordModal";
+import EditPasswordModal from "../components/Profile/EditPasswordModal";
 import { useNavigate } from "react-router-dom";
 import { useChangePassword } from "../hooks/useChangePassword";
 import { toast } from "react-toastify";
