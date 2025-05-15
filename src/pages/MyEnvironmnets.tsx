@@ -7,8 +7,9 @@ import { FetchMyEnvironments } from "../hooks/FetchMyEnvironmnets";
 import { useAuth } from "../contexts/UserAuthContext";
 import { EnvironmentBrief } from "../types/Environment";
 import { Grid, Card } from "../Styles/pages/ViewEnvironments.style";
-import { Button } from "../Styles/common/Button.style";
+import { Button, DeleteButton } from "../Styles/common/Button.style";
 import { Title } from "../Styles/common/Title.style";
+import { Flex } from "../Styles/common/Flex";
 
 const MyEnvironmnets = () => {
   const { setEnvironmentID, setIsOwner } = useEnvironmentCtx();
@@ -35,13 +36,17 @@ const MyEnvironmnets = () => {
         {environmentsList
           .filter((env) => env.role === "Owner")
           .map((environment: EnvironmentBrief) => (
-            <Card
-              key={environment.environment_id}
-              onClick={() => handleSwitch(environment.environment_id, true)}
-            >
-              <img src={plantsIcon} alt="XD" />
-              {environment.environment_id} XD
-            </Card>
+            <div>
+              <Card
+                key={environment.environment_id}
+                onClick={() => handleSwitch(environment.environment_id, true)}
+              >
+                <img src={plantsIcon} alt="XD" />
+                {environment.environment_id} XD
+
+              </Card>
+            </div>
+
           ))}
         <Button>Add new</Button>
       </Grid>
@@ -56,10 +61,12 @@ const MyEnvironmnets = () => {
             >
               {" "}
               <img src={plantsIcon} alt="XD" />
-              {environment.environment_id} XD
+              {environment.environment_id} Xd
+              <DeleteButton $margin="0 1rem">X</DeleteButton>
             </Card>
           ))}
       </Grid>
+
     </div>
   );
 };
