@@ -4,19 +4,32 @@ import axios from "axios";
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
 export const useDeletePot = () => {
-
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const deletePot = async (potId: string, environmentId: string): Promise<boolean> => {
     setError(null);
+    setLoading(true);
+    
     try {
-      await axios.delete(`${BASE_URL}/environments/${environmentId}/pots/${potId}`);
-      return true;
-    } catch (err) {
-      setError(err as Error);
+      const response = await axios.delete(`${BASE_URL}/environments/${environmentId}/pots/${potId}`);
+      
+      if (response.status === 200) {
+        console.log("Pot deleted successfully:", response.data);
+        return true;
+      } else {
+        setError("Unexpected response from server");
+        return false;
+      }
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.detail || err.message || "Failed to delete pot";
+      setError(errorMessage);
+      console.error("Delete pot error:", err);
       return false;
-    } 
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return { deletePot, error };
+  return { deletePot, error, loading };
 };

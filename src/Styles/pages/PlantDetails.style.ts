@@ -355,9 +355,16 @@ export const StyledDeleteButton = styled.button`
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   background: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
 
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(214, 48, 49, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 
   @media (max-width: 480px) {

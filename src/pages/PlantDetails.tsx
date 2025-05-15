@@ -37,10 +37,11 @@ const PlantDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { deletePot } = useDeletePot();
   const navigate = useNavigate();
-  const { pots, plantTypes, loading, error } = useEnvironmentCtx();
+  const { pots, plantTypes, loading, error, refreshEnvironmentData } = useEnvironmentCtx();
   
   // State for prediction time selection
   const [predictionMinutes, setPredictionMinutes] = useState<number>(5);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const pot = pots.find((p) => p.pot_id === id);
   const plantType = pot
@@ -50,17 +51,33 @@ const PlantDetails: React.FC = () => {
   const { prediction, loading: predictionLoading, error: predictionError } = useSoilHumidityPrediction(id || "", predictionMinutes);
 
   const handleSave = () => navigate("/plants");
+  
   const handleDelete = async () => {
+    if (!pot) return;
+    
     const environmentId = "680f8359688cb5341f9f9c19";
-    //Hardcoded environment ID for now
-
-    if (window.confirm("Are you sure you want to delete this plant?")) {
+    
+    if (window.confirm(`Are you sure you want to delete ${pot.name}? This action cannot be undone.`)) {
+      setIsDeleting(true);
+      
       try {
-        await deletePot(id!, environmentId);
-        navigate("/plants");
-        window.location.reload();
+       
+        const success = await deletePot(id!, environmentId);
+        
+        if (success) {
+          alert(`${pot.name} has been successfully deleted.`);
+         
+          await refreshEnvironmentData();
+         
+          navigate("/plants");
+        } else {
+          alert("Failed to delete the plant. Please try again.");
+        }
       } catch (error) {
-        alert("Failed to delete plant.");
+        console.error("Delete error:", error);
+        alert("Failed to delete the plant. Please try again.");
+      } finally {
+        setIsDeleting(false);
       }
     }
   };
@@ -70,7 +87,6 @@ const PlantDetails: React.FC = () => {
     setPredictionMinutes(minutes);
   };
 
-  // Get time display text
   const getTimeDisplayText = (minutes: number) => {
     if (minutes < 60) return `${minutes} minutes`;
     if (minutes < 1440) return `${minutes / 60} hour${minutes / 60 !== 1 ? 's' : ''}`;
@@ -140,7 +156,7 @@ const PlantDetails: React.FC = () => {
         </StyledDetailRow>
         <StyledDetailRow>
           <span className="detail-label">Watering Frequency</span>
-          <span className="detail-value">{plantType.watering_frequency}</span>
+          <span className="detail-value">{plantType.watering_frequency || plantType.watering_frequency || 'Not specified'}</span>
         </StyledDetailRow>
         <StyledDetailRow>
           <span className="detail-label">Dosage ml</span>
@@ -148,7 +164,6 @@ const PlantDetails: React.FC = () => {
         </StyledDetailRow>
       </StyledDetailsCard>
 
-      
       <StyledMetricsContainer>
         <StyledMetricBox>
           <h3>Temperature:</h3>
@@ -189,9 +204,9 @@ const PlantDetails: React.FC = () => {
 
       {/* Soil Humidity Prediction Section */}
       <StyledSoilHumidityPrediction>
-        <h2> Soil Humidity Predictions {pot.name}</h2>
+        <h2>Current Soil Humidity for {pot.name}</h2>
         <StyledTestingNote>
-          (Currently displaying predictions for pot_1 only, for testing purposes)
+          (Currently displaying predictions for pot_1 for testing purposes)
         </StyledTestingNote>
         
         {/* Time Selection for Predictions */}
@@ -327,8 +342,8 @@ const PlantDetails: React.FC = () => {
         <StyledSaveButton onClick={handleSave}>
           Go Back
         </StyledSaveButton>
-        <StyledDeleteButton onClick={handleDelete}>
-          Delete Plant
+        <StyledDeleteButton onClick={handleDelete} disabled={isDeleting}>
+          {isDeleting ? "Deleting..." : `Delete ${pot.name}`}
         </StyledDeleteButton>
       </Flex>
     </StyledPlantDetailsPage>
