@@ -54,7 +54,7 @@ export const StyledRow = styled.div`
   overflow-x: auto;
   gap: 0.2rem;
   padding: 1rem;
-  width: 30rem;
+  width: 50rem;
   &::-webkit-scrollbar {
     height: 8px;
   }

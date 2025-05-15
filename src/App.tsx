@@ -33,7 +33,7 @@ const App: React.FC = () => {
           <Container>
             <ToastContainer />
             <Routes>
-              <Route path="/" element={<ProtectedRoute><LogsPage />
+              <Route path="/logs" element={<ProtectedRoute><LogsPage />
               </ProtectedRoute>} />
               <Route
                 path="/plants"
@@ -46,7 +46,7 @@ const App: React.FC = () => {
                 }
               />
               <Route
-                path="/environments"
+                path="/"
                 element={
                   <ProtectedRoute>
                     <EnvironmentProvider>

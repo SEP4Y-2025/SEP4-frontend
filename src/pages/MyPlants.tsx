@@ -22,10 +22,9 @@ const MyPlants = () => {
     environmentName,
     error,
     refreshEnvironmentData,
+    isOwner
   } = useEnvironmentCtx();
   const { addPlantType } = useAddPlantType();
-
-  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
@@ -70,26 +69,7 @@ const MyPlants = () => {
   return (
     <StyledMyPlantsContainer>
       <h1 className="title">My Plants - {environmentName}</h1>
-
-      <Flex $dir="row" $width="35rem" $justifyC="space-between" $alignI="center">
-        <Button onClick={handleOnInvite}>Invite assistants</Button>
-
-        <Button onClick={() => setOpen(true)}>Add new type</Button>
-        {open && (
-          <AddPlantTypeModal
-            typeName={typeName}
-            setTypeName={setTypeName}
-            wateringFrequency={wateringFrequency}
-            setWateringFrequency={setWateringFrequency}
-            dosage={dosage}
-            setDosage={setDosage}
-            error={error ?? ""}
-            handleContinue={handleContinue}
-            handleCancel={handleCancel}
-          />
-        )}
-      </Flex>
-
+      {isOwner && <button onClick={handleOnInvite}>Invite assistants</button>}
 
       {plantTypes.map((plant: PlantType, index: number) => (
         <PlantTypeRow
@@ -104,6 +84,20 @@ const MyPlants = () => {
         />
       ))}
 
+      {isOwner && <Button onClick={() => setOpen(true)}>Add new type</Button>}
+      {open && (
+        <AddPlantTypeModal
+          typeName={typeName}
+          setTypeName={setTypeName}
+          wateringFrequency={wateringFrequency}
+          setWateringFrequency={setWateringFrequency}
+          dosage={dosage}
+          setDosage={setDosage}
+          error={error ?? ""}
+          handleContinue={handleContinue}
+          handleCancel={handleCancel}
+        />
+      )}
     </StyledMyPlantsContainer>
   );
 };

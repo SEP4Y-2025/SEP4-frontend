@@ -89,7 +89,7 @@ export const UserContextProvider = ({ children }: Props) => {
           `Bearer ${res.data.access_token}`;
 
         toast.success("Login successful");
-        navigate("/environments");
+        navigate("/");
       } else {
         toast.error("Invalid credentials");
       }

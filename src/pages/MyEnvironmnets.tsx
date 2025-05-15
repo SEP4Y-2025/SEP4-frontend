@@ -1,14 +1,17 @@
 import React, { useEffect } from "react";
-import { Flex } from "../Styles/common/Flex";
-import { StyledRow } from "../Styles/pages/MyPlants.style";
+
+import plantsIcon from "../assets/plants.png";
 import { useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { FetchMyEnvironments } from "../hooks/FetchMyEnvironmnets";
 import { useAuth } from "../contexts/UserAuthContext";
 import { EnvironmentBrief } from "../types/Environment";
+import { Grid, Card } from "../Styles/ViewEnvironments.style";
+import { Button } from "../Styles/Button.style";
+import { Title } from "../Styles/Title.style";
 
 const MyEnvironmnets = () => {
-  const { setEnvironmentID } = useEnvironmentCtx();
+  const { setEnvironmentID, setIsOwner } = useEnvironmentCtx();
   const { user } = useAuth();
   const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments();
   const navigate = useNavigate();
@@ -18,27 +21,45 @@ const MyEnvironmnets = () => {
       fetchAllEnvironments(user.user_id);
     }
   }, [user]);
-  const handleSwitch = (id: string) => {
-    setEnvironmentID(id);
+  const handleSwitch = (envId: string, own: boolean) => {
+    setEnvironmentID(envId);
+    setIsOwner(own);
     navigate("/plants");
   };
 
   return (
     <div>
-      <Flex $dir="column" $alignI="center">
-        <StyledRow>
-          {environmentsList
-            .filter((env) => env.role === "Owner")
-            .map((environment: EnvironmentBrief) => (
-              <div
-                key={environment.environment_id}
-                onClick={() => handleSwitch(environment.environment_id)}
-              >
-                {environment.environment_id} and {environment.role}
-              </div>
-            ))}
-        </StyledRow>
-      </Flex>
+      <Title>Select Environment</Title>
+      <Title>My Environments</Title>
+      <Grid>
+        {environmentsList
+          .filter((env) => env.role === "Owner")
+          .map((environment: EnvironmentBrief) => (
+            <Card
+              key={environment.environment_id}
+              onClick={() => handleSwitch(environment.environment_id, true)}
+            >
+              <img src={plantsIcon} alt="XD" />
+              {environment.environment_id} XD
+            </Card>
+          ))}
+        <Button>Add new</Button>
+      </Grid>
+      <Title>Other Environments</Title>
+      <Grid>
+        {environmentsList
+          .filter((env) => env.role != "Owner")
+          .map((environment: EnvironmentBrief) => (
+            <Card
+              key={environment.environment_id}
+              onClick={() => handleSwitch(environment.environment_id, false)}
+            >
+              {" "}
+              <img src={plantsIcon} alt="XD" />
+              {environment.environment_id} XD
+            </Card>
+          ))}
+      </Grid>
     </div>
   );
 };

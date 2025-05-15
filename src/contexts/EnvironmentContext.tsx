@@ -17,7 +17,8 @@ type EnvironmentContextType = {
   loading: boolean;
   error: string | null;
   environmentID: string;
-  ownerID: string;
+  isOwner: boolean;
+  setIsOwner:(b:boolean) =>void;
   setEnvironmentName: (newName: string) => void;
   setEnvironmentID: (search: string) => void;
   setPlantTypes: (newTypes: PlantType[]) => void;
@@ -34,7 +35,7 @@ interface Props {
 
 const EnvironmentProvider = ({ children }: Props) => {
   const [pots, setPots] = useState<Pot[]>([]);
-  const [ownerID, setOwnerID] = useState("");
+  const [isOwner, setIsOwner] = useState(false);
   const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
   const [environmentName, setEnvironmentName] = useState<string>("");
   const [environmentID, setEnvironmentID] = useState<string>("");
@@ -74,11 +75,12 @@ const EnvironmentProvider = ({ children }: Props) => {
       value={{
         loading,
         error,
-        ownerID,
+        isOwner,
         environmentName,
         plantTypes,
         pots,
         environmentID,
+        setIsOwner,
         refreshEnvironmentData: fetchEnvironment,
         setEnvironmentID,
         setEnvironmentName,
