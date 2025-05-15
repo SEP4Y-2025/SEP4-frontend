@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { SoilHumidityPrediction } from "../types"; // Adjust the path as needed
+import { SoilHumidityPrediction } from "../types"; 
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 
@@ -15,7 +15,7 @@ export const useSoilHumidityPrediction = (potId: string, minutesAhead: number = 
     
     try {
       // For testing purposes, use "pot_1" (which has data) instead of the actual potId
-      // In the future, you can change this back to use the actual potId parameter
+      // In the future, y change this back to use the actual potId parameter
       const testPotId = "pot_1";
       
       const response = await axios.get(
@@ -33,7 +33,7 @@ export const useSoilHumidityPrediction = (potId: string, minutesAhead: number = 
 
   useEffect(() => {
     // Always fetch predictions regardless of potId
-    // This ensures we can see the predictions for testing
+    
     fetchPrediction(minutesAhead);
   }, [fetchPrediction, minutesAhead]);
 
