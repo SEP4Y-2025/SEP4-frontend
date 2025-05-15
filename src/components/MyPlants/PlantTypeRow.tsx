@@ -19,7 +19,7 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
   return (
     <Flex $dir="column" $alignI="center">
       <Flex>
-        Type: {plant.name} ({plant.water_frequency}x/week, {plant.water_dosage}
+        Type: {plant.name} ({plant.watering_frequency}x/week, {plant.water_dosage}
         ml)
       </Flex>
       <Flex

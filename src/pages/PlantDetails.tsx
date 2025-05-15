@@ -140,7 +140,7 @@ const PlantDetails: React.FC = () => {
         </StyledDetailRow>
         <StyledDetailRow>
           <span className="detail-label">Watering Frequency</span>
-          <span className="detail-value">{plantType.water_frequency}</span>
+          <span className="detail-value">{plantType.watering_frequency}</span>
         </StyledDetailRow>
         <StyledDetailRow>
           <span className="detail-label">Dosage ml</span>
