@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
+import { UserProfile } from "../types/User";
 
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export const useGetAssistants = (environmentId: string) => {
-  const [assistants, setAssistants] = useState<string[]>([]);
+  const [assistants, setAssistants] = useState<UserProfile[]>([]);
   const [loadingAssistants, setLoadingAssistants] = useState(false);
   const [fetchingAssistantsError, setError] = useState<null | Error>(null);
 
@@ -15,11 +16,21 @@ export const useGetAssistants = (environmentId: string) => {
       const response = await axios.get(
         `${BASE_URL}/environments/${environmentId}/assistants`
       );
-      console.log(response.data.assistants);
-      const ids = (response.data.assistants || []).map(
+     const ids: string[] = (response.data.assistants || []).map(
         (a: { user_id: string }) => a.user_id
       );
-      setAssistants(ids);
+
+      const people: UserProfile[] = await Promise.all(
+        ids.map(async (id) => {
+          const userRes = await axios.get(`${BASE_URL}/users/${id}`);
+          const data = userRes.data;
+          return {
+            userName: data.username,
+            email: data.email,
+          } as UserProfile;
+        })
+      );
+      setAssistants(people);
     } catch (err) {
       setError(err as Error);
     } finally {

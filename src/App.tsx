@@ -21,6 +21,7 @@ import Register from "./pages/Auth/Register";
 import ProfilePage from "./pages/Profile";
 import MyEnvironmnets from "./pages/MyEnvironmnets";
 import Assistants from "./pages/Assistants";
+import PlantDetails from "./pages/PlantDetails";
 //-----------------------------------------------------
 const App: React.FC = () => {
   const [darkMode, setDarkmode] = useState(false);
@@ -82,7 +83,7 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              {/* <Route
+              <Route
                 path="/plant-details/:id"
                 element={
                   <ProtectedRoute>
@@ -91,7 +92,7 @@ const App: React.FC = () => {
                     </EnvironmentProvider>
                   </ProtectedRoute>
                 }
-              /> */}
+              />
               <Route
                 path="/profile"
                 element={

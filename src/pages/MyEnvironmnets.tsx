@@ -16,15 +16,16 @@ import { useAddEnvironments } from "../hooks/useAddEnvironments";
 const MyEnvironmnets = () => {
   const { setEnvironmentID, setIsOwner, environmentID } = useEnvironmentCtx();
   const { user } = useAuth();
-  const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments();
   const [showEnvironmentModal, setShowEnvironmentModal] = useState(false);
   const { addEnvironment, errorAdd, successAdd } = useAddEnvironments();
-
+  const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments(
+    user!.user_id
+  );
   const navigate = useNavigate();
   useEffect(() => {
     if (user?.user_id) {
       console.log("fetch call");
-      fetchAllEnvironments(user.user_id);
+      fetchAllEnvironments();
     }
   }, [user]);
   const handleSwitch = (envId: string, own: boolean) => {
@@ -37,7 +38,7 @@ const MyEnvironmnets = () => {
     await addEnvironment(envName);
     if (successAdd) {
       setShowEnvironmentModal(false);
-      fetchAllEnvironments(user!.user_id);
+      fetchAllEnvironments();
     }
     if (errorAdd) {
       alert(errorAdd);
@@ -59,10 +60,8 @@ const MyEnvironmnets = () => {
               >
                 <img src={plantsIcon} alt="XD" />
                 {environment.environment_id} XD
-
               </Card>
             </div>
-
           ))}
         <Button onClick={() => setShowEnvironmentModal(true)}>Add new</Button>
         {showEnvironmentModal && (
@@ -88,7 +87,6 @@ const MyEnvironmnets = () => {
             </Card>
           ))}
       </Grid>
-
     </div>
   );
 };
