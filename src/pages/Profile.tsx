@@ -17,12 +17,11 @@ const ProfilePage: React.FC = () => {
     const { changePassword, loading, error, success } = useChangePassword();
 
     const handlePasswordChange = async (oldPass: string, newPass: string) => {
-        console.log("Password updated:", oldPass, newPass);
         if (!user?.userName) {
             console.error("User not found");
             return;
         }
-        await changePassword(user?.userName, oldPass, newPass);
+        await changePassword(user?.email, oldPass, newPass);
     };
 
     useEffect(() => {

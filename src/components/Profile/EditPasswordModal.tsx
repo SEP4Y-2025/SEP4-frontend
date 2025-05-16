@@ -25,15 +25,6 @@ const EditPasswordModal: React.FC<EditPasswordModalProps> = ({ onClose, onSubmit
       setError("All fields are required.");
       return;
     }
-    if (newPassword !== confirmPassword) {
-      setError("New passwords do not match.");
-      return;
-    }
-    if (newPassword.length < 6) {
-      setError("Password must be at least 6 characters.");
-      return;
-    }
-
     setError("");
     onSubmit(oldPassword, newPassword);
     onClose();

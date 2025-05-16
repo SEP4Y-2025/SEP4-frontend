@@ -84,7 +84,6 @@ const MyEnvironmnets = () => {
               {" "}
               <img src={plantsIcon} alt="XD" />
               {environment.environment_id} Xd
-              <DeleteButton $margin="0 1rem">X</DeleteButton>
             </Card>
           ))}
       </Grid>
