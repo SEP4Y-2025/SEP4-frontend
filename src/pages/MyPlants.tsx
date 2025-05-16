@@ -22,6 +22,7 @@ const MyPlants = () => {
   const { environmentID, environmentName, isOwner } = useEnvironmentCtx();
   const { pots, loadingPots, fetchPots } =
     useGetPotsByEnvironment(environmentID);
+
   const { types, loadingTypes, fetchTypes } =
     useGetTypesByEnvironment(environmentID);
   const { addPlantType } = useAddPlantType(fetchTypes);
@@ -31,7 +32,11 @@ const MyPlants = () => {
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
   const navigate = useNavigate();
-  const { deleteEnvironment, errorDelete, successDelete } = useDeleteEnvironment();
+  const { deleteEnvironment } = useDeleteEnvironment();
+  // useEffect(() => {
+  //   console.log("pots");
+  //   fetchPots();
+  // }, []);
 
   const handleContinue = async () => {
     if (!typeName || !wateringFrequency || !dosage) {
@@ -64,22 +69,22 @@ const MyPlants = () => {
   const handleCancel = () => {
     setOpenNewType(false);
   };
-  const handleOnInvite = () => {
-  };
+  const handleOnInvite = () => {};
 
-  useEffect(() => {
-    if (successDelete) {
+  const handleDelete = async () => {
+    const { success, error } = await deleteEnvironment(environmentID);
+    if (!success) {
+      toast.error(error || "Failed to delete environment");
+    } else {
       toast.success("Environment deleted");
       navigate("/");
     }
-    if (errorDelete) {
-      toast.error("Failed to delete environment");
-    }
-  }, [successDelete, errorDelete, navigate]);
+  };
 
   const handleDeleteEnvironment = async () => {
     if (window.confirm("Are you sure you want to delete this environment?")) {
-      await deleteEnvironment(environmentID);
+      await handleDelete();
+      console.log("DEEELL");
     }
   };
 
@@ -87,8 +92,14 @@ const MyPlants = () => {
     <StyledMyPlantsContainer>
       <h1 className="title">My Plants - {environmentName}</h1>
       <Flex $width="55rem" $justifyC="start" $gap="1rem">
-        {isOwner && <Button onClick={() => setOpenAddAssistant(true)}>Invite Assistant</Button>}
-        {isOwner && <Button onClick={() => setOpenNewType(true)}>Add new type</Button>}
+        {isOwner && (
+          <Button onClick={() => setOpenAddAssistant(true)}>
+            Invite Assistant
+          </Button>
+        )}
+        {isOwner && (
+          <Button onClick={() => setOpenNewType(true)}>Add new type</Button>
+        )}
         {openNewType && (
           <AddPlantTypeModal
             typeName={typeName}
@@ -103,19 +114,20 @@ const MyPlants = () => {
           />
         )}
         {openAddAssistant && (
-          <AddAssistantModal
-            onClose={() => setOpenAddAssistant(false)}
-          />
+          <AddAssistantModal onClose={() => setOpenAddAssistant(false)} />
         )}
         {isOwner && (
           <Flex $width="100%" $justifyC="end">
-            <DeleteButton onClick={handleDeleteEnvironment}>Delete</DeleteButton>
+            <DeleteButton onClick={handleDeleteEnvironment}>
+              Delete
+            </DeleteButton>
           </Flex>
         )}
-
       </Flex>
       {types.map((plant: PlantType, index: number) => {
-        const filteredPots = pots.filter((pot) => pot.plant_type_id === plant._id);
+        const filteredPots = pots.filter(
+          (pot) => pot.plant_type_id === plant._id
+        );
 
         return (
           <PlantTypeRow
@@ -123,12 +135,11 @@ const MyPlants = () => {
             plant={plant}
             pots={filteredPots.map((pot) => ({
               id: pot.pot_id,
-              potName: pot.name,
+              potName: pot.label,
             }))}
           />
         );
       })}
-
     </StyledMyPlantsContainer>
   );
 };
