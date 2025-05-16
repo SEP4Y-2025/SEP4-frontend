@@ -113,7 +113,7 @@ const MyPlants = () => {
         )}
 
       </Flex>
-      {plantTypes.map((plant: PlantType, index: number) => {
+      {types.map((plant: PlantType, index: number) => {
         const filteredPots = pots.filter((pot) => pot.plant_type_id === plant._id);
 
         return (
