@@ -34,7 +34,7 @@ const MyEnvironmnets = () => {
   };
 
   const handleAdd = async (envName: string) => {
-    await addEnvironment(environmentID, envName);
+    await addEnvironment(envName);
     if (successAdd) {
       setShowEnvironmentModal(false);
       fetchAllEnvironments(user!.user_id);
