@@ -22,10 +22,14 @@ const ProfilePage: React.FC = () => {
             return;
         }
         await changePassword(user?.email, oldPass, newPass);
+
     };
 
     useEffect(() => {
-        if (success) toast.success(success);
+        if (success) {
+            toast.success(success);
+            logout();
+        }
         if (error) toast.error(error);
     }, [success, error]);
 
