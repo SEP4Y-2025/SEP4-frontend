@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export function useInvitePlantAssistant() {
   const [errorOnInvite, setErrorOnInvite] = useState("");
@@ -36,7 +36,9 @@ export function useInvitePlantAssistant() {
       );
       setAssistants(response.data.assistants);
     } catch (err: any) {
-      setErrorOnInvite(err.response?.data?.error || "Could not fetch assistants");
+      setErrorOnInvite(
+        err.response?.data?.error || "Could not fetch assistants"
+      );
     } finally {
       setLoading(false);
     }
@@ -52,7 +54,9 @@ export function useInvitePlantAssistant() {
       );
       await getAssistants(environmentId); // Refresh the list
     } catch (err: any) {
-      setErrorOnInvite(err.response?.data?.error || "Could not delete assistant");
+      setErrorOnInvite(
+        err.response?.data?.error || "Could not delete assistant"
+      );
     }
   };
 
