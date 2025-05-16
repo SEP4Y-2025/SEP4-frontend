@@ -27,8 +27,8 @@ export const UserContextProvider = ({ children }: Props) => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
+    const storedUser = sessionStorage.getItem("user");
+    const storedToken = sessionStorage.getItem("token");
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser));
       setToken(token);
@@ -50,8 +50,12 @@ export const UserContextProvider = ({ children }: Props) => {
       });
 
       if (res.data?.user_id) {
-        const newUser: UserProfile = { userName: username, email, user_id: res.data.user_id };
-        localStorage.setItem("user", JSON.stringify(newUser));
+        const newUser: UserProfile = {
+          userName: username,
+          email,
+          user_id: res.data.user_id,
+        };
+        sessionStorage.setItem("user", JSON.stringify(newUser));
         setUser(newUser);
         toast.success(res.data.message || "Registration successful");
         navigate("/");
@@ -75,18 +79,22 @@ export const UserContextProvider = ({ children }: Props) => {
       });
 
       if (res.data?.access_token && res.data?.user_id) {
-
         const f = await axios.get(`${API_URL}/users/${res.data.user_id}`);
-        const newUser: UserProfile = { userName: f.data.username, email: f.data.email, user_id: res.data.user_id };
+        const newUser: UserProfile = {
+          userName: f.data.username,
+          email: f.data.email,
+          user_id: res.data.user_id,
+        };
 
-        localStorage.setItem("token", res.data.access_token);
-        localStorage.setItem("user", JSON.stringify(newUser));
+        sessionStorage.setItem("token", res.data.access_token);
+        sessionStorage.setItem("user", JSON.stringify(newUser));
 
         setToken(res.data.access_token);
         setUser(newUser);
 
-        axios.defaults.headers.common["Authorization"] =
-          `Bearer ${res.data.access_token}`;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${res.data.access_token}`;
 
         toast.success("Login successful");
         navigate("/");
@@ -98,13 +106,12 @@ export const UserContextProvider = ({ children }: Props) => {
     }
   };
 
-
   const isLoggedIn = () => {
     return !!user;
   };
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     setUser(null);
     setToken(null);
     navigate("/login");
