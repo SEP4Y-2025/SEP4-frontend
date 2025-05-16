@@ -5,7 +5,7 @@ import Navbar from "./components/common/Navbar";
 import MyPlants from "./pages/MyPlants";
 import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
-import PlantDetails from "./pages/PlantDetails";
+import PlantDetails from "./pages/PlantDetails"
 import { EnvironmentProvider } from "./contexts/EnvironmentContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -19,7 +19,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { UserContextProvider } from "./contexts/UserAuthContext";
 import Register from "./pages/Auth/Register";
 import ProfilePage from "./pages/Profile";
-import AddAssistant from "./pages/AddAssistant";
 import MyEnvironmnets from "./pages/MyEnvironmnets";
 //-----------------------------------------------------
 const App: React.FC = () => {
@@ -83,16 +82,6 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="//plants/invite"
-                element={
-                  <ProtectedRoute>
-                    <EnvironmentProvider>
-                      <AddAssistant />
-                    </EnvironmentProvider>
-                  </ProtectedRoute>
-                }
-              />
-
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>

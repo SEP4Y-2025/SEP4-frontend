@@ -6,33 +6,13 @@ import { ErrorLabel } from "../../Styles/common/ErrorLabel";
 import { Title } from "../../Styles/common/Title.style";
 import { Input } from "../../Styles/common/Input.style";
 import { Flex } from "../../Styles/common/Flex";
+import { Overlay } from "../../Styles/modal/Overlay.style";
+import { Modal } from "../../Styles/modal/Modal.style";
 
 interface EditPasswordModalProps {
   onClose: () => void;
   onSubmit: (oldPassword: string, newPassword: string) => void;
 }
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-`;
-
-const Modal = styled.div`
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-`;
 
 const EditPasswordModal: React.FC<EditPasswordModalProps> = ({ onClose, onSubmit }) => {
   const [oldPassword, setOldPassword] = useState("");

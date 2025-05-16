@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { Pot } from "../types";
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export const useGetPotsByEnvironment = (environmentId: string) => {
   const [pots, setPots] = useState<Pot[]>([]);

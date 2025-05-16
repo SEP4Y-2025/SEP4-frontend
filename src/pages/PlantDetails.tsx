@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { useWaterStatus } from "../hooks/useWaterStatus";
 import { useDeletePot } from "../hooks/useDeletePot";
+import { useSoilHumidityPrediction } from "../hooks/useSoilHumidityPrediction";
 import {
   StyledPlantDetailsPage,
   StyledDetailsCard,
@@ -17,6 +28,16 @@ import {
   StyledTankLabels,
   StyledSaveButton,
   StyledDeleteButton,
+  StyledSoilHumidityPrediction,
+  StyledPredictionGraph,
+  StyledTestingNote,
+  StyledTimeSelector,
+  StyledTimeSelectorLabel,
+  StyledTimeSelectorDropdown,
+  StyledLoadingMessage,
+  StyledErrorMessage,
+  StyledCustomTooltip,
+  StyledTooltipValue,
 } from "../Styles/pages/PlantDetails.style";
 import { Title } from "../Styles/common/Title.style";
 import { Flex } from "../Styles/common/Flex";
@@ -25,27 +46,102 @@ const PlantDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { deletePot } = useDeletePot();
   const navigate = useNavigate();
-  const { pots, plantTypes, loading, error } = useEnvironmentCtx();
+  const { pots, plantTypes, loading, error, refreshEnvironmentData } =
+    useEnvironmentCtx();
+
+  // State for prediction time selection
+  const [predictionMinutes, setPredictionMinutes] = useState<number>(5);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const pot = pots.find((p) => p.pot_id === id);
   const plantType = pot
     ? plantTypes.find((type) => type._id === pot.plant_type_id)
     : null;
 
-  const handleSave = () => navigate("/plants");
-  const handleDelete = async () => {
-    const environmentId = "680f8359688cb5341f9f9c19";
-    //Hardcoded environment ID for now
+  const {
+    prediction,
+    loading: predictionLoading,
+    error: predictionError,
+  } = useSoilHumidityPrediction(id || "", predictionMinutes);
 
-    if (window.confirm("Are you sure you want to delete this plant?")) {
+  const handleSave = () => navigate("/plants");
+
+  const handleDelete = async () => {
+    if (!pot) return;
+
+    const environmentId = "680f8359688cb5341f9f9c19";
+
+    if (
+      window.confirm(
+        `Are you sure you want to delete ${pot.name}? This action cannot be undone.`
+      )
+    ) {
+      setIsDeleting(true);
+
       try {
-        await deletePot(id!, environmentId);
-        navigate("/plants");
-        window.location.reload();
+        const success = await deletePot(id!, environmentId);
+
+        if (success) {
+          alert(`${pot.name} has been successfully deleted.`);
+
+          await refreshEnvironmentData();
+
+          navigate("/plants");
+        } else {
+          alert("Failed to delete the plant. Please try again.");
+        }
       } catch (error) {
-        alert("Failed to delete plant.");
+        console.error("Delete error:", error);
+        alert("Failed to delete the plant. Please try again.");
+      } finally {
+        setIsDeleting(false);
       }
     }
+  };
+
+  // Handle prediction time change
+  const handlePredictionTimeChange = (minutes: number) => {
+    setPredictionMinutes(minutes);
+  };
+
+  const getTimeDisplayText = (minutes: number) => {
+    if (minutes < 60) return `${minutes} minutes`;
+    if (minutes < 1440)
+      return `${minutes / 60} hour${minutes / 60 !== 1 ? "s" : ""}`;
+    return `${minutes / 1440} day${minutes / 1440 !== 1 ? "s" : ""}`;
+  };
+
+  // Prepare data for the chart
+  const chartData = prediction
+    ? [
+        {
+          name: "Current",
+          value: prediction.current_soil_humidity,
+          type: "current",
+        },
+        {
+          name: `Predicted (${getTimeDisplayText(predictionMinutes)})`,
+          value: prediction.predicted_soil_humidity,
+          type: "predicted",
+        },
+      ]
+    : [];
+
+  // Custom tooltip for the chart
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0];
+      const color = data.payload.type === "current" ? "#8fd28f" : "#4a9eff";
+      return (
+        <StyledCustomTooltip>
+          <p>{label}</p>
+          <StyledTooltipValue $color={color}>
+            {`Soil Humidity: ${data.value}%`}
+          </StyledTooltipValue>
+        </StyledCustomTooltip>
+      );
+    }
+    return null;
   };
 
   const { waterPercentage, status: waterStatus } = useWaterStatus(
@@ -80,7 +176,11 @@ const PlantDetails: React.FC = () => {
         </StyledDetailRow>
         <StyledDetailRow>
           <span className="detail-label">Watering Frequency</span>
-          <span className="detail-value">{plantType.water_frequency}</span>
+          <span className="detail-value">
+            {plantType.watering_frequency ||
+              plantType.watering_frequency ||
+              "Not specified"}
+          </span>
         </StyledDetailRow>
         <StyledDetailRow>
           <span className="detail-label">Dosage ml</span>
@@ -126,6 +226,131 @@ const PlantDetails: React.FC = () => {
         </StyledMetricBox>
       </StyledMetricsContainer>
 
+      {/* Soil Humidity Prediction Section */}
+      <StyledSoilHumidityPrediction>
+        <h2>Current Soil Humidity for {pot.name}</h2>
+        <StyledTestingNote>
+          (Currently displaying predictions for pot_1 for testing purposes)
+        </StyledTestingNote>
+
+        {/* Time Selection for Predictions */}
+        <StyledTimeSelector>
+          <StyledTimeSelectorLabel>Prediction Time:</StyledTimeSelectorLabel>
+          <StyledTimeSelectorDropdown
+            value={predictionMinutes}
+            onChange={(e) => handlePredictionTimeChange(Number(e.target.value))}
+          >
+            <optgroup label="Minutes">
+              <option value={5}>5 minutes</option>
+              <option value={10}>10 minutes</option>
+              <option value={11}>11 minutes</option>
+              <option value={15}>15 minutes</option>
+              <option value={30}>30 minutes</option>
+              <option value={45}>45 minutes</option>
+            </optgroup>
+            <optgroup label="Hours">
+              <option value={60}>1 hour</option>
+              <option value={120}>2 hours</option>
+              <option value={180}>3 hours</option>
+              <option value={240}>4 hours</option>
+              <option value={360}>6 hours</option>
+              <option value={480}>8 hours</option>
+              <option value={720}>12 hours</option>
+            </optgroup>
+            <optgroup label="Days">
+              <option value={1440}>1 day</option>
+              <option value={2880}>2 days</option>
+              <option value={4320}>3 days</option>
+              <option value={7200}>5 days</option>
+              <option value={10080}>1 week</option>
+              <option value={20160}>2 weeks</option>
+              <option value={43200}>1 month</option>
+            </optgroup>
+          </StyledTimeSelectorDropdown>
+        </StyledTimeSelector>
+
+        {predictionLoading && (
+          <StyledLoadingMessage>Loading prediction...</StyledLoadingMessage>
+        )}
+        {predictionError && (
+          <StyledErrorMessage>
+            Error loading prediction: {predictionError}
+          </StyledErrorMessage>
+        )}
+
+        {prediction && (
+          <div>
+            <StyledDetailRow>
+              <span className="detail-label">Prediction for Pot ID</span>
+              <span className="detail-value">{prediction.plant_pot_id}</span>
+            </StyledDetailRow>
+            <StyledDetailRow>
+              <span className="detail-label">Current Soil Humidity</span>
+              <span className="detail-value">
+                {prediction.current_soil_humidity}%
+              </span>
+            </StyledDetailRow>
+            <StyledDetailRow>
+              <span className="detail-label">
+                Predicted Soil Humidity ({predictionMinutes} min)
+              </span>
+              <span className="detail-value">
+                {prediction.predicted_soil_humidity}%
+              </span>
+            </StyledDetailRow>
+            <StyledDetailRow>
+              <span className="detail-label">Prediction Method</span>
+              <span className="detail-value">
+                {prediction.prediction_method}
+              </span>
+            </StyledDetailRow>
+
+            <StyledPredictionGraph>
+              <h3>
+                Soil Humidity Prediction Graph (
+                {getTimeDisplayText(predictionMinutes)})
+              </h3>
+              <div className="chart-container">
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    data={chartData}
+                    margin={{
+                      top: 20,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                    barCategoryGap="20%"
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fontSize: 14, fill: "#333" }}
+                      tickLine={{ stroke: "#ccc" }}
+                    />
+                    <YAxis
+                      domain={[0, 100]}
+                      tick={{ fontSize: 14, fill: "#333" }}
+                      tickLine={{ stroke: "#ccc" }}
+                      label={{
+                        value: "Humidity (%)",
+                        angle: -90,
+                        position: "insideLeft",
+                      }}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                      <Cell fill="#8fd28f" />
+                      <Cell fill="#4a9eff" />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </StyledPredictionGraph>
+          </div>
+        )}
+      </StyledSoilHumidityPrediction>
+
       <StyledDetailsCard>
         <h2>Water Tank Status</h2>
 
@@ -160,8 +385,8 @@ const PlantDetails: React.FC = () => {
 
       <Flex $justifyC="center" $gap="20px" $width="600px" $margin="40px auto 0">
         <StyledSaveButton onClick={handleSave}>Go Back</StyledSaveButton>
-        <StyledDeleteButton onClick={handleDelete}>
-          Delete Plant
+        <StyledDeleteButton onClick={handleDelete} disabled={isDeleting}>
+          {isDeleting ? "Deleting..." : `Delete ${pot.name}`}
         </StyledDeleteButton>
       </Flex>
     </StyledPlantDetailsPage>

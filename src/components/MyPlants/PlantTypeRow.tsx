@@ -19,7 +19,7 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
   return (
     <Flex $dir="column" $alignI="center">
       <Flex>
-        Type: {plant.name} ({plant.water_frequency}x/week, {plant.water_dosage}
+        Type: {plant.name} ({plant.watering_frequency}x/week, {plant.water_dosage}
         ml)
       </Flex>
       <Flex
@@ -29,8 +29,8 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
         $background="#f2fdf8"
       >
         <StyledRow>
-          {pots.map((plant, index) => (
-            <PotCard key={index} id={plant.id} plantName={plant.potName} />
+          {pots.map((pot, index) => (  // Changed from 'plant' to 'pot'
+            <PotCard key={index} id={pot.id} plantName={pot.potName} />
           ))}
         </StyledRow>
         {isOwner && <i
