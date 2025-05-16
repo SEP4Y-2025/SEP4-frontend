@@ -3,7 +3,7 @@ name: Deploy Frontend to Azure ACI
 on:
   pull_request:
     branches:
-      - main
+      - master
   workflow_dispatch:
     inputs:
       tag:
