@@ -25,7 +25,8 @@ const MyPlants = () => {
   const { types, loadingTypes, fetchTypes } =
     useGetTypesByEnvironment(environmentID);
   const { addPlantType } = useAddPlantType(fetchTypes);
-  const [open, setOpen] = useState(false);
+  const [openNewType, setOpenNewType] = useState(false);
+  const [openAddAssistant, setOpenAddAssistant] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
@@ -96,7 +97,7 @@ const MyPlants = () => {
             setWateringFrequency={setWateringFrequency}
             dosage={dosage}
             setDosage={setDosage}
-            error={error ?? ""}
+            error={""}
             handleContinue={handleContinue}
             handleCancel={handleCancel}
           />
