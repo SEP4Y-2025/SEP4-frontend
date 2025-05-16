@@ -12,19 +12,16 @@ import { useAuth } from "../contexts/UserAuthContext";
 import { useAddPlantType } from "../hooks/useAddPlantType";
 import { toast } from "react-toastify";
 import { Flex } from "../Styles/common/Flex";
+import { useGetPotsByEnvironment } from "../hooks/useGetPotsByEnvironment";
+import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
 
 const MyPlants = () => {
-  const {
-    plantTypes,
-    pots,
-    environmentID,
-    loading,
-    environmentName,
-    error,
-    refreshEnvironmentData,
-    isOwner,
-    setPlantTypes  } = useEnvironmentCtx();
-  const { addPlantType } = useAddPlantType();
+  const { environmentID, environmentName, isOwner } = useEnvironmentCtx();
+  const { pots, loadingPots, fetchPots } =
+    useGetPotsByEnvironment(environmentID);
+  const { types, loadingTypes, fetchTypes } =
+    useGetTypesByEnvironment(environmentID);
+  const { addPlantType } = useAddPlantType(fetchTypes);
   const [open, setOpen] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
@@ -49,7 +46,6 @@ const MyPlants = () => {
         watering_frequency: watering,
         water_dosage: dose,
       });
-      await refreshEnvironmentData();
       setTypeName("");
       setWateringFrequency("");
       setDosage("");
@@ -71,20 +67,18 @@ const MyPlants = () => {
       <h1 className="title">My Plants - {environmentName}</h1>
       {isOwner && <button onClick={handleOnInvite}>Invite assistants</button>}
 
-   {plantTypes.map((plant: PlantType, index: number) => {
-    const filteredPots = pots.filter((pot) => pot.plant_type_id === plant._id);
-
-    return (
-      <PlantTypeRow
-        key={index}
-        plant={plant}
-        pots={filteredPots.map((pot) => ({
-          id: pot.pot_id,
-          potName: pot.name,
-        }))}
-      />
-    );
-  })}
+      {types.map((plant: PlantType, index: number) => (
+        <PlantTypeRow
+          key={index}
+          plant={plant}
+          pots={pots
+            .filter((pot) => pot.plantTypeId === plant._id)
+            .map((pot) => ({
+              id: pot.potId,
+              potName: pot.name,
+            }))}
+        />
+      ))}
 
       {isOwner && <Button onClick={() => setOpen(true)}>Add new type</Button>}
       {open && (
@@ -95,7 +89,7 @@ const MyPlants = () => {
           setWateringFrequency={setWateringFrequency}
           dosage={dosage}
           setDosage={setDosage}
-          error={error ?? ""}
+          error={""}
           handleContinue={handleContinue}
           handleCancel={handleCancel}
         />

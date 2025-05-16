@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { useWaterStatus } from "../hooks/useWaterStatus";
 import { useDeletePot } from "../hooks/useDeletePot";
-import { 
+import {
   StyledPlantDetailsPage,
   StyledDetailsCard,
   StyledDetailRow,
@@ -16,7 +16,7 @@ import {
   StyledWaterTankPercentage,
   StyledTankLabels,
   StyledSaveButton,
-  StyledDeleteButton
+  StyledDeleteButton,
 } from "../Styles/pages/PlantDetails.style";
 import { Title } from "../Styles/common/Title.style";
 import { Flex } from "../Styles/common/Flex";
@@ -53,9 +53,9 @@ const PlantDetails: React.FC = () => {
     pot?.state?.water_tank_capacity || 1
   );
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!pot || !plantType) return <div>Plant not found</div>;
+  //   if (loading) return <div>Loading...</div>;
+  //   if (error) return <div>Error: {error}</div>;
+  //   if (!pot || !plantType) return <div>Plant not found</div>;
 
   const temperatureValue = pot.state?.temperature || 0;
   const soilHumidityValue = pot.state?.soil_humidity || 0;
@@ -146,11 +146,11 @@ const PlantDetails: React.FC = () => {
 
         <StyledWaterTankVisual>
           <StyledWaterTankContainer>
-            <StyledWaterTankLevel 
-              $waterPercentage={waterPercentage}
-            />
+            <StyledWaterTankLevel $waterPercentage={waterPercentage} />
           </StyledWaterTankContainer>
-          <StyledWaterTankPercentage>{waterPercentage}%</StyledWaterTankPercentage>
+          <StyledWaterTankPercentage>
+            {waterPercentage}%
+          </StyledWaterTankPercentage>
           <StyledTankLabels>
             <span>0 ml</span>
             <span>{waterCapacity} ml</span>
@@ -159,9 +159,7 @@ const PlantDetails: React.FC = () => {
       </StyledDetailsCard>
 
       <Flex $justifyC="center" $gap="20px" $width="600px" $margin="40px auto 0">
-        <StyledSaveButton onClick={handleSave}>
-          Go Back
-        </StyledSaveButton>
+        <StyledSaveButton onClick={handleSave}>Go Back</StyledSaveButton>
         <StyledDeleteButton onClick={handleDelete}>
           Delete Plant
         </StyledDeleteButton>
