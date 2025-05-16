@@ -72,9 +72,9 @@ const MyPlants = () => {
           key={index}
           plant={plant}
           pots={pots
-            .filter((pot) => pot.plantTypeId === plant._id)
+            .filter((pot) => pot.plant_type_id === plant._id)
             .map((pot) => ({
-              id: pot.potId,
+              id: pot.pot_id,
               potName: pot.name,
             }))}
         />
