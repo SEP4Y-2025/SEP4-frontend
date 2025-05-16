@@ -12,6 +12,7 @@ import { Title } from "../Styles/common/Title.style";
 import { Flex } from "../Styles/common/Flex";
 import AddEnvironmentModal from "../components/MyEnvironments/AddNewModal";
 import { useAddEnvironments } from "../hooks/useAddEnvironments";
+import { toast } from "react-toastify";
 
 const MyEnvironmnets = () => {
   const { setEnvironmentID, setIsOwner, environmentID } = useEnvironmentCtx();
@@ -21,28 +22,31 @@ const MyEnvironmnets = () => {
   const { addEnvironment, errorAdd, successAdd } = useAddEnvironments();
 
   const navigate = useNavigate();
+
   useEffect(() => {
     if (user?.user_id) {
       console.log("fetch call");
       fetchAllEnvironments(user.user_id);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (successAdd) {
+      toast.success("Environment added successfully");
+      fetchAllEnvironments(user!.user_id);
+      setShowEnvironmentModal(false);
+    }
+    if (errorAdd) {
+      toast.error(errorAdd);
+    }
+  }, [successAdd, errorAdd]);
+
   const handleSwitch = (envId: string, own: boolean) => {
     setEnvironmentID(envId);
     setIsOwner(own);
     navigate("/plants");
   };
 
-  const handleAdd = async (envName: string) => {
-    await addEnvironment(envName);
-    if (successAdd) {
-      setShowEnvironmentModal(false);
-      fetchAllEnvironments(user!.user_id);
-    }
-    if (errorAdd) {
-      alert(errorAdd);
-    }
-  };
 
   return (
     <div>
@@ -68,7 +72,7 @@ const MyEnvironmnets = () => {
         {showEnvironmentModal && (
           <AddEnvironmentModal
             onClose={() => setShowEnvironmentModal(false)}
-            onSubmit={handleAdd}
+            onSubmit={addEnvironment}
           />
         )}
       </Grid>
