@@ -6,7 +6,9 @@ const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export function FetchMyEnvironments() {
   const [error, setError] = useState("");
-  const [environmentsList, setEnvironmentsList] = useState<EnvironmentBrief[]>([]);
+  const [environmentsList, setEnvironmentsList] = useState<EnvironmentBrief[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
 
   const fetchAllEnvironments = async (userId: string) => {
