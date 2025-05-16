@@ -15,6 +15,8 @@ import { Flex } from "../Styles/common/Flex";
 import { useDeleteEnvironment } from "../hooks/useDeleteEnvironment";
 import { useInvitePlantAssistant } from "../hooks/useInviteAssistant";
 import AddAssistantModal from "../components/MyPlants/AddAssistantModal";
+import { useGetPotsByEnvironment } from "../hooks/useGetPotsByEnvironment";
+import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
 
 const MyPlants = () => {
   const { environmentID, environmentName, isOwner } = useEnvironmentCtx();
