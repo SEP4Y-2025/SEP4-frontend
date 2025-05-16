@@ -1,13 +1,16 @@
 import React from 'react'
 
+
 interface Props{
     source:string;
     summary:string;
+    onClick?:() =>void;
 }
 
-const Icon = ({source, summary} :Props) => {
+const Icon = ({source, summary,onClick} :Props) => {
+
   return (
-    <img src={source} alt={summary}></img>
+    <img src={source} alt={summary} onClick={onClick}></img>
   )
 }
 

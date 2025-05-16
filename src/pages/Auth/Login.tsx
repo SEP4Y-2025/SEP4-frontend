@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Flex } from "../../Styles/Flex";
-import { Input } from "../../Styles/Input.style";
-import { Button } from "../../Styles/Button.style";
-import { ErrorLabel } from "../../Styles/ErrorLabel";
-import { Label } from "../../Styles/Label.style";
-import { Title } from "../../Styles/Title.style";
+import { Flex } from "../../Styles/common/Flex";
+import { Input } from "../../Styles/common/Input.style";
+import { Button } from "../../Styles/common/Button.style";
+import { ErrorLabel } from "../../Styles/common/ErrorLabel";
+import { Label } from "../../Styles/common/Label.style";
+import { Title } from "../../Styles/common/Title.style";
 import { useAuth } from "../../contexts/UserAuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
         {error && <ErrorLabel>{error}</ErrorLabel>}
 
         <Flex $justifyC="space-between" $alignI="center" $margin="20px 0">
-          <Button onClick={()=> navigate("/register")}>Register</Button>
+          <Button onClick={() => navigate("/register")}>Register</Button>
           <Button onClick={handleLogin}>Log in</Button>
         </Flex>
       </Flex>

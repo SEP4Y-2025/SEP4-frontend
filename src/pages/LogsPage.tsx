@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchLogs } from "../services/api";
 import LogTable from "../components/LogTable";
 import { LogEntry } from "../types/logTypes";
-import { Flex } from "../Styles/Flex";
+import { Flex } from "../Styles/common/Flex";
 
 const LogsPage: React.FC = () => {
   const [logs, setLogs] = useState<String[]>([]);

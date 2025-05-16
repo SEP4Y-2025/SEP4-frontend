@@ -5,11 +5,11 @@ import Navbar from "./components/common/Navbar";
 import MyPlants from "./pages/MyPlants";
 import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
-import PlantDetails from "./pages/PlantDetails";
+//import PlantDetails from "./pages/PlantDetails"
 import { EnvironmentProvider } from "./contexts/EnvironmentContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { darkTheme, lightTheme } from "./Styles/Themes";
+import { darkTheme, lightTheme } from "./Styles/themes/Themes";
 import { ThemeProvider } from "styled-components";
 import Login from "./pages/Auth/Login";
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -18,8 +18,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContextProvider } from "./contexts/UserAuthContext";
 import Register from "./pages/Auth/Register";
-import ProfilePage from "./pages/NavBar/Profile";
-import AddAssistant from "./pages/AddAssistant";
+import ProfilePage from "./pages/Profile";
+import MyEnvironmnets from "./pages/MyEnvironmnets";
 //-----------------------------------------------------
 const App: React.FC = () => {
   const [darkMode, setDarkmode] = useState(false);
@@ -32,7 +32,7 @@ const App: React.FC = () => {
           <Container>
             <ToastContainer />
             <Routes>
-              <Route path="/" element={<ProtectedRoute><LogsPage />
+              <Route path="/logs" element={<ProtectedRoute><LogsPage />
               </ProtectedRoute>} />
               <Route
                 path="/plants"
@@ -40,6 +40,16 @@ const App: React.FC = () => {
                   <ProtectedRoute>
                     <EnvironmentProvider>
                       <MyPlants />
+                    </EnvironmentProvider>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <EnvironmentProvider>
+                      <MyEnvironmnets />
                     </EnvironmentProvider>
                   </ProtectedRoute>
                 }
@@ -54,7 +64,7 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route
+              {/* <Route
                 path="/plant-details/:id"
                 element={
                   <ProtectedRoute>
@@ -63,27 +73,17 @@ const App: React.FC = () => {
                     </EnvironmentProvider>
                   </ProtectedRoute>
                 }
-              />
-               <Route
+              /> */}
+              <Route
                 path="/profile"
                 element={
                   <ProtectedRoute>
-                      <ProfilePage />
-                  </ProtectedRoute>
-                }
-                />
-                <Route  path="//plants/invite"
-                element={
-                  <ProtectedRoute>
-                    <EnvironmentProvider>
-                      <AddAssistant />
-                    </EnvironmentProvider>
+                    <ProfilePage />
                   </ProtectedRoute>
                 }
               />
-              
-              <Route path="/login" element={<Login />}/>
-              <Route path="/register" element={<Register />}/>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
             </Routes>
           </Container>
         </ThemeProvider>

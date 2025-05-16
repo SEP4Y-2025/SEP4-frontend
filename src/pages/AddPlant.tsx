@@ -1,41 +1,73 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-// import { addPotToPlantType } from "../services/plantPotsRepo";
+
+import { AddPlantPotRequest } from "../types/addPlantPotApiTypes";
 import "./AddPlant.css";
+import { useAddPlantPot } from "../hooks/useAddPlantPot";
+import { toast } from "react-toastify";
+import { StyledAddPlantModal, StyledInputGroup, StyledModalBody, StyledModalContent, StyledModalFooter, StyledModalHeader } from "../Styles/pages/AddPlant.style";
 
 const AddPlant: React.FC = () => {
-  const { typeName } = useParams<{ typeName: string }>();
+  const { environmentId, plantTypeId, typeName } = useParams<{
+    environmentId: string;
+    plantTypeId: string;
+    typeName: string;
+  }>();
+
   const navigate = useNavigate();
-  
   const [plantName, setPlantName] = useState("");
+  const [potId, setPotId] = useState("");
   const [error, setError] = useState("");
+  const { addPlantPot } = useAddPlantPot();
 
   const handleSave = async () => {
-    
-    if (!plantName.trim()) {
-      setError("Please enter a plant name");
+    if (!plantName.trim() || !potId.trim()) {
+      toast.error("Please fill in all fields");
       return;
     }
-    // await addPotToPlantType(typeName || "", plantName);
 
-    // Navigate back to MyPlants page
-    navigate("/plants");
+
+    try {
+      const request: AddPlantPotRequest = {
+        pot_id: potId,
+        plant_pot_label: plantName,
+        plant_type_id: plantTypeId!,
+      };
+
+      await addPlantPot(request);
+      navigate("/plants");
+    } catch (e: any) {
+      console.error(e);
+      setError("Failed to add plant. Please try again.");
+    }
   };
 
   const handleCancel = () => {
-    navigate(-1); // Go back to previous page
+    navigate(-1);
   };
 
   return (
-    <div className="add-plant-modal">
-      <div className="modal-content">
-        <div className="modal-header">
-          <span role="img" aria-label="leaf">🌿</span>
-          <h2>Add new Plant</h2>
-        </div>
+    <StyledAddPlantModal>
+      <StyledModalContent>
+        <StyledModalHeader>
+          <span role="img" aria-label="leaf">
+            🌿
+          </span>
+          <h2>Add New Plant</h2>
+        </StyledModalHeader>
 
-        <div className="modal-body">
-          <div className="input-group">
+        <StyledModalBody>
+          <StyledInputGroup>
+            <label>Device ID</label>
+            <input
+              className="input"
+              placeholder="Enter device ID"
+              value={potId}
+              onChange={(e) => setPotId(e.target.value)}
+            />
+          </StyledInputGroup>
+
+          <StyledInputGroup>
             <label>Name</label>
             <input
               className="input"
@@ -43,26 +75,26 @@ const AddPlant: React.FC = () => {
               value={plantName}
               onChange={(e) => setPlantName(e.target.value)}
             />
-          </div>
+          </StyledInputGroup>
 
-          <div className="input-group">
+          <StyledInputGroup>
             <label>Type</label>
             <div className="type-display">{typeName}</div>
-          </div>
+          </StyledInputGroup>
 
           {error && <div className="error-message">{error}</div>}
 
-          <div className="modal-footer">
+          <StyledModalFooter>
             <button className="cancel-button" onClick={handleCancel}>
               Cancel
             </button>
             <button className="save-button" onClick={handleSave}>
               Save
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          </StyledModalFooter>
+        </StyledModalBody>
+      </StyledModalContent>
+    </StyledAddPlantModal>
   );
 };
 

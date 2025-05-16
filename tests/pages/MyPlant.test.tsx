@@ -31,6 +31,7 @@ describe("MyPlants - Add Type Creation", () => {
       loading: false,
       error: null,
       environmentName: "TestEnv",
+      environmentID: "680f8359688cb5341f9f9c19",
       setPlantTypes: mockSetPlantTypes,
     });
 
@@ -39,7 +40,7 @@ describe("MyPlants - Add Type Creation", () => {
       {
         _id: "abc123",
         name: "Basil",
-        water_frequency: 5,
+        watering_frequency: 5,
         water_dosage: 100,
       },
     ]);
@@ -72,7 +73,7 @@ describe("MyPlants - Add Type Creation", () => {
         "680f8359688cb5341f9f9c19",
         {
           name: "Basil",
-          water_frequency: 5,
+          watering_frequency: 5,
           water_dosage: 100,
         }
       );
@@ -84,7 +85,7 @@ describe("MyPlants - Add Type Creation", () => {
         {
           _id: "abc123",
           name: "Basil",
-          water_frequency: 5,
+          watering_frequency: 5,
           water_dosage: 100,
         },
       ]);

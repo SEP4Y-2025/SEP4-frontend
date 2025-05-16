@@ -6,11 +6,14 @@ interface Props {
   $borderR?: string;
   $border?: string;
   $margin?: string;
+  $variant?: "primary" | "cancel"; // Add variant prop
 }
 
 export const Button = styled.button<Props>`
-  background-color: #58cd63;
-  color: white;
+  background-color: ${(p) =>
+    p.$variant === "cancel" ? "#e0e0e0" : "#58cd63"};
+  color: ${(p) =>
+    p.$variant === "cancel" ? "#333" : "white"};
   font-weight: bold;
   cursor: pointer;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.15);
@@ -21,6 +24,16 @@ export const Button = styled.button<Props>`
   border: ${(p) => p.$border || "none"};
 
   &:hover {
-    background-color: #4bb157;
+    background-color: ${(p) =>
+    p.$variant === "cancel" ? "#bdbdbd" : "#4bb157"};
+  }
+`;
+
+export const DeleteButton = styled(Button)`
+  background-color: #e53935;
+  color: white;
+
+  &:hover {
+    background-color: #b71c1c;
   }
 `;

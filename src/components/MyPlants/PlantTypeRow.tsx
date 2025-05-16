@@ -2,8 +2,10 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PotCard from "./PotCard";
 import { PlantType } from "../../types";
-import { Flex } from "../../Styles/Flex";
-import { StyledRow } from "../../Styles/MyPlants.style";
+
+import { useEnvironmentCtx } from "../../contexts/EnvironmentContext";
+import { Flex } from "../../Styles/common/Flex";
+import { StyledRow } from "../../Styles/pages/MyPlants.style";
 
 export interface PlantTypeRowProps {
   plant: PlantType;
@@ -12,11 +14,12 @@ export interface PlantTypeRowProps {
 
 const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
   const navigate = useNavigate();
+  const{isOwner} = useEnvironmentCtx();
 
   return (
     <Flex $dir="column" $alignI="center">
       <Flex>
-        Type: {plant.name} ({plant.water_frequency}x/week, {plant.water_dosage}
+        Type: {plant.name} ({plant.watering_frequency}x/week, {plant.water_dosage}
         ml)
       </Flex>
       <Flex
@@ -26,16 +29,16 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
         $background="#f2fdf8"
       >
         <StyledRow>
-          {pots.map((plant, index) => (
-            <PotCard key={index} id={plant.id} plantName={plant.potName} />
+          {pots.map((pot, index) => (  // Changed from 'plant' to 'pot'
+            <PotCard key={index} id={pot.id} plantName={pot.potName} />
           ))}
         </StyledRow>
-        <i
+        {isOwner && <i
           className="bi bi-plus-circle"
           role="button"
           aria-label="Add plant"
           onClick={() => navigate(`/addplant/${plant.name}`)}
-        ></i>
+        ></i>}
       </Flex>
     </Flex>
   );

@@ -6,19 +6,18 @@ import {
   useState,
 } from "react";
 import { PlantType, Pot } from "../types";
-import { getPotsByEnvironment } from "../services/plantPotsApi";
-import { getTypesByEnvironment } from "../services/plantTypesApi";
+import axios from "axios";
+
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 type EnvironmentContextType = {
-  pots: Pot[];
-  plantTypes: PlantType[];
   environmentName: string;
-  loading: boolean;
-  error: string | null;
-  environmentID:string;
+
+  environmentID: string;
+  isOwner: boolean;
+  setIsOwner: (b: boolean) => void;
   setEnvironmentName: (newName: string) => void;
   setEnvironmentID: (search: string) => void;
-  setPlantTypes: (newTypes: PlantType[]) => void;
 };
 
 const EnvironmentContext = createContext<EnvironmentContextType | undefined>(
@@ -30,56 +29,21 @@ interface Props {
 }
 
 const EnvironmentProvider = ({ children }: Props) => {
-  const [pots, setPots] = useState<Pot[]>([]);
-  const [plantTypes, setPlantTypes] = useState<PlantType[]>([]);
+  const [isOwner, setIsOwner] = useState(false);
   const [environmentName, setEnvironmentName] = useState<string>("");
-  const [environmentID, setEnvironmentID] = useState<string>("680f8359688cb5341f9f9c19");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchEnvironment = async () => {
-      try {
-        setError(null);
-        setLoading(true);
-
-        const fetchedTypes = await getTypesByEnvironment(
-          environmentID
-        );
-        setPlantTypes(fetchedTypes);
-
-        const fetchedPots = await getPotsByEnvironment(
-          environmentID
-        );
-        setPots(fetchedPots);
-      } catch (er) {
-        er instanceof Error
-          ? setError(er.message)
-          : setError("Unknown error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEnvironment();
-  }, [environmentID]);
-
-  useEffect(() => {
-
-  }, [plantTypes]);
+  const [environmentID, setEnvironmentID] = useState<string>("");
 
   return (
     <EnvironmentContext.Provider
       value={{
-        loading,
-        error,
+        isOwner,
         environmentName,
-        plantTypes,
-        pots,
+
         environmentID,
+        setIsOwner,
+
         setEnvironmentID,
         setEnvironmentName,
-        setPlantTypes,
       }}
     >
       {children}
