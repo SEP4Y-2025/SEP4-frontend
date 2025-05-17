@@ -4,32 +4,28 @@ import axios from "axios";
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export function useDeleteEnvironment() {
-  const [errorDelete, setErrorDelete] = useState<string | null>(null);
-  const [successDelete, setSuccessDelete] = useState<string | null>(null);
-
-  const deleteEnvironment = async (environmentId: string) => {
-    setErrorDelete(null);
-    setSuccessDelete(null);
+  const deleteEnvironment = async (
+    environmentId: string
+  ): Promise<{
+    success: boolean;
+    error?: string;
+  }> => {
+    console.log("called")
     try {
-      const response = await axios.delete(
-        `${BASE_URL}/environments/${environmentId}`
-      );
-      setSuccessDelete(
-        response.data?.message || "Environment deleted successfully"
-      );
+      await axios.delete(`${BASE_URL}/environments/${environmentId}`);
+      console.log("yay");
+      return { success: true };
     } catch (err: any) {
-      console.error("Error deleting environment:", err.response?.data.message);
-      setErrorDelete(
-        err.response?.data?.error ||
+      console.error("Error deleting environment:", err.response?.data?.message);
+      return {
+        success: false,
+        error:
+          err.response?.data?.error ||
           err.response?.data?.message ||
-          "Failed to delete environment"
-      );
+          "Failed to delete environment",
+      };
     }
   };
 
-  return {
-    deleteEnvironment,
-    errorDelete: errorDelete,
-    successDelete: successDelete,
-  };
+  return { deleteEnvironment };
 }

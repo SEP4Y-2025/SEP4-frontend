@@ -1,7 +1,7 @@
 export type Pot = {
-  pot_id: string;           
-  name: string;
-  plant_type_id: string;  
+  pot_id: string;
+  label: string;
+  plant_type_id: string;
   state?: {
     air_humidity?: number;
     temperature?: number;

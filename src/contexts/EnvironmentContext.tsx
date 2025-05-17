@@ -29,9 +29,28 @@ interface Props {
 }
 
 const EnvironmentProvider = ({ children }: Props) => {
-  const [isOwner, setIsOwner] = useState(false);
-  const [environmentName, setEnvironmentName] = useState<string>("");
-  const [environmentID, setEnvironmentID] = useState<string>("");
+  const [isOwner, setIsOwner] = useState<boolean>(() => {
+    const stored = sessionStorage.getItem("isOwner");
+    return stored ? JSON.parse(stored) : false;
+  });
+  const [environmentName, setEnvironmentName] = useState<string>(() => {
+    return sessionStorage.getItem("environmentName") || "";
+  });
+  const [environmentID, setEnvironmentID] = useState<string>(() => {
+    return sessionStorage.getItem("environmentID") || "";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("isOwner", JSON.stringify(isOwner));
+  }, [isOwner]);
+
+  useEffect(() => {
+    sessionStorage.setItem("environmentName", environmentName);
+  }, [environmentName]);
+
+  useEffect(() => {
+    sessionStorage.setItem("environmentID", environmentID);
+  }, [environmentID]);
 
   return (
     <EnvironmentContext.Provider

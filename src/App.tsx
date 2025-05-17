@@ -20,6 +20,7 @@ import { UserContextProvider } from "./contexts/UserAuthContext";
 import Register from "./pages/Auth/Register";
 import ProfilePage from "./pages/Profile";
 import MyEnvironmnets from "./pages/MyEnvironmnets";
+import Assistants from "./pages/Assistants";
 //-----------------------------------------------------
 const App: React.FC = () => {
   const [darkMode, setDarkmode] = useState(false);
@@ -32,8 +33,14 @@ const App: React.FC = () => {
           <Container>
             <ToastContainer />
             <Routes>
-              <Route path="/logs" element={<ProtectedRoute><LogsPage />
-              </ProtectedRoute>} />
+              <Route
+                path="/logs"
+                element={
+                  <ProtectedRoute>
+                    <LogsPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/plants"
                 element={
@@ -54,12 +61,23 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+
               <Route
                 path="/addplant/:typeName"
                 element={
                   <ProtectedRoute>
                     <EnvironmentProvider>
                       <AddPlant />
+                    </EnvironmentProvider>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/loremIpsum"
+                element={
+                  <ProtectedRoute>
+                    <EnvironmentProvider>
+                      <Assistants />
                     </EnvironmentProvider>
                   </ProtectedRoute>
                 }
@@ -89,7 +107,6 @@ const App: React.FC = () => {
         </ThemeProvider>
       </UserContextProvider>
     </Router>
-
   );
 };
 
