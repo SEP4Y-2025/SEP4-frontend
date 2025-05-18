@@ -77,8 +77,6 @@ const PlantDetails = () => {
   const handleDelete = async () => {
     if (!pot) return;
 
-    const environmentId = "680f8359688cb5341f9f9c19";
-
     if (
       window.confirm(
         `Are you sure you want to delete ${pot.label}? This action cannot be undone.`
@@ -87,7 +85,7 @@ const PlantDetails = () => {
       setIsDeleting(true);
 
       try {
-        const success = await deletePot(id!, environmentId);
+        const success = await deletePot(id!, environmentID);
 
         if (success) {
           alert(`${pot.label} has been successfully deleted.`);
@@ -157,9 +155,15 @@ const PlantDetails = () => {
     pot?.state?.water_tank_capacity || 1
   );
 
-    // if (loading) return <div>Loading...</div>;
-    // if (error) return <div>Error: {error}</div>;
-    if (!pot || !type) return <div>Plant not found</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error}</div>;
+  if (!pot) return <div>Plant not found</div>;
+  if (!type)
+    return (
+      <div>
+        type error {pot.label} {pot.plant_type_id} {pot.pot_id}
+      </div>
+    );
 
   const temperatureValue = pot!.state?.temperature || 0;
   const soilHumidityValue = pot!.state?.soil_humidity || 0;
