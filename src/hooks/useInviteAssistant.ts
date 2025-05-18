@@ -7,26 +7,26 @@ export function useInviteAssistants() {
   const invite = async (
     environmentId: string,
     userMail: string,
-    onSuccess?:() =>void,
+    onSuccess?: () => void
   ): Promise<{
     success: boolean;
     error?: string;
   }> => {
     try {
-       await axios.put(
-        `${BASE_URL}/environments/${environmentId}/assistants`,
-        { user_email: userMail }
+      await axios.put(
+        `${BASE_URL}/environments/${environmentId}/assistants?user_id=${userMail}`
         //TODO deleteing doesnt work bcs of backend cheers
       );
       onSuccess && onSuccess();
       return { success: true };
     } catch (err: any) {
+      console.log(err);
       return {
         success: false,
         error:
           err.response?.data?.error ||
           err.response?.data?.message ||
-          "Failed to delete environment",
+          "Failed to add assistant",
       };
     }
   };

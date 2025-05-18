@@ -14,8 +14,7 @@ export function useDeleteAssistants() {
   }> => {
     try {
       await axios.delete(
-        `${BASE_URL}/environments/${environmentId}/assistants`,
-        { data: { user_email: email } }
+        `${BASE_URL}/environments/${environmentId}/assistants?user_email=${email}`
       );
       onSuccess && onSuccess();
       return { success: true };
