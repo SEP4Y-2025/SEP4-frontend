@@ -14,7 +14,7 @@ export function useInviteAssistants() {
   }> => {
     try {
       await axios.put(
-        `${BASE_URL}/environments/${environmentId}/assistants?user_id=${userMail}`
+        `${BASE_URL}/environments/${environmentId}/assistants?user_email=${userMail}`
         //TODO deleteing doesnt work bcs of backend cheers
       );
       onSuccess && onSuccess();
