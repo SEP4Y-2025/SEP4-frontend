@@ -4,7 +4,6 @@ import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
 import { useEffect } from "react";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { AddPlantPotRequest } from "../types/addPlantPotApiTypes";
-import "./AddPlant.css";
 import { useAddPlantPot } from "../hooks/useAddPlantPot";
 import { toast } from "react-toastify";
 import { StyledAddPlantModal, StyledInputGroup, StyledModalBody, StyledModalContent, StyledModalFooter, StyledModalHeader } from "../Styles/pages/AddPlant.style";
@@ -13,11 +12,11 @@ const AddPlant: React.FC = () => {
   const { typeName } = useParams<{
     typeName: string;
   }>();
-  const {environmentID} = useEnvironmentCtx();
-  
-  const { types} = useGetTypesByEnvironment(environmentID);
+  const { environmentID } = useEnvironmentCtx();
+
+  const { types } = useGetTypesByEnvironment(environmentID);
   const plantTypeId = types.find((type) => type.name === typeName)?._id ?? "";
-  
+
   const navigate = useNavigate();
   const [plantName, setPlantName] = useState("");
   const [potId, setPotId] = useState("");
@@ -42,21 +41,21 @@ const AddPlant: React.FC = () => {
       toast.success("Plant added successfully");
       navigate("/plants");
     } catch (e: any) {
-    console.error("Add plant error:", e.message);
+      console.error("Add plant error:", e.message);
 
-    if (e.message.includes("Timeout waiting for Arduino response")) {
-      toast.error("Failed to connect to Arduino. Make sure it's connected.");
-    } 
-    else if(e.message.includes("Unknown or unregistered Arduino")) {
-      toast.error("Unregistered Arduino. Please register it first.");
-    }
+      if (e.message.includes("Timeout waiting for Arduino response")) {
+        toast.error("Failed to connect to Arduino. Make sure it's connected.");
+      }
+      else if (e.message.includes("Unknown or unregistered Arduino")) {
+        toast.error("Unregistered Arduino. Please register it first.");
+      }
       else {
-      toast.error(e.message || "Failed to add plant. Please try again.");
-    }
+        toast.error(e.message || "Failed to add plant. Please try again.");
+      }
 
-    //setError(e.message);
-  }
-};
+      //setError(e.message);
+    }
+  };
 
   const handleCancel = () => {
     navigate(-1);
@@ -80,7 +79,7 @@ const AddPlant: React.FC = () => {
               placeholder="Enter device ID"
               value={potId}
               onChange={(e) => setPotId(e.target.value)
-               
+
               }
             />
           </StyledInputGroup>
@@ -92,8 +91,8 @@ const AddPlant: React.FC = () => {
               placeholder="Enter plant name"
               value={plantName}
               onChange={(e) => setPlantName(e.target.value)
-            }
-              />
+              }
+            />
           </StyledInputGroup>
 
           <StyledInputGroup>

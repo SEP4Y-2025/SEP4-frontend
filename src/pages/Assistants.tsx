@@ -5,6 +5,13 @@ import { Button, DeleteButton } from "../Styles/common/Button.style";
 import AddAssistantModal from "../components/MyPlants/AddAssistantModal";
 import { useInviteAssistants } from "../hooks/useInviteAssistant";
 import { useDeleteAssistants } from "../hooks/useDeleteAssistants";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import TableContainer from '@mui/material/TableContainer';
 
 const Assistants = () => {
   const { environmentID } = useEnvironmentCtx();
@@ -21,24 +28,48 @@ const Assistants = () => {
     setOpenAddAssistant(false);
     fetchAssistants();
   };
+
   return (
     <div>
-      <Button onClick={()=>setOpenAddAssistant(true)}>Add assistants</Button>
+      <Button $margin="2rem 0 2rem 0" onClick={() => setOpenAddAssistant(true)}>Add assistants</Button>
       {openAddAssistant && <AddAssistantModal onClose={handleCloseModal} />}
-      <ul>
-        {assistants.map((as) => (
-          <li key={as.userName}>
-            {as.userName} {as.email}{" "}
-            <DeleteButton
-              onClick={() => deleteAssistant(environmentID,as.email, fetchAssistants)}
-            >
-              Remove
-            </DeleteButton>
-          </li>
-        ))}
-      </ul>
+
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Username</TableCell>
+              <TableCell align="right">Email</TableCell>
+              <TableCell align="right"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {assistants.map((as) => (
+              <TableRow
+                key={as.userName}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {as.email}
+                </TableCell>
+                <TableCell align="right">
+                  <DeleteButton
+                    onClick={() => deleteAssistant(environmentID, as.email, fetchAssistants)}>
+                    Remove
+                  </DeleteButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };
 
 export default Assistants;
+
+
+
+
+
