@@ -5,6 +5,7 @@ export const Grid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
+  margin-bottom: 2rem;
   justify-items: center;
 `;
 
@@ -29,6 +30,7 @@ export const Card = styled.div`
   }
 
   p {
+    font-family: "Inter", sans-serif;
     margin: 0;
     font-weight: 500;
     color: #333;

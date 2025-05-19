@@ -5,6 +5,7 @@ interface Props {
 }
 
 export const Title = styled.h1<Props>`
+  font-family: "Inter", sans-serif;
   font-size: 2rem;
   font-weight: bold;
   color: #333;
