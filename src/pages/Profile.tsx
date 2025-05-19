@@ -10,6 +10,8 @@ import EditPasswordModal from "../components/Profile/EditPasswordModal";
 import { useNavigate } from "react-router-dom";
 import { useChangePassword } from "../hooks/useChangePassword";
 import { toast } from "react-toastify";
+import CircularProgress from '@mui/material/CircularProgress';
+import { Overlay } from "../Styles/modal/Overlay.style";
 
 const ProfilePage: React.FC = () => {
     const { logout, user } = useAuth();
@@ -58,6 +60,11 @@ const ProfilePage: React.FC = () => {
                     )}
                     <Button onClick={logout} $margin="0 0 10px 0">Log Out</Button>
                 </Flex>
+                {loading && (
+                    <Overlay>
+                        <CircularProgress size={80} />
+                    </Overlay>
+                )}
             </Flex>
         </Flex>
     );
