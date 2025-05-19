@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const StyledMyPlantsContainer = styled.div`
+  font-family: "Inter", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
