@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PlantTypeRow from "../components/MyPlants/PlantTypeRow";
 import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
-import "./MyPlants.css";
-
 import { PlantType } from "../types";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { StyledMyPlantsContainer } from "../Styles/pages/MyPlants.style";
@@ -27,7 +25,7 @@ const MyPlants = () => {
     useGetTypesByEnvironment(environmentID);
   const { addPlantType } = useAddPlantType(fetchTypes);
   const [openNewType, setOpenNewType] = useState(false);
-  
+
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
@@ -112,7 +110,7 @@ const MyPlants = () => {
             handleCancel={handleCancel}
           />
         )}
-        
+
         {isOwner && (
           <Flex $width="100%" $justifyC="end">
             <DeleteButton onClick={handleDeleteEnvironment}>
