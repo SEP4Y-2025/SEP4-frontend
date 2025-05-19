@@ -15,6 +15,8 @@ import { useDeleteEnvironment } from "../hooks/useDeleteEnvironment";
 import AddAssistantModal from "../components/MyPlants/AddAssistantModal";
 import { useGetPotsByEnvironment } from "../hooks/useGetPotsByEnvironment";
 import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
+import { CircularProgress } from "@mui/material";
+import { Overlay } from "../Styles/modal/Overlay.style";
 
 const MyPlants = () => {
   const { environmentID, environmentName, isOwner } = useEnvironmentCtx();
@@ -135,6 +137,11 @@ const MyPlants = () => {
           />
         );
       })}
+      {loadingTypes && (
+        <Overlay>
+          <CircularProgress size={80} />
+        </Overlay>
+      )}
     </StyledMyPlantsContainer>
   );
 };

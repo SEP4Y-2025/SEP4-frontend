@@ -45,10 +45,12 @@ import { PlantType, Pot } from "../types";
 import { useGetPotById } from "../hooks/useGetPotById";
 import { useAuth } from "../contexts/UserAuthContext";
 import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
+import { Overlay } from "../Styles/modal/Overlay.style";
+import { CircularProgress } from "@mui/material";
 
 const PlantDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const { deletePot } = useDeletePot();
+  const { deletePot, } = useDeletePot();
   const { environmentID } = useEnvironmentCtx();
   const { user } = useAuth();
   const [potIdReady, setPotIdReady] = useState(false);
@@ -129,17 +131,17 @@ const PlantDetails = () => {
   // Prepare data for the chart
   const chartData = prediction
     ? [
-        {
-          name: "Current",
-          value: prediction.current_soil_humidity,
-          type: "current",
-        },
-        {
-          name: `Predicted (${getTimeDisplayText(predictionMinutes)})`,
-          value: prediction.predicted_soil_humidity,
-          type: "predicted",
-        },
-      ]
+      {
+        name: "Current",
+        value: prediction.current_soil_humidity,
+        type: "current",
+      },
+      {
+        name: `Predicted (${getTimeDisplayText(predictionMinutes)})`,
+        value: prediction.predicted_soil_humidity,
+        type: "predicted",
+      },
+    ]
     : [];
 
   // Custom tooltip for the chart
@@ -410,6 +412,12 @@ const PlantDetails = () => {
           {isDeleting ? "Deleting..." : `Delete ${pot!.label}`}
         </StyledDeleteButton>
       </Flex>
+
+      {loading && (
+        <Overlay>
+          <CircularProgress size={80} />
+        </Overlay>
+      )}
     </StyledPlantDetailsPage>
   );
 };

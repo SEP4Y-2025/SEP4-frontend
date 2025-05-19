@@ -12,6 +12,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TableContainer from '@mui/material/TableContainer';
+import { CircularProgress } from "@mui/material";
 
 const Assistants = () => {
   const { environmentID } = useEnvironmentCtx();
@@ -31,6 +32,7 @@ const Assistants = () => {
 
   return (
     <div>
+      {loadingAssistants && <CircularProgress style={{ marginTop: 20 }} />}
       <Button $margin="2rem 0 2rem 0" onClick={() => setOpenAddAssistant(true)}>Add assistants</Button>
       {openAddAssistant && <AddAssistantModal onClose={handleCloseModal} />}
 
