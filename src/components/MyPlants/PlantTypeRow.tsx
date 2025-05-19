@@ -7,6 +7,7 @@ import { useEnvironmentCtx } from "../../contexts/EnvironmentContext";
 import { Flex } from "../../Styles/common/Flex";
 import { StyledRow } from "../../Styles/pages/MyPlants.style";
 import AddPlantTypeModal from "./AddPlantTypeModal";
+import settingIcon from "../../assets/Setting.png";
 
 export interface PlantTypeRowProps {
   plant: PlantType;
@@ -36,14 +37,20 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
           {plant.water_dosage}ml)
         </span>
         {isOwner && (
-          <span
-            role="button"
+          <img
+            src={settingIcon}
+            alt="Edit plant type"
             title="Edit plant type"
-            style={{ cursor: "pointer", fontSize: "1.1rem" }}
+            role="button"
             onClick={() => setEditOpen(true)}
-          >
-            ⚙️
-          </span>
+            style={{
+              cursor: "pointer",
+              width: "20px",
+              height: "20px",
+              marginLeft: "0.3rem",
+              marginBottom: "0.2rem",
+            }}
+          />
         )}
       </Flex>
 
