@@ -2,20 +2,24 @@ import styled from "styled-components";
 
 export const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
   justify-items: center;
+  background:rgb(249, 249, 249);
+  padding: 2rem 1rem;
+  border-radius: 18px;
 `;
 
 export const Card = styled.div`
-  background: #f4f4f4;
+  background:rgba(41, 248, 62, 0.88);
   border-radius: 12px;
-  padding: 1.2rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: auto;
+  width: 100%;           /* Make card fill the grid cell horizontally */
+  align-self: stretch; 
+  direction: ltr;
 
   &:hover {
     background: #e0e0e0;

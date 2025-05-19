@@ -23,7 +23,7 @@ const MyEnvironmnets = () => {
   const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments(
     user!.user_id
   );
-  const {deleteAssistant} = useDeleteAssistants();
+  const { deleteAssistant } = useDeleteAssistants();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,21 +63,18 @@ const MyEnvironmnets = () => {
 
   return (
     <div>
-      <Title>Select Environment</Title>
-      <Title>My Environments</Title>
+      <Title $margin="2rem">My Environments</Title>
       <Grid>
         {environmentsList
           .filter((env) => env.role === "Owner")
           .map((environment: EnvironmentBrief) => (
-            <div>
-              <Card
-                key={environment.environment_id}
-                onClick={() => handleSwitch(environment.environment_id, true)}
-              >
-                <img src={plantsIcon} alt="XD" />
-                {environment.environment_id} XD
-              </Card>
-            </div>
+            <Card
+              key={environment.environment_id}
+              onClick={() => handleSwitch(environment.environment_id, true)}
+            >
+              <img src={plantsIcon} alt="XD" />
+              {environment.environment_id} XD
+            </Card>
           ))}
         <Button onClick={() => setShowEnvironmentModal(true)}>Add new</Button>
         {showEnvironmentModal && (
@@ -87,7 +84,7 @@ const MyEnvironmnets = () => {
           />
         )}
       </Grid>
-      <Title>Other Environments</Title>
+      <Title $margin="2rem">Other Environments</Title>
       <Grid>
         {environmentsList
           .filter((env) => env.role != "Owner")
@@ -98,21 +95,21 @@ const MyEnvironmnets = () => {
               >
                 <img src={plantsIcon} alt="XD" />
                 {environment.environment_id} Xd
-              
-              <DeleteButton 
-                $margin="0 1rem"
-                onClick={(e) => {
-            e.stopPropagation();
-            const confirmLeave = window.confirm(
-              "Are you sure you want to leave this environment as an assistant?"
-            );
-            if (confirmLeave && user?.email) {
-              deleteAssistant(environment.environment_id, user.email, fetchAllEnvironments);
-            }
-          }}
-        >
-          X
-              </DeleteButton>
+
+                <DeleteButton
+                  $margin="0 1rem"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const confirmLeave = window.confirm(
+                      "Are you sure you want to leave this environment as an assistant?"
+                    );
+                    if (confirmLeave && user?.email) {
+                      deleteAssistant(environment.environment_id, user.email, fetchAllEnvironments);
+                    }
+                  }}
+                >
+                  X
+                </DeleteButton>
               </Card>
             </div>
           ))}
