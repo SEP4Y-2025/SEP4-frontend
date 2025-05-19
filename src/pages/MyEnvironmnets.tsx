@@ -12,6 +12,7 @@ import { Title } from "../Styles/common/Title.style";
 import { Flex } from "../Styles/common/Flex";
 import AddEnvironmentModal from "../components/MyEnvironments/AddNewModal";
 import { useAddEnvironments } from "../hooks/useAddEnvironments";
+import { useDeleteAssistants } from "../hooks/useDeleteAssistants";
 
 const MyEnvironmnets = () => {
   const { setEnvironmentID, setIsOwner, environmentID } = useEnvironmentCtx();
@@ -21,6 +22,7 @@ const MyEnvironmnets = () => {
   const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments(
     user!.user_id
   );
+  const {deleteAssistant} = useDeleteAssistants();
   const navigate = useNavigate();
   useEffect(() => {
     if (user?.user_id) {
@@ -76,15 +78,29 @@ const MyEnvironmnets = () => {
         {environmentsList
           .filter((env) => env.role != "Owner")
           .map((environment: EnvironmentBrief) => (
-            <Card
-              key={environment.environment_id}
-              onClick={() => handleSwitch(environment.environment_id, false)}
-            >
-              {" "}
-              <img src={plantsIcon} alt="XD" />
-              {environment.environment_id} Xd
-              <DeleteButton $margin="0 1rem">X</DeleteButton>
-            </Card>
+            <div key={environment.environment_id} style={{ display: "flex", alignItems: "center" }}>
+              <Card
+                onClick={() => handleSwitch(environment.environment_id, false)}
+              >
+                <img src={plantsIcon} alt="XD" />
+                {environment.environment_id} Xd
+              
+              <DeleteButton 
+                $margin="0 1rem"
+                onClick={(e) => {
+            e.stopPropagation();
+            const confirmLeave = window.confirm(
+              "Are you sure you want to leave this environment as an assistant?"
+            );
+            if (confirmLeave && user?.email) {
+              deleteAssistant(environment.environment_id, user.email, fetchAllEnvironments);
+            }
+          }}
+        >
+          X
+              </DeleteButton>
+              </Card>
+            </div>
           ))}
       </Grid>
     </div>
