@@ -6,7 +6,7 @@ import { Title } from "../Styles/common/Title.style";
 import { Label } from "../Styles/common/Label.style";
 import { InfoBlock, Value } from "../Styles/pages/Profile.style";
 import { useAuth } from "../contexts/UserAuthContext";
-import EditPasswordModal from "../components/common/EditPasswordModal";
+import EditPasswordModal from "../components/Profile/EditPasswordModal";
 import { useNavigate } from "react-router-dom";
 import { useChangePassword } from "../hooks/useChangePassword";
 import { toast } from "react-toastify";
@@ -17,16 +17,19 @@ const ProfilePage: React.FC = () => {
     const { changePassword, loading, error, success } = useChangePassword();
 
     const handlePasswordChange = async (oldPass: string, newPass: string) => {
-        console.log("Password updated:", oldPass, newPass);
         if (!user?.userName) {
             console.error("User not found");
             return;
         }
-        await changePassword(user?.userName, oldPass, newPass);
+        await changePassword(user?.email, oldPass, newPass);
+
     };
 
     useEffect(() => {
-        if (success) toast.success(success);
+        if (success) {
+            toast.success(success);
+            logout();
+        }
         if (error) toast.error(error);
     }, [success, error]);
 

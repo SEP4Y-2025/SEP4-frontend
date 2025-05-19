@@ -5,7 +5,7 @@ import Navbar from "./components/common/Navbar";
 import MyPlants from "./pages/MyPlants";
 import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
-import PlantDetails from "./pages/PlantDetails";
+//import PlantDetails from "./pages/PlantDetails"
 import { EnvironmentProvider } from "./contexts/EnvironmentContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -19,8 +19,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { UserContextProvider } from "./contexts/UserAuthContext";
 import Register from "./pages/Auth/Register";
 import ProfilePage from "./pages/Profile";
-import AddAssistant from "./pages/AddAssistant";
 import MyEnvironmnets from "./pages/MyEnvironmnets";
+import Assistants from "./pages/Assistants";
+import PlantDetails from "./pages/PlantDetails";
 //-----------------------------------------------------
 const App: React.FC = () => {
   const [darkMode, setDarkmode] = useState(false);
@@ -33,8 +34,14 @@ const App: React.FC = () => {
           <Container>
             <ToastContainer position="top-left" />
             <Routes>
-              <Route path="/logs" element={<ProtectedRoute><LogsPage />
-              </ProtectedRoute>} />
+              <Route
+                path="/logs"
+                element={
+                  <ProtectedRoute>
+                    <LogsPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/plants"
                 element={
@@ -55,12 +62,23 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+
               <Route
                 path="/addplant/:typeName"
                 element={
                   <ProtectedRoute>
                     <EnvironmentProvider>
                       <AddPlant />
+                    </EnvironmentProvider>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/loremIpsum"
+                element={
+                  <ProtectedRoute>
+                    <EnvironmentProvider>
+                      <Assistants />
                     </EnvironmentProvider>
                   </ProtectedRoute>
                 }
@@ -83,16 +101,6 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="//plants/invite"
-                element={
-                  <ProtectedRoute>
-                    <EnvironmentProvider>
-                      <AddAssistant />
-                    </EnvironmentProvider>
-                  </ProtectedRoute>
-                }
-              />
-
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>
@@ -100,7 +108,6 @@ const App: React.FC = () => {
         </ThemeProvider>
       </UserContextProvider>
     </Router>
-
   );
 };
 

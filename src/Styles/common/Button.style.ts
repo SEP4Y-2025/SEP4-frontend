@@ -28,3 +28,12 @@ export const Button = styled.button<Props>`
     p.$variant === "cancel" ? "#bdbdbd" : "#4bb157"};
   }
 `;
+
+export const DeleteButton = styled(Button)`
+  background-color: #e53935;
+  color: white;
+
+  &:hover {
+    background-color: #b71c1c;
+  }
+`;
