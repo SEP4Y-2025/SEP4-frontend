@@ -34,7 +34,7 @@ const MyEnvironmnets = () => {
   useEffect(() => {
     if (successAdd) {
       toast.success("Environment added successfully");
-      fetchAllEnvironments(user!.user_id);
+      fetchAllEnvironments();
       setShowEnvironmentModal(false);
     }
     if (errorAdd) {
