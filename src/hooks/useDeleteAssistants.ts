@@ -25,7 +25,7 @@ export function useDeleteAssistants() {
         error:
           err.response?.data?.error ||
           err.response?.data?.message ||
-          "Failed to delete environment",
+          "Failed to delete an assistant",
       };
     }
   };
