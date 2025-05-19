@@ -92,7 +92,7 @@ const MyEnvironmnets = () => {
         {environmentsList
           .filter((env) => env.role != "Owner")
           .map((environment: EnvironmentBrief) => (
-            <div key={environment.environment_id} style={{ display: "flex", alignItems: "center" }}>
+            <div key={environment.environment_id}>
               <Card
                 onClick={() => handleSwitch(environment.environment_id, false)}
               >
