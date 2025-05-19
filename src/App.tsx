@@ -31,7 +31,7 @@ const App: React.FC = () => {
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
           <Navbar />
           <Container>
-            <ToastContainer />
+            <ToastContainer position="top-left" />
             <Routes>
               <Route path="/logs" element={<ProtectedRoute><LogsPage />
               </ProtectedRoute>} />

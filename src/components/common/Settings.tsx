@@ -11,8 +11,8 @@ const Settings = () => {
       <button>
         <Icon source={BellIcon} summary="Notifications" />
       </button>
-      <button onClick={() => navigate("/profile")}>
-        <Icon source={UserIcon} summary="Profile" />
+      <button onClick={() => navigate("/profile")} className="profile">
+       Profile <Icon source={UserIcon} summary="Profile" />
       </button>
       {/* onClick={() =>toggleTheme(false)} */}
       <Flex $dir="column" $background="auto" $gap="0.5rem">
