@@ -13,7 +13,7 @@ export function useInviteAssistants() {
     error?: string;
   }> => {
     try {
-      await axios.put(
+      await axios.post(
         `${BASE_URL}/environments/${environmentId}/assistants?user_email=${userMail}`
         //TODO deleteing doesnt work bcs of backend cheers
       );

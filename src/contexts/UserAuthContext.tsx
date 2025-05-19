@@ -43,7 +43,7 @@ export const UserContextProvider = ({ children }: Props) => {
     password: string
   ) => {
     try {
-      const res = await axios.post(`${API_URL}/auth/register`, {
+      const res = await axios.post(`${API_URL}/auth/registration`, {
         username,
         password,
         email,
