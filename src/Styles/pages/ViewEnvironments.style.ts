@@ -18,9 +18,8 @@ export const Card = styled.div`
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: 100%; 
   max-width: 20rem;
-  align-self: stretch; 
+  align-self: center;
   direction: ltr;
 
   font-size: 1.15rem;

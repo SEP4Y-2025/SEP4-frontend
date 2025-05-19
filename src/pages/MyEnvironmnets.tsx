@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { useDeleteAssistants } from "../hooks/users/useDeleteAssistants";
 
 const MyEnvironmnets = () => {
-  const { setEnvironmentID, setIsOwner } = useEnvironmentCtx();
+  const { setEnvironmentID, setIsOwner, setEnvironmentName } = useEnvironmentCtx();
   const { user } = useAuth();
   const [showEnvironmentModal, setShowEnvironmentModal] = useState(false);
   const { addEnvironment, errorAdd, successAdd } = useAddEnvironments();
@@ -44,8 +44,9 @@ const MyEnvironmnets = () => {
     }
   }, [successAdd, errorAdd]);
 
-  const handleSwitch = (envId: string, own: boolean) => {
+  const handleSwitch = (envId: string, envName: string, own: boolean) => {
     setEnvironmentID(envId);
+    setEnvironmentName(envName);
     setIsOwner(own);
     navigate("/plants");
   };
@@ -70,13 +71,13 @@ const MyEnvironmnets = () => {
           .map((environment: EnvironmentBrief) => (
             <Card
               key={environment.environment_id}
-              onClick={() => handleSwitch(environment.environment_id, true)}
+              onClick={() => handleSwitch(environment.environment_id, environment.environment_name, true)}
             >
               <img src={plantsIcon} alt="XD" />
               {environment.environment_name}
             </Card>
           ))}
-        <Button onClick={() => setShowEnvironmentModal(true)}>Add new</Button>
+        <Button $width="150px" onClick={() => setShowEnvironmentModal(true)}>Add new </Button>
         {showEnvironmentModal && (
           <AddEnvironmentModal
             onClose={() => setShowEnvironmentModal(false)}
@@ -91,7 +92,7 @@ const MyEnvironmnets = () => {
           .map((environment: EnvironmentBrief) => (
             <Card
               key={environment.environment_id}
-              onClick={() => handleSwitch(environment.environment_id, false)}
+              onClick={() => handleSwitch(environment.environment_id, environment.environment_name, false)}
             >
               <img src={plantsIcon} alt="XD" />
               {environment.environment_name}
