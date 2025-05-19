@@ -26,6 +26,7 @@ import MyEnvironmnets from "./pages/MyEnvironmnets";
 import Assistants from "./pages/Assistants";
 import PlantDetails from "./pages/PlantDetails";
 import LandingPage from "./pages/LandingPage";
+import PlantDetails1 from "./pages/PlantDetails1";
 
 // Component to handle redirect from root path
 const RootRedirect = () => {
@@ -103,7 +104,7 @@ const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <EnvironmentProvider>
-                      <PlantDetails />
+                      <PlantDetails1 />
                     </EnvironmentProvider>
                   </ProtectedRoute>
                 }
