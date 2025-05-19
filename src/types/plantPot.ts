@@ -2,14 +2,17 @@ export type Pot = {
   pot_id: string;
   label: string;
   plant_type_id: string;
+  environment_id: string;
+  watering_frequency: number;
+  water_dosage: number;
   state?: {
-    air_humidity?: number;
-    temperature?: number;
-    soil_humidity?: number;
-    light_intensity?: number;
-    water_level?: number;
-    water_tank_capacity?: number;
-    measured_at?: string;
+    soil_humidity: number;
+    air_humidity: number;
+    temperature: number;
+    light_intensity: number;
+    water_level: number;
+    water_tank_capacity: number;
+    measured_at: string;
   };
 };
 
