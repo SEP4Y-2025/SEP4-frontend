@@ -17,16 +17,17 @@ import { toast } from "react-toastify";
 const MyEnvironmnets = () => {
   const { setEnvironmentID, setIsOwner, environmentID } = useEnvironmentCtx();
   const { user } = useAuth();
-  const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments();
   const [showEnvironmentModal, setShowEnvironmentModal] = useState(false);
   const { addEnvironment, errorAdd, successAdd } = useAddEnvironments();
-
+  const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments(
+    user!.user_id
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user?.user_id) {
       console.log("fetch call");
-      fetchAllEnvironments(user.user_id);
+      fetchAllEnvironments();
     }
   }, [user]);
 
@@ -47,6 +48,16 @@ const MyEnvironmnets = () => {
     navigate("/plants");
   };
 
+  const handleAdd = async (envName: string) => {
+    await addEnvironment(envName);
+    if (successAdd) {
+      setShowEnvironmentModal(false);
+      fetchAllEnvironments();
+    }
+    if (errorAdd) {
+      alert(errorAdd);
+    }
+  };
 
   return (
     <div>
@@ -63,10 +74,8 @@ const MyEnvironmnets = () => {
               >
                 <img src={plantsIcon} alt="XD" />
                 {environment.environment_id} XD
-
               </Card>
             </div>
-
           ))}
         <Button onClick={() => setShowEnvironmentModal(true)}>Add new</Button>
         {showEnvironmentModal && (
@@ -91,7 +100,6 @@ const MyEnvironmnets = () => {
             </Card>
           ))}
       </Grid>
-
     </div>
   );
 };

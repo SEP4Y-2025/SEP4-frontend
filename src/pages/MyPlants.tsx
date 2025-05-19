@@ -13,7 +13,7 @@ import { useAddPlantType } from "../hooks/useAddPlantType";
 import { toast } from "react-toastify";
 import { Flex } from "../Styles/common/Flex";
 import { useDeleteEnvironment } from "../hooks/useDeleteEnvironment";
-import { useInvitePlantAssistant } from "../hooks/useInviteAssistant";
+
 import AddAssistantModal from "../components/MyPlants/AddAssistantModal";
 import { useGetPotsByEnvironment } from "../hooks/useGetPotsByEnvironment";
 import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
@@ -27,7 +27,7 @@ const MyPlants = () => {
     useGetTypesByEnvironment(environmentID);
   const { addPlantType } = useAddPlantType(fetchTypes);
   const [openNewType, setOpenNewType] = useState(false);
-  const [openAddAssistant, setOpenAddAssistant] = useState(false);
+  
   const [typeName, setTypeName] = useState("");
   const [wateringFrequency, setWateringFrequency] = useState("");
   const [dosage, setDosage] = useState("");
@@ -69,7 +69,6 @@ const MyPlants = () => {
   const handleCancel = () => {
     setOpenNewType(false);
   };
-  const handleOnInvite = () => {};
 
   const handleDelete = async () => {
     const { success, error } = await deleteEnvironment(environmentID);
@@ -93,8 +92,8 @@ const MyPlants = () => {
       <h1 className="title">My Plants - {environmentName}</h1>
       <Flex $width="55rem" $justifyC="start" $gap="1rem">
         {isOwner && (
-          <Button onClick={() => setOpenAddAssistant(true)}>
-            Invite Assistant
+          <Button onClick={() => navigate(`/loremIpsum`)}>
+            Manage Assistants
           </Button>
         )}
         {isOwner && (
@@ -113,9 +112,7 @@ const MyPlants = () => {
             handleCancel={handleCancel}
           />
         )}
-        {openAddAssistant && (
-          <AddAssistantModal onClose={() => setOpenAddAssistant(false)} />
-        )}
+        
         {isOwner && (
           <Flex $width="100%" $justifyC="end">
             <DeleteButton onClick={handleDeleteEnvironment}>

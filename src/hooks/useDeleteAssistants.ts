@@ -3,19 +3,23 @@ import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
-export function useDeleteEnvironment() {
-
-  const deleteEnvironment = async (
-    environmentId: string
+export function useDeleteAssistants() {
+  const deleteAssistant = async (
+    environmentId: string,
+    email: string,
+    onSuccess?: () => void
   ): Promise<{
     success: boolean;
     error?: string;
   }> => {
     try {
-      await axios.delete(`${BASE_URL}/environments/${environmentId}`);
+      await axios.delete(
+        `${BASE_URL}/environments/${environmentId}/assistants?user_email=${email}`
+      );
+      onSuccess && onSuccess();
       return { success: true };
     } catch (err: any) {
-      console.error("Error deleting environment:", err.response?.data?.message);
+      console.error("Error deleting assistant:", err.response?.data?.message);
       return {
         success: false,
         error:
@@ -26,5 +30,5 @@ export function useDeleteEnvironment() {
     }
   };
 
-  return { deleteEnvironment };
+  return { deleteAssistant };
 }

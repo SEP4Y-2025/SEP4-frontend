@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Pot } from "../types";
+import axios from "axios";
 
-export const useGetPotById = (potId: string, environmentId: string = "680f8359688cb5341f9f9c19") => {
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
+
+export const useGetPotById = (potId: string, environmentId: string) => {
   const [pot, setPot] = useState<Pot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -10,11 +13,11 @@ export const useGetPotById = (potId: string, environmentId: string = "680f835968
     const fetchPot = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/environments/${environmentId}/pots/${potId}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch pot details");
-        }
-        const data = await response.json();
+        const response = await axios.get(
+          `${BASE_URL}/environments/${environmentId}/pots/pot_2`
+        );
+        console.log(response.data);
+        const data = await response.data;
         setPot(data.pot);
       } catch (err) {
         setError(err as Error);
@@ -23,7 +26,10 @@ export const useGetPotById = (potId: string, environmentId: string = "680f835968
       }
     };
 
-    if (potId) fetchPot();
+    if (potId && environmentId) {
+      console.log(pot);
+      fetchPot();
+    }
   }, [potId, environmentId]);
 
   return { pot, loading, error };
