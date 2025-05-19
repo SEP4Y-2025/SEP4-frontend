@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   BarChart,
@@ -51,11 +51,20 @@ const PlantDetails = () => {
   const { deletePot } = useDeletePot();
   const { environmentID } = useEnvironmentCtx();
   const { user } = useAuth();
-  const { pot } = useGetPotById(user!.user_id, environmentID);
+  const [potIdReady, setPotIdReady] = useState(false);
+
+  useEffect(() => {
+    if (id && environmentID && user?.user_id) {
+      setPotIdReady(true);
+    }
+  }, [id, environmentID, user]);
+
+  const { pot, loading, error } = useGetPotById(
+    potIdReady ? id! : "",
+    potIdReady ? environmentID : ""
+  );
   const { types } = useGetTypesByEnvironment(environmentID);
   const navigate = useNavigate();
-  console.log(pot?.label);
-  console.log(environmentID);
 
   // State for prediction time selection
   const [predictionMinutes, setPredictionMinutes] = useState<number>(5);
