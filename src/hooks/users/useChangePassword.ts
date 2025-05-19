@@ -13,7 +13,7 @@ export function useChangePassword() {
         setError(null);
         setSuccess(null);
         try {
-            const response = await axios.post(`${BASE_URL}/auth/change-password`, {
+            const response = await axios.put(`${BASE_URL}/auth/password`, {
                 email: email,
                 old_password: oldPassword,
                 new_password: newPassword,

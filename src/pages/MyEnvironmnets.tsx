@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import plantsIcon from "../assets/plants.png";
 import { useNavigate } from "react-router-dom";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
-import { FetchMyEnvironments } from "../hooks/FetchMyEnvironmnets";
+import { useFetchMyEnvironments } from "../hooks/environments/useFetchMyEnvironmnets";
 import { useAuth } from "../contexts/UserAuthContext";
 import { EnvironmentBrief } from "../types/Environment";
 import { Grid, Card } from "../Styles/pages/ViewEnvironments.style";
@@ -11,16 +11,16 @@ import { Button, DeleteButton } from "../Styles/common/Button.style";
 import { Title } from "../Styles/common/Title.style";
 import { Flex } from "../Styles/common/Flex";
 import AddEnvironmentModal from "../components/MyEnvironments/AddNewModal";
-import { useAddEnvironments } from "../hooks/useAddEnvironments";
+import { useAddEnvironments } from "../hooks/environments/useAddEnvironments";
 import { toast } from "react-toastify";
-import { useDeleteAssistants } from "../hooks/useDeleteAssistants";
+import { useDeleteAssistants } from "../hooks/users/useDeleteAssistants";
 
 const MyEnvironmnets = () => {
-  const { setEnvironmentID, setIsOwner, environmentID } = useEnvironmentCtx();
+  const { setEnvironmentID, setIsOwner } = useEnvironmentCtx();
   const { user } = useAuth();
   const [showEnvironmentModal, setShowEnvironmentModal] = useState(false);
   const { addEnvironment, errorAdd, successAdd } = useAddEnvironments();
-  const { environmentsList, fetchAllEnvironments } = FetchMyEnvironments(
+  const { environmentsList, fetchAllEnvironments } = useFetchMyEnvironments(
     user!.user_id
   );
   const { deleteAssistant } = useDeleteAssistants();
@@ -73,7 +73,7 @@ const MyEnvironmnets = () => {
               onClick={() => handleSwitch(environment.environment_id, true)}
             >
               <img src={plantsIcon} alt="XD" />
-              {environment.environment_id} XD
+              {environment.environment_name}
             </Card>
           ))}
         <Button onClick={() => setShowEnvironmentModal(true)}>Add new</Button>
@@ -89,29 +89,28 @@ const MyEnvironmnets = () => {
         {environmentsList
           .filter((env) => env.role != "Owner")
           .map((environment: EnvironmentBrief) => (
-            <div key={environment.environment_id}>
-              <Card
-                onClick={() => handleSwitch(environment.environment_id, false)}
-              >
-                <img src={plantsIcon} alt="XD" />
-                {environment.environment_id} Xd
+            <Card
+              key={environment.environment_id}
+              onClick={() => handleSwitch(environment.environment_id, false)}
+            >
+              <img src={plantsIcon} alt="XD" />
+              {environment.environment_name}
 
-                <DeleteButton
-                  $margin="0 1rem"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const confirmLeave = window.confirm(
-                      "Are you sure you want to leave this environment as an assistant?"
-                    );
-                    if (confirmLeave && user?.email) {
-                      deleteAssistant(environment.environment_id, user.email, fetchAllEnvironments);
-                    }
-                  }}
-                >
-                  X
-                </DeleteButton>
-              </Card>
-            </div>
+              <DeleteButton
+                $margin="0 1rem"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const confirmLeave = window.confirm(
+                    "Are you sure you want to leave this environment as an assistant?"
+                  );
+                  if (confirmLeave && user?.email) {
+                    deleteAssistant(environment.environment_id, user.email, fetchAllEnvironments);
+                  }
+                }}
+              >
+                X
+              </DeleteButton>
+            </Card>
           ))}
       </Grid>
     </div>

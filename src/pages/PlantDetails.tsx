@@ -11,9 +11,9 @@ import {
   Cell,
 } from "recharts";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
-import { useWaterStatus } from "../hooks/useWaterStatus";
-import { useDeletePot } from "../hooks/useDeletePot";
-import { useSoilHumidityPrediction } from "../hooks/useSoilHumidityPrediction";
+import { useWaterStatus } from "../hooks/potStatistics/useWaterStatus";
+import { useDeletePot } from "../hooks/pots/useDeletePot";
+import { useSoilHumidityPrediction } from "../hooks/potStatistics/useSoilHumidityPrediction";
 import {
   StyledPlantDetailsPage,
   StyledDetailsCard,
@@ -42,9 +42,9 @@ import {
 import { Title } from "../Styles/common/Title.style";
 import { Flex } from "../Styles/common/Flex";
 import { PlantType, Pot } from "../types";
-import { useGetPotById } from "../hooks/useGetPotById";
+import { useGetPotById } from "../hooks/pots/useGetPotById";
 import { useAuth } from "../contexts/UserAuthContext";
-import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
+import { useGetTypesByEnvironment } from "../hooks/pots/useGetTypesByEnvironment";
 import { Overlay } from "../Styles/modal/Overlay.style";
 import { CircularProgress } from "@mui/material";
 

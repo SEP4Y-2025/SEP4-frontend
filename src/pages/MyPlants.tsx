@@ -7,14 +7,14 @@ import { StyledMyPlantsContainer } from "../Styles/pages/MyPlants.style";
 import { Button, DeleteButton } from "../Styles/common/Button.style";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/UserAuthContext";
-import { useAddPlantType } from "../hooks/useAddPlantType";
+import { useAddPlantType } from "../hooks/pots/useAddPlantType";
 import { toast } from "react-toastify";
 import { Flex } from "../Styles/common/Flex";
-import { useDeleteEnvironment } from "../hooks/useDeleteEnvironment";
+import { useDeleteEnvironment } from "../hooks/environments/useDeleteEnvironment";
 
 import AddAssistantModal from "../components/MyPlants/AddAssistantModal";
-import { useGetPotsByEnvironment } from "../hooks/useGetPotsByEnvironment";
-import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
+import { useGetPotsByEnvironment } from "../hooks/pots/useGetPotsByEnvironment";
+import { useGetTypesByEnvironment } from "../hooks/pots/useGetTypesByEnvironment";
 import { CircularProgress } from "@mui/material";
 import { Overlay } from "../Styles/modal/Overlay.style";
 
@@ -137,7 +137,7 @@ const MyPlants = () => {
           />
         );
       })}
-      {loadingTypes && (
+      {(loadingTypes || loadingPots) && (
         <Overlay>
           <CircularProgress size={80} />
         </Overlay>

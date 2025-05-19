@@ -6,21 +6,28 @@ export const Grid = styled.div`
   gap: 1.5rem;
   margin-top: 2rem;
   margin-bottom: 2rem;
-  justify-items: center;
+  justify-items: space-between;
   background:rgb(249, 249, 249);
   padding: 2rem 1rem;
   border-radius: 18px;
 `;
 
 export const Card = styled.div`
-  background:rgba(41, 248, 62, 0.88);
+  background: #58cd63;
   border-radius: 12px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: 100%;           /* Make card fill the grid cell horizontally */
+  width: 100%; 
+  max-width: 20rem;
   align-self: stretch; 
   direction: ltr;
+
+  font-size: 1.15rem;
+  font-weight: 600;
+  color:rgb(238, 251, 237);
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(41, 248, 62, 0.08);
 
   &:hover {
     background: #e0e0e0;

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { PlantType } from "../types";
+import { PlantType } from "../../types";
 import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";

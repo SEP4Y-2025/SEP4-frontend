@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
+import { useGetTypesByEnvironment } from "../hooks/pots/useGetTypesByEnvironment";
 import { useEffect } from "react";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { AddPlantPotRequest } from "../types/addPlantPotApiTypes";
-import { useAddPlantPot } from "../hooks/useAddPlantPot";
+import { useAddPlantPot } from "../hooks/pots/useAddPlantPot";
 import { toast } from "react-toastify";
 import { StyledAddPlantModal, StyledInputGroup, StyledModalBody, StyledModalContent, StyledModalFooter, StyledModalHeader } from "../Styles/pages/AddPlant.style";
 import { Overlay } from "../Styles/modal/Overlay.style";

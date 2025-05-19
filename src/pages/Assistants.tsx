@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useGetAssistants } from "../hooks/useGetAssistants";
+import { useGetAssistants } from "../hooks/users/useGetAssistants";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { Button, DeleteButton } from "../Styles/common/Button.style";
 import AddAssistantModal from "../components/MyPlants/AddAssistantModal";
-import { useInviteAssistants } from "../hooks/useInviteAssistant";
-import { useDeleteAssistants } from "../hooks/useDeleteAssistants";
+import { useInviteAssistants } from "../hooks/users/useInviteAssistant";
+import { useDeleteAssistants } from "../hooks/users/useDeleteAssistants";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';

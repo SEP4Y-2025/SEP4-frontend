@@ -21,10 +21,11 @@ export const Button = styled.button<Props>`
   padding: ${(p) => p.$padding || "10px 20px"};
   border-radius: ${(p) => p.$borderR || "10px"};
   border: ${(p) => p.$border || "none"};
+  width: ${(p) => p.$width || "auto"};
 
   &:hover {
     background-color: ${(p) =>
-      p.$variant === "cancel" ? "#bdbdbd" : "#70D767"};
+    p.$variant === "cancel" ? "#bdbdbd" : "#70D767"};
   }
 `;
 
@@ -32,6 +33,8 @@ export const DeleteButton = styled(Button)`
   font-family: "Inter", sans-serif;
   background-color: #e15f54;
   color: white;
+  align-self: center;
+  margin: 0.7rem;
 
   &:hover {
     background-color: #e15f54;
