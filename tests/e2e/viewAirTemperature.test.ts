@@ -1,4 +1,5 @@
 
+
 // playwright.config.ts
 import { defineConfig, test, expect } from '@playwright/test';
 
@@ -7,7 +8,7 @@ export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
 
-test('addPlantType', async ({ page }) => {
+test('viewAirTemperature', async ({ page }) => {
   await page.goto(`${BASE_URL}/`);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
@@ -16,14 +17,12 @@ test('addPlantType', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).fill('password1');
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Greenhouse #').click();
-  await page.getByRole('button', { name: 'Add new type' }).click();
-  await page.getByRole('textbox', { name: 'Type' }).click();
-  await page.getByRole('textbox', { name: 'Type' }).fill('Mint');
-  await page.getByRole('spinbutton', { name: 'Watering frequency' }).click();
-  await page.getByRole('spinbutton', { name: 'Watering frequency' }).fill('12');
-  await page.getByRole('spinbutton', { name: 'Dosage' }).click();
-  await page.getByRole('spinbutton', { name: 'Dosage' }).fill('23');
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await expect(page.getByText('Type: Mint (12x/week, 23ml)')).toBeVisible();
+  await page.getByRole('button', { name: 'Plant Icon pot4' }).click();
 
+    await expect(page.getByText('Namepot4')).toBeVisible();
+    await expect(page.getByText('Type DetailsTulip')).toBeVisible();
+    await expect(page.getByText('Temperature:')).toBeVisible();
+    await expect(page.getByText('Air Humidity:')).toBeVisible();
+ 
+   await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
 });
