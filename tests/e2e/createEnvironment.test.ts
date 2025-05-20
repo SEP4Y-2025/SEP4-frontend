@@ -8,7 +8,7 @@ export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
 
-test('deletePlant', async ({ page }) => {
+test('createEnvironment', async ({ page }) => {
   await page.goto(`${BASE_URL}/`);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
@@ -16,12 +16,10 @@ test('deletePlant', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).click();
   await page.getByRole('textbox', { name: 'Enter password' }).fill('password1');
   await page.getByRole('button', { name: 'Log in' }).click();
-  await page.getByText('Greenhouse #').click();
-  await page.getByRole('button', { name: 'Plant Icon pot3' }).click();
-  page.once('dialog', dialog => {
-    console.log(`Dialog message: ${dialog.message()}`);
-    dialog.dismiss().catch(() => {});
-  });
-  await page.getByRole('button', { name: 'Delete pot3' }).click();
+  await page.getByRole('button', { name: 'Add new' }).click();
+  await page.getByRole('textbox', { name: 'Environment Name' }).click();
+  await page.getByRole('textbox', { name: 'Environment Name' }).fill('Kitchen');
+  await page.getByRole('button', { name: 'Add', exact: true }).click();
+  await expect(page.getByText('Kitchen')).toBeVisible();
 
 });

@@ -8,7 +8,7 @@ export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
 
-test('deletePlant', async ({ page }) => {
+test('addPlant', async ({ page }) => {
   await page.goto(`${BASE_URL}/`);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
@@ -17,11 +17,10 @@ test('deletePlant', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).fill('password1');
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Greenhouse #').click();
-  await page.getByRole('button', { name: 'Plant Icon pot3' }).click();
-  page.once('dialog', dialog => {
-    console.log(`Dialog message: ${dialog.message()}`);
-    dialog.dismiss().catch(() => {});
-  });
-  await page.getByRole('button', { name: 'Delete pot3' }).click();
+  await page.getByRole('button', { name: 'Plant Icon pot4' }).click();
 
+  await expect(page.getByText('Namepot4')).toBeVisible();
+  await expect(page.getByText('Type DetailsTulip')).toBeVisible();
+   await expect(page.getByText('Soil Humidity:')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
 });

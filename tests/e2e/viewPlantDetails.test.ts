@@ -8,7 +8,7 @@ export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
 
-test('addPlant', async ({ page }) => {
+test('viewPlantDetails', async ({ page }) => {
   await page.goto(`${BASE_URL}/`);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
