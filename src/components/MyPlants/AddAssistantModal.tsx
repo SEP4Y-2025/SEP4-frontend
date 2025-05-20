@@ -7,7 +7,7 @@ import { Modal } from "../../Styles/modal/Modal.style";
 import { ErrorLabel } from "../../Styles/common/ErrorLabel";
 import { Button } from "../../Styles/common/Button.style";
 import { Flex } from "../../Styles/common/Flex";
-import { useInviteAssistants } from "../../hooks/useInviteAssistant";
+import { useInviteAssistants } from "../../hooks/users/useInviteAssistant";
 import { useEnvironmentCtx } from "../../contexts/EnvironmentContext";
 import { toast } from "react-toastify";
 
@@ -30,7 +30,7 @@ const AddAssistantModal: React.FC<AddAssistantModalProps> = ({ onClose }) => {
     if (!success) {
       toast.error(error || "Failed to delete environment");
     } else {
-      toast.success("Environment deleted");
+      toast.success("Assistant added successfully");
     }
   };
 

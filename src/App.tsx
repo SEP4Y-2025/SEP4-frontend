@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import LogsPage from "./pages/LogsPage";
 import Navbar from "./components/common/Navbar";
 import MyPlants from "./pages/MyPlants";
 import { Container } from "@mui/material";
 import AddPlant from "./pages/AddPlant";
-//import PlantDetails from "./pages/PlantDetails"
 import { EnvironmentProvider } from "./contexts/EnvironmentContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -13,16 +17,27 @@ import { darkTheme, lightTheme } from "./Styles/themes/Themes";
 import { ThemeProvider } from "styled-components";
 import Login from "./pages/Auth/Login";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-//POPUP STUFF for auth, subject to change
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UserContextProvider } from "./contexts/UserAuthContext";
+import { UserContextProvider, useAuth } from "./contexts/UserAuthContext";
 import Register from "./pages/Auth/Register";
 import ProfilePage from "./pages/Profile";
 import MyEnvironmnets from "./pages/MyEnvironmnets";
 import Assistants from "./pages/Assistants";
 import PlantDetails from "./pages/PlantDetails";
-//-----------------------------------------------------
+import LandingPage from "./pages/LandingPage";
+
+// Component to handle redirect from root path
+const RootRedirect = () => {
+  const { user } = useAuth();
+
+  if (user) {
+    return <Navigate to="/environments" replace />;
+  } else {
+    return <LandingPage />;
+  }
+};
+
 const App: React.FC = () => {
   const [darkMode, setDarkmode] = useState(false);
 
@@ -52,8 +67,9 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/" element={<RootRedirect />} />
               <Route
-                path="/"
+                path="/environments"
                 element={
                   <ProtectedRoute>
                     <EnvironmentProvider>
@@ -62,7 +78,6 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-
               <Route
                 path="/addplant/:typeName"
                 element={
@@ -101,6 +116,7 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/landingpage" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>

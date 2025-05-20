@@ -3,12 +3,12 @@ import axios from "axios";
 import {
   AddPlantPotRequest,
   PlantPotResponse,
-} from "../types/addPlantPotApiTypes";
+} from "../../types/addPlantPotApiTypes";
 
 
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
-export const useAddPlantPot = (onSuccess?:() => void) => {
+export const useAddPlantPot = (onSuccess?: () => void) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -23,9 +23,9 @@ export const useAddPlantPot = (onSuccess?:() => void) => {
       onSuccess && onSuccess();
       return response.data;
     } catch (err: any) {
-       const backendError = err.response?.data?.detail || "Unexpected error";
+      const backendError = err.response?.data?.detail || "Unexpected error";
       setError(new Error(backendError));
-        throw new Error(backendError); 
+      throw new Error(backendError);
     } finally {
       setLoading(false);
     }

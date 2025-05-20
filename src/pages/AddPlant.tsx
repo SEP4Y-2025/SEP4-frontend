@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGetTypesByEnvironment } from "../hooks/useGetTypesByEnvironment";
+import { useGetTypesByEnvironment } from "../hooks/pots/useGetTypesByEnvironment";
 import { useEffect } from "react";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { AddPlantPotRequest } from "../types/addPlantPotApiTypes";
-import { useAddPlantPot } from "../hooks/useAddPlantPot";
+import { useAddPlantPot } from "../hooks/pots/useAddPlantPot";
 import { toast } from "react-toastify";
 import { StyledAddPlantModal, StyledInputGroup, StyledModalBody, StyledModalContent, StyledModalFooter, StyledModalHeader } from "../Styles/pages/AddPlant.style";
+import { Overlay } from "../Styles/modal/Overlay.style";
+import { CircularProgress } from "@mui/material";
+import { ErrorLabel } from "../Styles/common/ErrorLabel";
+import { Button } from "../Styles/common/Button.style";
 
 const AddPlant: React.FC = () => {
   const { typeName } = useParams<{
@@ -21,7 +25,7 @@ const AddPlant: React.FC = () => {
   const [plantName, setPlantName] = useState("");
   const [potId, setPotId] = useState("");
   const [error, setError] = useState("");
-  const { addPlantPot } = useAddPlantPot();
+  const { addPlantPot, loading } = useAddPlantPot();
 
   const handleSave = async () => {
     if (!plantName.trim() || !potId.trim()) {
@@ -100,16 +104,21 @@ const AddPlant: React.FC = () => {
             <div className="type-display">{typeName}</div>
           </StyledInputGroup>
 
-          {error && <div className="error-message">{error}</div>}
+          {error && <ErrorLabel className="error-message">{error}</ErrorLabel>}
 
           <StyledModalFooter>
-            <button className="cancel-button" onClick={handleCancel}>
+            <Button $variant="cancel" className="cancel-button" onClick={handleCancel}>
               Cancel
-            </button>
-            <button className="save-button" onClick={handleSave}>
+            </Button>
+            <Button className="save-button" onClick={handleSave}>
               Save
-            </button>
+            </Button>
           </StyledModalFooter>
+          {loading && (
+            <Overlay>
+              <CircularProgress size={80} />
+            </Overlay>
+          )}
         </StyledModalBody>
       </StyledModalContent>
     </StyledAddPlantModal>

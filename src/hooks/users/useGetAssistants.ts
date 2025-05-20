@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { UserProfile } from "../types/User";
+import { UserProfile } from "../../types/User";
 
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
@@ -16,7 +16,7 @@ export const useGetAssistants = (environmentId: string) => {
       const response = await axios.get(
         `${BASE_URL}/environments/${environmentId}/assistants`
       );
-     const ids: string[] = (response.data.assistants || []).map(
+      const ids: string[] = (response.data.assistants || []).map(
         (a: { user_id: string }) => a.user_id
       );
 

@@ -1,4 +1,5 @@
-export type EnvironmentBrief={
-environment_id:string;
-role:string;
+export type EnvironmentBrief = {
+    environment_id: string;
+    environment_name: string;
+    role: string;
 }

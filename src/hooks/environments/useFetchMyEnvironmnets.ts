@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { EnvironmentBrief } from "../types/Environment";
+import { EnvironmentBrief } from "../../types/Environment";
 
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
-export function FetchMyEnvironments(userId: string) {
+export function useFetchMyEnvironments(userId: string) {
   const [error, setError] = useState("");
   const [environmentsList, setEnvironmentsList] = useState<EnvironmentBrief[]>(
     []
@@ -28,8 +28,8 @@ export function FetchMyEnvironments(userId: string) {
       setLoading(false);
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     fetchAllEnvironments()
-  },[])
+  }, [])
   return { error, environmentsList, loading, fetchAllEnvironments };
 }
