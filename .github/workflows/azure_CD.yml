@@ -6,6 +6,7 @@ on:
       - master
   workflow_dispatch:
 
+
 env:
   RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
   ACR_NAME: ${{ vars.ACR_NAME }}
@@ -13,6 +14,7 @@ env:
   IMAGE_NAME: frontend
   BACKEND_URL: ${{vars.BACKEND_URL}}
   UNIQUE_ID: ${{ github.run_id }}
+
 
 jobs:
   build-and-deploy-frontend:
