@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { PlantType } from "../../types";
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export const useGetTypesByEnvironment = (environmentId: string) => {
   const [types, setTypes] = useState<PlantType[]>([]);
