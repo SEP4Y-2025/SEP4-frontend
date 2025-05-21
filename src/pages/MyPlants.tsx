@@ -33,6 +33,7 @@ const MyPlants = () => {
   const [dosage, setDosage] = useState("");
   const navigate = useNavigate();
   const { deleteEnvironment } = useDeleteEnvironment();
+
   // useEffect(() => {
   //   console.log("pots");
   //   fetchPots();

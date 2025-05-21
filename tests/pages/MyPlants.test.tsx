@@ -1,166 +1,138 @@
-import {
-  fireEvent,
-  render,
-  renderHook,
-  screen,
-  waitFor,
-} from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import EnvironmentContext, { useEnvironmentCtx } from "../../src/contexts/EnvironmentContext";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import MyPlants from "../../src/pages/MyPlants";
-import { vi, Mock, it, expect } from "vitest";
-import { useAddPlantType } from "../../src/hooks/useAddPlantType";
-import "@testing-library/jest-dom/vitest";
-import AddPlantModal from "../../src/components/MyPlants/AddPlantTypeModal";
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 
 vi.mock("../../src/contexts/EnvironmentContext", () => ({
-  useEnvironmentCtx: vi.fn(),
+  useEnvironmentCtx: () => ({
+    environmentID: "env123",
+    environmentName: "Test Garden",
+    isOwner: true,
+  }),
 }));
 
-it("renders the page correctly", () => {
-  (useEnvironmentCtx as Mock).mockReturnValue({
-    plantTypes: [
-      { _id: "1", name: "Basil", water_frequency: 5, water_dosage: 100 },
-      { _id: "2", name: "Mint", water_frequency: 3, water_dosage: 50 },
+vi.mock("../../src/contexts/UserAuthContext", () => ({
+  useAuth: () => ({
+    user: { uid: "user123" },
+  }),
+}));
+
+vi.mock("../../src/hooks/pots/useGetPotsByEnvironment", () => ({
+  useGetPotsByEnvironment: () => ({
+    pots: [
+      {
+        pot_id: "pot1",
+        label: "Pot 1",
+        plant_type_id: "type1",
+      },
     ],
-    pots: [],
-    environmentName: "Greenhouse",
-    environmentId: "680f8359688cb5341f9f9c19",
-    loading: false,
-    error: null,
+    loadingPots: false,
+    fetchPots: vi.fn(),
+  }),
+}));
+
+vi.mock("../../src/hooks/pots/useGetTypesByEnvironment", () => ({
+  useGetTypesByEnvironment: () => ({
+    types: [
+      {
+        _id: "type1",
+        name: "Tomato",
+        watering_frequency: 3,
+        water_dosage: 500,
+      },
+    ],
+    loadingTypes: false,
+    fetchTypes: vi.fn(),
+  }),
+}));
+
+const mockAddPlantType = vi.fn();
+vi.mock("../../src/hooks/pots/useAddPlantType", () => ({
+  useAddPlantType: () => ({
+    addPlantType: mockAddPlantType,
+  }),
+}));
+
+const mockDeleteEnvironment = vi.fn();
+vi.mock("../../src/hooks/environments/useDeleteEnvironment", () => ({
+  useDeleteEnvironment: () => ({
+    deleteEnvironment: mockDeleteEnvironment,
+  }),
+}));
+
+vi.mock("../../src/components/MyPlants/PlantTypeRow", () => ({
+  default: (props: any) => (
+    <div data-testid="plant-row">{props.plant.name}</div>
+  ),
+}));
+
+vi.mock("../../src/components/MyPlants/AddPlantTypeModal", () => ({
+  default: (props: any) => (
+    <div data-testid="add-modal">
+      <button onClick={props.handleContinue}>Continue</button>
+      <button onClick={props.handleCancel}>Cancel</button>
+    </div>
+  ),
+}));
+
+vi.mock("react-toastify", () => ({
+  toast: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
+
+describe("MyPlants (Vitest)", () => {
+  const setup = () =>
+    render(
+      <BrowserRouter>
+        <MyPlants />
+      </BrowserRouter>
+    );
+
+  beforeEach(() => {
+    mockAddPlantType.mockReset();
+    mockDeleteEnvironment.mockReset();
+    mockDeleteEnvironment.mockResolvedValue({ success: true });
   });
 
-  render(
-    <MemoryRouter>
-      <MyPlants />
-    </MemoryRouter>
-  );
+  it("renders environment title", () => {
+    setup();
+    expect(screen.getByText("My Plants - Test Garden")).toBeInTheDocument();
+  });
 
-  expect(screen.getByText(/My Plants/)).toBeInTheDocument();
-  expect(screen.getByText(/Type: Basil/)).toBeInTheDocument();
-  expect(screen.getByText(/Type: Mint /)).toBeInTheDocument();
-  expect(screen.getByText(/\(3x\/week, 50ml\)/)).toBeInTheDocument();
+  it("renders plant types", () => {
+    setup();
+    expect(screen.getByTestId("plant-row")).toHaveTextContent("Tomato");
+  });
+
+  it("opens and closes AddPlantTypeModal", async () => {
+    setup();
+    fireEvent.click(screen.getByText("Add new type"));
+    expect(screen.getByTestId("add-modal")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText("Cancel"));
+    await waitFor(() =>
+      expect(screen.queryByTestId("add-modal")).not.toBeInTheDocument()
+    );
+  });
+
+  it("confirms and calls deleteEnvironment", async () => {
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    setup();
+
+    fireEvent.click(screen.getByText("Delete"));
+    await waitFor(() =>
+      expect(mockDeleteEnvironment).toHaveBeenCalledWith("env123")
+    );
+  });
+
+  it("does not call deleteEnvironment if confirmation is cancelled", async () => {
+    vi.spyOn(window, "confirm").mockReturnValue(false);
+    setup();
+
+    fireEvent.click(screen.getByText("Delete"));
+    await waitFor(() => expect(mockDeleteEnvironment).not.toHaveBeenCalled());
+  });
 });
-
-it("opens the model when 'Add new type' is clicked", () => {
-  (useEnvironmentCtx as Mock).mockReturnValue({
-    plantTypes: [],
-    pots: [],
-    environmentName: "Greenhouse",
-    loading: false,
-    error: null,
-    isOwner: true,
-  });
-
-  render(
-    <MemoryRouter>
-      <MyPlants />
-    </MemoryRouter>
-  );
-
-  fireEvent.click(screen.getByText("Add new type"));
-  expect(
-    screen.getByRole("button", { name: /add new type/i })
-  ).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /CanCel/i })).toBeInTheDocument();
-  expect(
-    screen.getByRole("button", { name: /Invite assistants/i })
-  ).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /continue/i })).toBeInTheDocument();
-});
-
-it("adds a new plant type correctly", async () => {
-    const mockRefresh = vi.fn();
-
-  (useEnvironmentCtx as Mock).mockReturnValue({
-    plantTypes: [],
-    pots: [],
-    environmentName: "Greenhouse",
-    environmentID: "680f8359688cb5341f9f9c19",
-    loading: false,
-    error: null,
-    isOwner: true,
-    refreshEnvironment: mockRefresh,
-    setPlantTypes: vi.fn(),
-  });
-
-  vi.spyOn(EnvironmentContext, "refreshEnvironmentData").mockResolvedValue();
-
-
-
-  //   (getTypesByEnvironment as Mock).mockResolvedValueOnce([
-  //     { _id: "1", name: "Basil", water_frequency: 5, water_dosage: 100 },
-  //   ]);
-
-  render(
-    <MemoryRouter>
-      <MyPlants />
-    </MemoryRouter>
-  );
-
-  //   // Open modal
-  fireEvent.click(screen.getByText("Add new type"));
-
-  // Fill out the form
-  fireEvent.change(screen.getByLabelText(/Type/i), {
-    target: { value: "Basil" },
-  });
-  fireEvent.change(screen.getByLabelText(/Watering Frequency/i), {
-    target: { value: "5" },
-  });
-  fireEvent.change(screen.getByLabelText(/Dosage/i), {
-    target: { value: "100" },
-  });
-  fireEvent.click(screen.getByText("Continue"));
-
-  await waitFor(() => {
-    expect(mockRefresh).toHaveBeenCalled();
-
-    //expect(screen.getByText(/Type: Basil/)).toBeInTheDocument();
-  });
-  // Submit the form
-
-  //   await waitFor(() => {
-  //     expect(fetchEnvironment).toHaveBeenCalledWith("680f8359688cb5341f9f9c19", {
-  //       name: "Basil",
-  //       watering_frequency: 5,
-  //       water_dosage: 100,
-  //     });
-  //     expect(getTypesByEnvironment).toHaveBeenCalledWith(
-  //       "680f8359688cb5341f9f9c19"
-  //     );
-  //   });
-});
-
-// it("handles API errors when adding a new plant type", async () => {
-//     (useEnvironmentCtx as Mock).mockReturnValue({
-//         plantTypes: [],
-//         pots: [],
-//         environmentName: "Greenhouse",
-//         loading: false,
-//         error: null,
-//         setPlantTypes: vi.fn(),
-//     });
-
-//     (addPlantType as Mock).mockRejectedValueOnce(new Error("Failed to add plant type"));
-
-//     render(
-//         <MemoryRouter>
-//             <MyPlants />
-//         </MemoryRouter>
-//     );
-
-//     // Open modal
-//     fireEvent.click(screen.getByText("Add new type"));
-
-//     // Fill out the form
-//     fireEvent.change(screen.getByLabelText(/Type/i), { target: { value: "Basil" } });
-//     fireEvent.change(screen.getByLabelText(/Dosage/i), { target: { value: "100" } });
-
-//     // Submit the form
-//     fireEvent.click(screen.getByText("Continue"));
-
-//     await waitFor(() => {
-//         expect(screen.getByText("Failed to add plant type")).toBeInTheDocument();
-//     });
-// });

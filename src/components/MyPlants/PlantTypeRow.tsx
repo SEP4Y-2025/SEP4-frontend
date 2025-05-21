@@ -45,8 +45,8 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
             onClick={() => setEditOpen(true)}
             style={{
               cursor: "pointer",
-              width: "20px",
-              height: "20px",
+              width: 20,
+              height: 20,
               marginLeft: "0.3rem",
               marginBottom: "0.2rem",
             }}
@@ -61,8 +61,8 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
         $background="#f2fdf8"
       >
         <StyledRow>
-          {pots.map((pot, index) => (
-            <PotCard key={index} id={pot.id} plantName={pot.potName} />
+          {pots.map((pot) => (
+            <PotCard key={pot.id} id={pot.id} plantName={pot.potName} />
           ))}
         </StyledRow>
 
@@ -72,7 +72,8 @@ const PlantTypeRow: React.FC<PlantTypeRowProps> = ({ plant, pots }) => {
             role="button"
             aria-label="Add plant"
             onClick={() => navigate(`/addplant/${plant.name}`)}
-          ></i>
+            style={{ cursor: "pointer", fontSize: "1.5rem" }}
+          />
         )}
       </Flex>
 
