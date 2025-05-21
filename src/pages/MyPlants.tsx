@@ -93,7 +93,7 @@ const MyPlants = () => {
       <h1 className="title">My Plants - {environmentName}</h1>
       <Flex $width="55rem" $justifyC="start" $gap="1rem">
         {isOwner && (
-          <Button onClick={() => navigate(`/loremIpsum`)}>
+          <Button onClick={() => navigate(`/assistants`)}>
             Manage Assistants
           </Button>
         )}

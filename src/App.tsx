@@ -89,7 +89,7 @@ const App: React.FC = () => {
                 }
               />
               <Route
-                path="/loremIpsum"
+                path="/assistants"
                 element={
                   <ProtectedRoute>
                     <EnvironmentProvider>
