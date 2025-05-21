@@ -3,6 +3,7 @@ import { StyledTypeContent } from "../../Styles/pages/MyPlants.style";
 import { Flex } from "../../Styles/common/Flex";
 import { Input } from "../../Styles/common/Input.style";
 import { ErrorLabel } from "../../Styles/common/ErrorLabel";
+import { Button } from "../../Styles/common/Button.style";
 
 interface AddPlantModalProps {
   typeName: string;
@@ -27,7 +28,7 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
   handleContinue,
   handleCancel,
 }) => {
-  
+
   return (
     <div className="modal-overlay">
       <StyledTypeContent>
@@ -103,12 +104,12 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
           )}
 
           <Flex $justifyC="space-between" $margin="1rem">
-            <button className="cancel-button" onClick={handleCancel}>
+            <Button $variant="cancel" onClick={handleCancel}>
               Cancel
-            </button>
-            <button className="continue-button" onClick={handleContinue}>
+            </Button>
+            <Button onClick={handleContinue}>
               Continue
-            </button>
+            </Button>
           </Flex>
         </Flex>
       </StyledTypeContent>

@@ -8,14 +8,15 @@ interface Props {
   $overflow?: string;
   $dir?: string;
   $width?: string;
-  $background?:string;
-  $colour?:string;
-  $margin?:string;
+  $background?: string;
+  $colour?: string;
+  $margin?: string;
   height?: string;
   width?: string;
 }
 
 export const Flex = styled.div<Props>`
+  font-family: "Inter", sans-serif;
   display: flex;
   background: ${(p) => p.$background || "white"};
   color: ${(p) => p.$colour || "black"};
@@ -28,5 +29,3 @@ export const Flex = styled.div<Props>`
   height: ${(p) => p.$height};
   width: ${(p) => p.$width};
 `;
-
-

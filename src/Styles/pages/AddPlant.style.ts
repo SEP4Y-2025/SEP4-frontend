@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 export const StyledAddPlantModal = styled.div`
   display: flex;
   justify-content: center;
@@ -52,6 +51,7 @@ export const StyledInputGroup = styled.div`
   }
 
   .input {
+    font-family: "Inter", sans-serif;
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;

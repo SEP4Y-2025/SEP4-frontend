@@ -1,103 +1,93 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
 import PlantDetails from "../../src/pages/PlantDetails";
-import { useEnvironmentCtx } from "../../src/contexts/EnvironmentContext";
-import { beforeEach, describe, vi } from "vitest";
+import * as potHooks from "../../src/hooks/pots/useGetPotById";
+import * as plantTypeHooks from "../../src/hooks/useGetPlantTypeById";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockNavigate = vi.fn();
+const mockPot = {
+  pot_id: "some-id",
+  label: "Test Plant",
+  plant_type_id: "plant-type-id",
+  environment_id: "env-id",
+  watering_frequency: 3,
+  water_dosage: 500,
+  state: {
+    temperature: 22,
+    soil_humidity: 50,
+    air_humidity: 40,
+    light_intensity: 70,
+    water_level: 50,
+    water_tank_capacity: 1000,
+    measured_at: new Date().toISOString(),
+  },
+};
 
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual<typeof import("react-router-dom")>("react-router-dom");
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
-});
+const mockType = {
+  plant_type_id: "plant-type-id",
+  name: "Ficus ▼",
+  watering_frequency: 3,
+  water_dosage: 500,
+};
 
-vi.mock("../../src/contexts/EnvironmentContext", () => ({
-  useEnvironmentCtx: vi.fn(),
-}));
-
-describe("PlantDetails", () => {
-  const mockProps = {
-    pots: [
-      {
-        potId: "123",
-        name: "Aloe Vera",
-        plantTypeId: "plant123",
-        state: {
-          temperature: ["raw", "22.3"],
-          soilHumidity: ["raw", "45"],
-          airHumidity: ["raw", "55"],
-        },
-        waterTank: {
-          currentLevelMl: 750,
-          capacityMl: 1000,
-          status: "Good",
-        },
-      },
-    ],
-    plantTypes: [
-      {
-        _id: "plant123",
-        name: "Aloe",
-        water_frequency: 2,
-        water_dosage: 300,
-      },
-    ],
-    loading: false,
-    error: null,
-    environmentName: "",
-    setEnvironmentName: vi.fn(),
-    setEnvironmentID: vi.fn(),
-    setPlantTypes: vi.fn(),
-  };
-
-  const mockedUseEnvironmentCtx = useEnvironmentCtx as jest.Mock;
-
+describe("PlantDetails component", () => {
   beforeEach(() => {
-    mockedUseEnvironmentCtx.mockReturnValue(mockProps);
+    vi.spyOn(potHooks, "useGetPotById").mockReturnValue({
+      pot: mockPot,
+      isLoading: false,
+      error: null,
+    });
+
+    vi.spyOn(plantTypeHooks, "useGetPlantTypeById").mockReturnValue({
+      plantType: mockType,
+      isLoading: false,
+      error: null,
+    });
   });
 
-  it("displays the correct temperature value from state", () => {
-    render(
-      <MemoryRouter initialEntries={["/plants/123"]}>
-        <Routes>
-          <Route path="/plants/:id" element={<PlantDetails />} />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    expect(screen.getByTestId("temperature")).toHaveTextContent("22.3°C");
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
-  it("displays 'Plant not found' if the pot is missing", () => {
-    mockedUseEnvironmentCtx.mockReturnValue({ ...mockProps, pots: [] });
+  it("renders plant details correctly", () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
 
-    render(
-      <MemoryRouter initialEntries={["/plants/123"]}>
-        <Routes>
-          <Route path="/plants/:id" element={<PlantDetails />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    render(<PlantDetails />);
 
-    expect(screen.getByText("Plant not found")).toBeInTheDocument();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+    expect(
+      screen.getByText((content) => content.includes("Plant Details"))
+    ).toBeDefined();
+
+    expect(screen.getByText("Test Plant")).toBeDefined();
+
+    expect(screen.getByText("Ficus ▼")).toBeDefined();
+
+    expect(
+      screen.getByText(`Every ${mockType.watering_frequency} days`)
+    ).toBeDefined();
+
+    expect(screen.getByText("1000")).toBeDefined();
+
+    expect(screen.getByTestId("temperature").textContent).toBe("22°C");
+    expect(screen.getByTestId("soil-humidity").textContent).toBe("50%");
+    expect(screen.getByTestId("air-humidity").textContent).toBe("40%");
+    expect(screen.getByTestId("light-intensity").textContent).toBe("70%");
+
+    consoleErrorSpy.mockRestore();
   });
 
-  it("navigates to the plants page when the save button is clicked", () => {
-    render(
-      <MemoryRouter initialEntries={["/plants/123"]}>
-        <Routes>
-          <Route path="/plants/:id" element={<PlantDetails />} />
-        </Routes>
-      </MemoryRouter>
-    );
+  it("shows error if pot not found", () => {
+    vi.spyOn(potHooks, "useGetPotById").mockReturnValue({
+      pot: null,
+      isLoading: false,
+      error: null,
+    });
 
-    const saveButton = screen.getByText("Go Back");
-    saveButton.click();
-
-    expect(mockNavigate).toHaveBeenCalledWith("/plants");
+    render(<PlantDetails />);
+    expect(screen.getByText("Pot not found")).toBeDefined();
   });
 });

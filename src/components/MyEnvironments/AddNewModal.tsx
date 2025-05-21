@@ -24,7 +24,6 @@ const AddEnvironmentModal: React.FC<AddEnvironmentModalProps> = ({ onClose, onSu
         }
         setError("");
         onSubmit(name.trim());
-        onClose();
     };
 
     return (

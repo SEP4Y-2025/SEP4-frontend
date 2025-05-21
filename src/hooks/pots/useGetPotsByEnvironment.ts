@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { Pot } from "../types";
+import { Pot } from "../../types";
 
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
@@ -16,13 +16,14 @@ export const useGetPotsByEnvironment = (environmentId: string) => {
       const response = await axios.get(
         `${BASE_URL}/environments/${environmentId}/pots`
       );
+      console.log(response.data);
       setPots(response.data.pots);
     } catch (err) {
       setError(err as Error);
     } finally {
       setLoadingPots(false);
     }
-  },[]);
+  }, []);
 
   useEffect(() => {
     fetchPots();

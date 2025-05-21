@@ -1,6 +1,7 @@
 import styled, { keyframes } from "styled-components";
 
 export const StyledPlantDetailsPage = styled.div`
+  font-family: "Inter", sans-serif;
   padding: 20px;
   max-width: 1000px;
   margin: 0 auto;
@@ -176,7 +177,7 @@ export const StyledTimeSelectorDropdown = styled.select`
   optgroup {
     font-weight: bold;
     color: #333;
-    
+
     option {
       font-weight: normal;
       padding: 5px;
@@ -210,7 +211,7 @@ export const StyledCustomTooltip = styled.div`
 
   p {
     margin: 0;
-    
+
     &:first-child {
       font-weight: bold;
     }
@@ -218,7 +219,7 @@ export const StyledCustomTooltip = styled.div`
 `;
 
 export const StyledTooltipValue = styled.p<{ $color: string }>`
-  color: ${props => props.$color} !important;
+  color: ${(props) => props.$color} !important;
 `;
 
 export const StyledPredictionGraph = styled.div`
@@ -263,11 +264,11 @@ export const StyledPredictionGraph = styled.div`
 
   @media (max-width: 480px) {
     padding: 15px;
-    
+
     h3 {
       font-size: 16px;
     }
-    
+
     .chart-container {
       min-height: 250px;
     }
@@ -307,20 +308,25 @@ export const StyledWaterTankLevel = styled.div<WaterLevelProps>`
   top: 0;
   left: 0;
   height: 100%;
-  width: ${props => props.$waterPercentage}%;
+  width: ${(props) => props.$waterPercentage}%;
   background: linear-gradient(90deg, #3498db 0%, #4da7db 50%, #3498db 100%);
   border-radius: 18px;
   transition: width 0.5s ease;
   box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
     animation: ${waterShine} 2s infinite;
   }
 `;

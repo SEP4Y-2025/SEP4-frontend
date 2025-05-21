@@ -8,7 +8,9 @@ import { describe, expect, it, vi } from "vitest";
 const mockNavigate = vi.fn();
 
 vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual<typeof import("react-router-dom")>("react-router-dom");
+  const actual = await vi.importActual<typeof import("react-router-dom")>(
+    "react-router-dom"
+  );
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -43,6 +45,9 @@ describe("PotCard", () => {
     const potCard = screen.getByText("Aloe Vera");
     await userEvent.click(potCard);
 
-    expect(mockNavigate).toHaveBeenCalledWith("/plant-details/123");
+    expect(mockNavigate).toHaveBeenCalledWith(
+      "/plant-details/123",
+      expect.anything()
+    );
   });
 });

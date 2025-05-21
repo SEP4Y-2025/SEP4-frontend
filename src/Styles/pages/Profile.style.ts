@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const InfoBlock = styled.div`
+  font-family: "Inter", sans-serif;
   width: 100%;
   margin: 10px 0;
 `;
