@@ -54,7 +54,7 @@ const AddPlant: React.FC = () => {
         toast.error("Unregistered Arduino. Please register it first.");
       }
       else {
-        toast.error(e.message || "Failed to add plant. Please try again.");
+        toast.error("Failed to add plant. Please try again.");
       }
 
       //setError(e.message);

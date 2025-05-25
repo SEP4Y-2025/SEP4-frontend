@@ -1,33 +1,23 @@
+import { test, expect } from '@playwright/test';
 
+const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 
-// playwright.config.ts
-import { defineConfig, test, expect } from '@playwright/test';
+test('register', async ({ page, browserName }) => {
+  const randomNumber = Math.floor(Math.random() * 1000); 
+  const username = `kasia${randomNumber}`;
+  const email = `kasia${randomNumber}@domain.com`;
+  const password = 'password123';
 
-const BASE_URL = 'http://localhost:3000';
-export default defineConfig({
-  testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
-});
+  console.log(`Registering user ${username} with email ${email} in ${browserName}`);
 
-test('register', async ({ page }) => {
-  await page.goto(`${BASE_URL}/`);
-
+  await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Register' }).click();
-  await page.getByRole('textbox', { name: 'Enter username' }).click();
-  await page.getByRole('textbox', { name: 'Enter username' }).fill('kasia');
-  await page.getByRole('textbox', { name: 'Enter email' }).click();
-  await page.getByRole('textbox', { name: 'Enter email' }).fill('kasia@domai.com');
-  await page.getByRole('textbox', { name: 'Enter email' }).press('ArrowLeft');
-  await page.getByRole('textbox', { name: 'Enter email' }).press('ArrowLeft');
-  await page.getByRole('textbox', { name: 'Enter email' }).press('ArrowLeft');
-  await page.getByRole('textbox', { name: 'Enter email' }).press('ArrowLeft');
-  await page.getByRole('textbox', { name: 'Enter email' }).fill('kasia@domain.com');
-  await page.getByRole('textbox', { name: 'Repeat email' }).click();
-  await page.getByRole('textbox', { name: 'Repeat email' }).fill('kasia@domain.com');
-  await page.getByRole('textbox', { name: 'Enter password' }).click();
-  await page.getByRole('textbox', { name: 'Enter password' }).fill('123');
-  await page.getByRole('textbox', { name: 'Repeat password' }).click();
-  await page.getByRole('textbox', { name: 'Repeat password' }).fill('123');
+  await page.getByRole('textbox', { name: 'Enter username' }).fill(username);
+  await page.getByRole('textbox', { name: 'Enter email' }).fill(email);
+  await page.getByRole('textbox', { name: 'Repeat email' }).fill(email);
+  await page.getByRole('textbox', { name: 'Enter password' }).fill(password);
+  await page.getByRole('textbox', { name: 'Repeat password' }).fill(password);
   await page.getByRole('button', { name: 'Register' }).click();
+
   await expect(page.getByText('User created successfully')).toBeVisible();
-
 });
