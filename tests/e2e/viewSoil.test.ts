@@ -3,23 +3,29 @@
 // playwright.config.ts
 import { defineConfig, test, expect } from '@playwright/test';
 
+
 export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
 
-test('addPlant', async ({ page }) => {
-  await page.goto(`http://plantandgo-frontend.northeurope.azurecontainer.io/?fbclid=IwY2xjawKe_0xleHRuA2FlbQIxMABicmlkETFKS2xib1hzdDNYeWF0dlg3AR4jZxdoNXjh0hEAYrOA85Mki00x6olMEOnceavb5Erdr-xfzmRv1pkrWIm7MA_aem_00PluytVi5_S8RD0UjTHyA`);
+const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
+
+const email = 'email4@domain.com';
+const password = 'password4';
+
+test('viewSoil', async ({ page }) => {
+  await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
-  await page.getByRole('textbox', { name: 'Enter email' }).fill('email1@domain.com');
+  await page.getByRole('textbox', { name: 'Enter email' }).fill(email);
   await page.getByRole('textbox', { name: 'Enter password' }).click();
-  await page.getByRole('textbox', { name: 'Enter password' }).fill('password1');
+  await page.getByRole('textbox', { name: 'Enter password' }).fill(password);
   await page.getByRole('button', { name: 'Log in' }).click();
-  await page.getByText('Greenhouse #').click();
-  await page.getByRole('button', { name: 'Plant Icon pot4' }).click();
+  await page.getByText('Bathroom').click();
+  await page.getByRole('button', { name: 'Plant Icon pot3Test' }).click();
 
-  await expect(page.getByText('Namepot4')).toBeVisible();
-  await expect(page.getByText('Type DetailsTulip')).toBeVisible();
+    await expect(page.getByText('Namepot3Test')).toBeVisible();
+  await expect(page.getByText('Type DetailsDaisy')).toBeVisible();
    await expect(page.getByText('Soil Humidity:')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
 });

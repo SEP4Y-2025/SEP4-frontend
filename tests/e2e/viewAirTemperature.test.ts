@@ -8,14 +8,13 @@ export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
 
-
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 
 const email = 'email4@domain.com';
 const password = 'password4';
 
 test('viewAirTemperature', async ({ page }) => {
-   await page.goto(baseUrl);
+  await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).fill(email);
@@ -26,7 +25,7 @@ test('viewAirTemperature', async ({ page }) => {
   await page.getByRole('button', { name: 'Plant Icon pot3Test' }).click();
 
     await expect(page.getByText('Namepot3Test')).toBeVisible();
-    await expect(page.getByText('Type DetailsTulip')).toBeVisible();
+    await expect(page.getByText('Type DetailsDaisy')).toBeVisible();
     await expect(page.getByText('Temperature:')).toBeVisible();
     await expect(page.getByText('Air Humidity:')).toBeVisible();
  
