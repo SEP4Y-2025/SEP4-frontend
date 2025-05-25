@@ -1,17 +1,12 @@
 
 // playwright.config.ts
 import { defineConfig, test, expect } from '@playwright/test';
-
-
 export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
-});
-
+})
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
-
 const email = 'email4@domain.com';
 const password = 'password4';
-
 test('deletePlant', async ({ page, browserName }) => {
   test.skip(browserName !== 'webkit', 'This test only runs on webkit');
   await page.goto(baseUrl);

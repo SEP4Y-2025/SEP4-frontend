@@ -9,10 +9,8 @@ export default defineConfig({
 });
 
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
-
 const email = 'email4@domain.com';
 const password = 'password4';
-
 test('viewSoil', async ({ page }) => {
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
@@ -23,9 +21,8 @@ test('viewSoil', async ({ page }) => {
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Bathroom').click();
   await page.getByRole('button', { name: 'Plant Icon pot3Test' }).click();
-
-    await expect(page.getByText('Namepot3Test')).toBeVisible();
+  await expect(page.getByText('Namepot3Test')).toBeVisible();
   await expect(page.getByText('Type DetailsDaisy')).toBeVisible();
-   await expect(page.getByText('Soil Humidity:')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
+  await expect(page.getByText('Soil Humidity:')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
 });

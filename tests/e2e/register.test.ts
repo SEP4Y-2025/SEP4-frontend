@@ -7,9 +7,6 @@ test('register', async ({ page, browserName }) => {
   const username = `kasia${randomNumber}`;
   const email = `kasia${randomNumber}@domain.com`;
   const password = 'password123';
-
-  console.log(`Registering user ${username} with email ${email} in ${browserName}`);
-
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Register' }).click();
   await page.getByRole('textbox', { name: 'Enter username' }).fill(username);
@@ -18,6 +15,5 @@ test('register', async ({ page, browserName }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).fill(password);
   await page.getByRole('textbox', { name: 'Repeat password' }).fill(password);
   await page.getByRole('button', { name: 'Register' }).click();
-
   await expect(page.getByText('User created successfully')).toBeVisible();
 });

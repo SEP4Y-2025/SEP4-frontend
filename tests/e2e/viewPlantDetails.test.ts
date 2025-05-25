@@ -1,16 +1,11 @@
 // playwright.config.ts
 import { defineConfig, test, expect } from '@playwright/test';
-
-
 export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
-
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
-
 const email = 'email4@domain.com';
 const password = 'password4';
-
 test('viewPlantDetails', async ({ page }) => {
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
@@ -21,7 +16,6 @@ test('viewPlantDetails', async ({ page }) => {
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Bathroom').click();
   await page.getByRole('button', { name: 'Plant Icon pot3Test' }).click();
-
   await expect(page.getByText('Namepot3Test')).toBeVisible();
   await expect(page.getByText('Type DetailsDaisy')).toBeVisible();
   await expect(page.getByText('Watering Frequency')).toBeVisible();
@@ -30,12 +24,9 @@ test('viewPlantDetails', async ({ page }) => {
   await expect(page.getByText('Soil Humidity:')).toBeVisible();
   await expect(page.getByText('Air Humidity:')).toBeVisible();
   await expect(page.getByText('Light Intensity:')).toBeVisible();
-
   await expect(page.getByRole('heading', { name: 'Current Soil Humidity for ' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Water Tank Status' })).toBeVisible();
   await expect(page.getByText('Current Level')).toBeVisible();
   await expect(page.getByText('Total Capacity')).toBeVisible();
- 
-
-   await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
 });

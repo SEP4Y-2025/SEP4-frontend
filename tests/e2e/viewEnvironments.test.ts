@@ -1,17 +1,12 @@
 
 
 import { defineConfig, test, expect } from '@playwright/test';
-
-
 export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
-
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
-
 const email = 'email4@domain.com';
 const password = 'password4';
-
 test('viewEnvironment', async ({ page, browserName }) => {
    await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();

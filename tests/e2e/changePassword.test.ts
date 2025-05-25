@@ -9,11 +9,11 @@ export default defineConfig({
 
 
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
-
 const email = 'email4@domain.com';
 const password = 'password4';
-
-test('changePassword', async ({ page }) => {
+test('changePassword', async ({ page , browserName}) => {
+  test.skip(browserName !== 'webkit', 'This test only runs on webkit');
+ 
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();

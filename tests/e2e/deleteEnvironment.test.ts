@@ -9,10 +9,8 @@ export default defineConfig({
 });
 
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
-
 const email = 'email4@domain.com';
 const password = 'password4';
-
 test('deleteEnvironment', async ({ page,  browserName  }) => {
    test.skip(browserName !== 'firefox', 'This test only runs on firefox');
     await page.goto(baseUrl);
@@ -23,7 +21,6 @@ test('deleteEnvironment', async ({ page,  browserName  }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).fill(password);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Kitchen').click();
-
   await page.getByRole('button', { name: 'Delete' }).click();
   await page.getByRole('button', { name: 'close' }).click();
 });
