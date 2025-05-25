@@ -39,4 +39,7 @@ export const DeleteButton = styled(Button)`
   &:hover {
     background-color: #e15f54;
   }
+
+
+
 `;

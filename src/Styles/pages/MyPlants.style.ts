@@ -48,6 +48,13 @@ export const StyledMyPlantsContainer = styled.div`
       width: 100%;
     }
   }
+    @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 1.2rem;
+  }
 `;
 
 export const StyledRow = styled.div`
@@ -121,3 +128,18 @@ export const StyledTypeContent = styled.div`
     max-width: 100%;
   }
 `;
+
+
+export const StyledButtonContainer = styled.div`
+  flex: 1 1 auto;
+  max-width: 12rem;
+  min-width: 8rem;
+  display: flex;
+  justify-content: center;
+
+  @media screen and (max-width: 768px) {
+    max-width: 100%;
+    margin-bottom: 0.5rem;
+  }
+`;
+

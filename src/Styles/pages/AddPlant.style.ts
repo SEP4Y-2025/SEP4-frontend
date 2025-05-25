@@ -6,6 +6,11 @@ export const StyledAddPlantModal = styled.div`
   align-items: center;
   padding: 20px;
   font-family: Arial, sans-serif;
+
+    @media (max-width: 768px) {
+    padding: 20px;
+    align-items: flex-start;
+  }
 `;
 
 export const Label = styled.label`
@@ -24,6 +29,14 @@ export const StyledModalContent = styled.div`
   max-width: 500px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+
+    @media (max-width: 480px) {
+    max-width: 95%;
+  }
+
+  @media (min-height: 2000px) {
+    padding-bottom: 3rem;
+  }
 `;
 export const FormTitle = styled.h2`
   font-weight: bold;
@@ -39,10 +52,25 @@ export const StyledModalHeader = styled.div`
   padding: 40px;
   background-color:rgb(255, 255, 255);
 
+   img {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 10px;
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
 `;
 
 export const StyledModalBody = styled.div`
   padding: 20px;
+
+    @media (max-width: 480px) {
+    padding: 16px;
+  }
 `;
 
 export const StyledInputGroup = styled.div`
@@ -77,6 +105,18 @@ export const StyledModalFooter = styled.div`
   display: flex;
   justify-content: space-between;
   padding-top: 15px;
+
+    @media (max-width: 480px) {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+
+    button:not(:last-child) {
+      margin-bottom: 8px; /* space between stacked buttons */
+    }
+  }
 `;
 
 export const StyledButton = styled.button`

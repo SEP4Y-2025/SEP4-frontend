@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TableContainer from '@mui/material/TableContainer';
 import { CircularProgress } from "@mui/material";
+import { AssistantWrapper } from "../Styles/pages/AssistantWrapper.style";
 
 const Assistants = () => {
   const { environmentID } = useEnvironmentCtx();
@@ -31,14 +32,13 @@ const Assistants = () => {
   };
 
   return (
-    <div>
+    <AssistantWrapper>
       {loadingAssistants && <CircularProgress style={{ marginTop: 20 }} />}
       <Button $margin="2rem 0 2rem 0" onClick={() => setOpenAddAssistant(true)}>Add assistants</Button>
       {openAddAssistant && <AddAssistantModal onClose={handleCloseModal} />}
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
+<TableContainer component={Paper} sx={{ width: "100%", overflowX: "hidden" }}>
+  <Table sx={{ width: "100%" }} aria-label="assistants table"> <TableHead>
             <TableRow>
               <TableCell>Assistant Email</TableCell>
               <TableCell align="right"></TableCell>
@@ -65,7 +65,7 @@ const Assistants = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </AssistantWrapper>
   );
 };
 
