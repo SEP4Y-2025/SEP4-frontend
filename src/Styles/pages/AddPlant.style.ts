@@ -8,6 +8,15 @@ export const StyledAddPlantModal = styled.div`
   font-family: Arial, sans-serif;
 `;
 
+export const Label = styled.label`
+  color:rgb(44, 157, 50);
+  font-weight: 500;
+  font-weight: 600;
+  margin-top: 1rem;
+  display: block;
+  font-size: 1.2rem;
+`;
+
 export const StyledModalContent = styled.div`
   background-color: white;
   border-radius: 12px;
@@ -16,24 +25,20 @@ export const StyledModalContent = styled.div`
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 `;
+export const FormTitle = styled.h2`
+  font-weight: bold;
+  color: #333;
+  margin-left: 0.25rem;
+  margin-top: 0.25rem;
+  font-size: 1.4rem;
+`;
 
 export const StyledModalHeader = styled.div`
   display: flex;
   align-items: center;
-  padding: 20px;
-  background-color: #f1f8e9;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 40px;
+  background-color:rgb(255, 255, 255);
 
-  span {
-    font-size: 24px;
-    margin-right: 10px;
-  }
-
-  h2 {
-    margin: 0;
-    color: #333;
-    font-weight: 500;
-  }
 `;
 
 export const StyledModalBody = styled.div`
@@ -43,20 +48,13 @@ export const StyledModalBody = styled.div`
 export const StyledInputGroup = styled.div`
   margin-bottom: 20px;
 
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #66bb6a;
-  }
-
   .input {
     font-family: "Inter", sans-serif;
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 17px;
     box-sizing: border-box;
   }
 

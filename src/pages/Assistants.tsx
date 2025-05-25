@@ -40,8 +40,8 @@ const Assistants = () => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Username</TableCell>
-              <TableCell align="right">Email</TableCell>
+              <TableCell>Assistant Email</TableCell>
+              <TableCell align="right"></TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>

@@ -6,11 +6,16 @@ import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
 import { AddPlantPotRequest } from "../types/addPlantPotApiTypes";
 import { useAddPlantPot } from "../hooks/pots/useAddPlantPot";
 import { toast } from "react-toastify";
-import { StyledAddPlantModal, StyledInputGroup, StyledModalBody, StyledModalContent, StyledModalFooter, StyledModalHeader } from "../Styles/pages/AddPlant.style";
+import { StyledAddPlantModal, StyledInputGroup, StyledModalBody,
+   StyledModalContent, StyledModalFooter, StyledModalHeader,Label,  FormTitle
+  } from "../Styles/pages/AddPlant.style";
 import { Overlay } from "../Styles/modal/Overlay.style";
 import { CircularProgress } from "@mui/material";
 import { ErrorLabel } from "../Styles/common/ErrorLabel";
 import { Button } from "../Styles/common/Button.style";
+import plant1 from "../assets/plant1.png";
+import { Input } from "../Styles/common/Input.style";
+import {Flex} from "../Styles/common/Flex";
 
 const AddPlant: React.FC = () => {
   const { typeName } = useParams<{
@@ -69,16 +74,17 @@ const AddPlant: React.FC = () => {
     <StyledAddPlantModal>
       <StyledModalContent>
         <StyledModalHeader>
-          <span role="img" aria-label="leaf">
-            🌿
-          </span>
-          <h2>Add New Plant</h2>
+    
+        <img src={plant1} alt="leaf icon" width="40" height="40" />
+        <FormTitle>Add new plant</FormTitle>
+      
         </StyledModalHeader>
 
         <StyledModalBody>
-          <StyledInputGroup>
-            <label>Device ID</label>
-            <input
+          <Flex $dir="column" $gap="1rem" $overflow="visible" $colour="green">
+          
+            <Label>Device ID</Label>
+            <Input
               className="input"
               placeholder="Enter device ID"
               value={potId}
@@ -86,21 +92,24 @@ const AddPlant: React.FC = () => {
 
               }
             />
-          </StyledInputGroup>
+          </Flex>
 
-          <StyledInputGroup>
-            <label>Name</label>
-            <input
+        <Flex $dir="column" $gap="1rem" $overflow="visible" $colour="green">
+          
+            <Label>Name</Label>
+            <Input
               className="input"
               placeholder="Enter plant name"
               value={plantName}
               onChange={(e) => setPlantName(e.target.value)
               }
             />
-          </StyledInputGroup>
+          </Flex>
 
+          <Flex $dir="column" $gap="1rem" $overflow="visible" $colour="green">
+            <Label>Type</Label>
+          </Flex>
           <StyledInputGroup>
-            <label>Type</label>
             <div className="type-display">{typeName}</div>
           </StyledInputGroup>
 
