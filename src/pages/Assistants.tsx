@@ -16,7 +16,6 @@ import { CircularProgress } from "@mui/material";
 import { AssistantWrapper } from "../Styles/pages/AssistantWrapper.style";
 import { toast } from "react-toastify";
 
-
 const Assistants = () => {
   const { environmentID } = useEnvironmentCtx();
   const {
@@ -41,15 +40,18 @@ const Assistants = () => {
       </Button>
       {openAddAssistant && <AddAssistantModal onClose={handleCloseModal} />}
 
-<TableContainer component={Paper} sx={{ width: "100%", overflowX: "hidden" }}>
-  <Table sx={{ width: "100%" }} aria-label="assistants table"> <TableHead>
-            
-            <TableRow> 
+      <TableContainer
+        component={Paper}
+        sx={{ width: "100%", overflowX: "hidden" }}
+      >
+        <Table sx={{ width: "100%" }} aria-label="assistants table">
+          {" "}
+          <TableHead>
+            <TableRow>
               <TableCell>Assistant Email</TableCell>
               <TableCell align="right"></TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
-
           </TableHead>
           <TableBody>
             {assistants.map((as) => (
@@ -61,15 +63,19 @@ const Assistants = () => {
                   {as.email}
                 </TableCell>
                 <TableCell align="right">
-                 <DeleteButton
+                  <DeleteButton
                     onClick={() => {
-                      deleteAssistant(environmentID, as.email, fetchAssistants)
-                        .then(() => {
-                          toast.success('Assistant removed');
-                        });
-                    }}>
+                      deleteAssistant(
+                        environmentID,
+                        as.email,
+                        fetchAssistants
+                      ).then(() => {
+                        toast.success("Assistant removed");
+                      });
+                    }}
+                  >
                     Remove
-                </DeleteButton>
+                  </DeleteButton>
                 </TableCell>
               </TableRow>
             ))}
