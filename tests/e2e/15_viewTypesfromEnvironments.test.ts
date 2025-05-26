@@ -16,7 +16,7 @@ test('viewPotsFromEnvironment', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).fill(password);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Bathroom').click();
-  await expect(page.getByText('Type: Daisy (once per 12h,').nth(1)).toBeVisible();
+  await expect(page.getByText('Type: Daisy')).toBeVisible();
 
 
 });

@@ -28,4 +28,5 @@ test('addPlantType', async ({ page, browserName }) => {
   await page.getByRole('spinbutton', { name: 'Dosage' }).click();
   await page.getByRole('spinbutton', { name: 'Dosage' }).fill('23');
   await page.getByRole('button', { name: 'Continue' }).click();
- });
+  await expect(page.getByText('Daisy')).toBeVisible();
+});

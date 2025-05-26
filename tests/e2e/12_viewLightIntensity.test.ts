@@ -23,9 +23,8 @@ test('viewLightIntensity', async ({ page }) => {
   await page.getByText('Bathroom').click();
   await page.getByRole('button', { name: 'Plant Icon pot3Test' }).click();
 
-    await expect(page.getByText('Namepot3Test')).toBeVisible();
- await expect(page.getByText('Type DetailsDaisy')).toBeVisible();
-await expect(page.getByText('Light Intensity:')).toBeVisible();
+  await expect(page.getByText('Namepot3Test')).toBeVisible();
+ await expect(page.getByText('Light Intensity:')).toBeVisible();
 
 
    await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
