@@ -22,5 +22,4 @@ test('deleteEnvironment', async ({ page,  browserName  }) => {
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Kitchen').click();
   await page.getByRole('button', { name: 'Delete' }).click();
-  await page.getByRole('button', { name: 'close' }).click();
-});
+  });

@@ -9,6 +9,7 @@ const password = 'password4';
 test('viewPotsFromEnvironment', async ({ page }) => {
   
   await page.goto(baseUrl);
+  await page.getByRole('button', { name: 'Log in' }).waitFor({ state: 'visible' });
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).fill(email);
