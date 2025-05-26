@@ -53,7 +53,7 @@ test("renders plant type info and pots", () => {
   );
 
   expect(screen.getByText(/Type: Cactus/i)).toBeInTheDocument();
-  expect(screen.getByText(/3x\/week/i)).toBeInTheDocument();
+  expect(screen.getByText(/once per 3h/i)).toBeInTheDocument();
   expect(screen.getByText(/200ml/i)).toBeInTheDocument();
 
   expect(screen.getByText("Pot 1")).toBeInTheDocument();
