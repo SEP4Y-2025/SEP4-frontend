@@ -14,6 +14,8 @@ import Paper from '@mui/material/Paper';
 import TableContainer from '@mui/material/TableContainer';
 import { CircularProgress } from "@mui/material";
 import { AssistantWrapper } from "../Styles/pages/AssistantWrapper.style";
+import { toast } from "react-toastify";
+
 
 const Assistants = () => {
   const { environmentID } = useEnvironmentCtx();
@@ -39,12 +41,13 @@ const Assistants = () => {
 
 <TableContainer component={Paper} sx={{ width: "100%", overflowX: "hidden" }}>
   <Table sx={{ width: "100%" }} aria-label="assistants table"> <TableHead>
-            <TableRow>
-              
+            
+            <TableRow> 
               <TableCell>Assistant Email</TableCell>
               <TableCell align="right"></TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
+
           </TableHead>
           <TableBody>
             {assistants.map((as) => (
@@ -56,10 +59,15 @@ const Assistants = () => {
                   {as.email}
                 </TableCell>
                 <TableCell align="right">
-                  <DeleteButton
-                    onClick={() => deleteAssistant(environmentID, as.email, fetchAssistants)}>
+                 <DeleteButton
+                    onClick={() => {
+                      deleteAssistant(environmentID, as.email, fetchAssistants)
+                        .then(() => {
+                          toast.success('Assistant removed');
+                        });
+                    }}>
                     Remove
-                  </DeleteButton>
+                </DeleteButton>
                 </TableCell>
               </TableRow>
             ))}
