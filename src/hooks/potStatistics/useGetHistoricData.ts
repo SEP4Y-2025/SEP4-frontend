@@ -16,20 +16,24 @@ export const useGetHistoricData = (envId: string, potId: string) => {
 
     try {
       const response = await axios.get(
-        `${BASE_URL}/environments/${envId}/pots//historicalData`
+        `${BASE_URL}/environments/${envId}/pots/${potId}/historicalData`
       );
-      console.log(response.data);
-      setOldReadings(response.data.readings);
+      setOldReadings(response.data.historicalData);
     } catch (err) {
       setErrorGettingOldReadings(err as Error);
     } finally {
+      if (oldReadings.length === 0) {
+        setErrorGettingOldReadings(new Error("No data for the pot available"));
+      }
       setLoadingOldReadings(false);
     }
   };
 
   useEffect(() => {
-    if (!envId || !potId){console.log("empty!!!") 
-        return;}
+    if (!envId || !potId) {
+      console.log("empty!!!");
+      return;
+    }
     fetchOldReadings();
   }, [potId, envId]);
 

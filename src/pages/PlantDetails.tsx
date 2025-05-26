@@ -3,9 +3,12 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   BarChart,
   Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
+  Legend,
   Tooltip,
   ResponsiveContainer,
   Cell,
@@ -66,7 +69,8 @@ const PlantDetails = () => {
     potIdReady ? id! : "",
     potIdReady ? environmentID : ""
   );
-  const { oldReadings } = useGetHistoricData(environmentID, "pot_1");
+  const { oldReadings, loadingOldReadings, errorGettingOldReadings } =
+    useGetHistoricData(environmentID, potIdReady ? id! : "");
   const { types } = useGetTypesByEnvironment(environmentID);
   const navigate = useNavigate();
 
@@ -250,6 +254,71 @@ const PlantDetails = () => {
           </StyledCircularMetric>
         </StyledMetricBox>
       </StyledMetricsContainer>
+      {/*Historic data section */}
+      <StyledDetailsCard>
+        <Title>Last readings</Title>
+        {!loadingOldReadings ? (
+          oldReadings.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={oldReadings}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="timestamp"
+                  tickFormatter={(str) =>
+                    new Date(str).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  }
+                />
+                <YAxis domain={[0, 100]} />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="temperature"
+                  stroke="#8884d8"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                  label={{ fill: "#ffc658", fontSize: 12, position: "top" }}
+                  name="Temp (°C)"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="air_humidity"
+                  stroke="#82ca9d"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                  label={{ fill: "#ffc658", fontSize: 12, position: "top" }}
+                  name="Air Humidity (%)"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="soil_humidity"
+                  stroke="#ffc658"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                  label={{ fill: "#ffc658", fontSize: 12, position: "top" }}
+                  name="Soil Humidity (%)"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="light_intensity"
+                  stroke="#ff8042"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                  label={{ fill: "#ffc658", fontSize: 12, position: "top" }}
+                  name="Light Intensity"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          ) : (
+            <p>{errorGettingOldReadings?.message}</p>
+          )
+        ) : (
+          <p>Loading chart data...</p>
+        )}
+      </StyledDetailsCard>
 
       {/* Soil Humidity Prediction Section */}
       <StyledSoilHumidityPrediction>
