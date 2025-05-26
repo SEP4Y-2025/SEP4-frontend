@@ -85,7 +85,6 @@ const MyPlants = () => {
   const handleDeleteEnvironment = async () => {
     if (window.confirm("Are you sure you want to delete this environment?")) {
       await handleDelete();
-      console.log("DEEELL");
     }
   };
 

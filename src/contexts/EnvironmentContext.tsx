@@ -57,10 +57,8 @@ const EnvironmentProvider = ({ children }: Props) => {
       value={{
         isOwner,
         environmentName,
-
         environmentID,
         setIsOwner,
-
         setEnvironmentID,
         setEnvironmentName,
       }}

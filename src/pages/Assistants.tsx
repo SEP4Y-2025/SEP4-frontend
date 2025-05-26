@@ -5,13 +5,13 @@ import { Button, DeleteButton } from "../Styles/common/Button.style";
 import AddAssistantModal from "../components/MyPlants/AddAssistantModal";
 import { useInviteAssistants } from "../hooks/users/useInviteAssistant";
 import { useDeleteAssistants } from "../hooks/users/useDeleteAssistants";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TableContainer from '@mui/material/TableContainer';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import TableContainer from "@mui/material/TableContainer";
 import { CircularProgress } from "@mui/material";
 import { AssistantWrapper } from "../Styles/pages/AssistantWrapper.style";
 import { toast } from "react-toastify";
@@ -36,7 +36,9 @@ const Assistants = () => {
   return (
     <AssistantWrapper>
       {loadingAssistants && <CircularProgress style={{ marginTop: 20 }} />}
-      <Button $margin="2rem 0 2rem 0" onClick={() => setOpenAddAssistant(true)}>Add assistants</Button>
+      <Button $margin="2rem 0 2rem 0" onClick={() => setOpenAddAssistant(true)}>
+        Add assistants
+      </Button>
       {openAddAssistant && <AddAssistantModal onClose={handleCloseModal} />}
 
 <TableContainer component={Paper} sx={{ width: "100%", overflowX: "hidden" }}>
@@ -53,7 +55,7 @@ const Assistants = () => {
             {assistants.map((as) => (
               <TableRow
                 key={as.userName}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   {as.email}
@@ -79,8 +81,3 @@ const Assistants = () => {
 };
 
 export default Assistants;
-
-
-
-
-

@@ -1,8 +1,10 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { UserProfile } from "../types/User";
 import { data, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { Node } from "typescript";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
@@ -25,14 +27,35 @@ export const UserContextProvider = ({ children }: Props) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const logoutTimer = useRef<number | null>(null);
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     const storedToken = sessionStorage.getItem("token");
     if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(token);
-      axios.defaults.headers.common["Authorization"] = "bearer " + token;
+      try {
+        const decoded: any = jwtDecode(storedToken);
+        const currentTime = Date.now() / 1000;
+        if (decoded.exp && decoded.exp < currentTime) {
+          logout();
+          return;
+        }
+
+        setUser(JSON.parse(storedUser));
+        setToken(storedToken);
+        axios.defaults.headers.common["Authorization"] =
+          "Bearer " + storedToken;
+
+        const expiresIn = decoded.exp * 1000 - Date.now();
+        if (logoutTimer.current) clearTimeout(logoutTimer.current);
+        logoutTimer.current = window.setTimeout(() => {
+          toast.info("Session expired. Logging out.");
+          logout();
+        }, expiresIn);
+      } catch (err) {
+        toast.error("Invalid token");
+        logout();
+      }
     }
     setIsReady(true);
   }, []);
@@ -95,6 +118,15 @@ export const UserContextProvider = ({ children }: Props) => {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${res.data.access_token}`;
+
+        const decoded: any = jwtDecode(res.data.access_token);
+        const expiresIn = decoded.exp * 1000 - Date.now();
+
+        if (logoutTimer.current) clearTimeout(logoutTimer.current);
+        logoutTimer.current = window.setTimeout(() => {
+          toast.info("Session expired. Logging out.");
+          logout();
+        }, expiresIn);
 
         toast.success("Login successful");
         navigate("/");
