@@ -3,7 +3,10 @@ import PlantTypeRow from "../components/MyPlants/PlantTypeRow";
 import AddPlantTypeModal from "../components/MyPlants/AddPlantTypeModal";
 import { PlantType } from "../types";
 import { useEnvironmentCtx } from "../contexts/EnvironmentContext";
-import { StyledMyPlantsContainer, StyledButtonContainer } from "../Styles/pages/MyPlants.style";
+import {
+  StyledMyPlantsContainer,
+  StyledButtonContainer,
+} from "../Styles/pages/MyPlants.style";
 import { Button, DeleteButton } from "../Styles/common/Button.style";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/UserAuthContext";
@@ -18,7 +21,7 @@ import { useGetTypesByEnvironment } from "../hooks/pots/useGetTypesByEnvironment
 import { CircularProgress } from "@mui/material";
 import { Overlay } from "../Styles/modal/Overlay.style";
 import { dir } from "console";
-import {Title} from "../Styles/common/Title.style";
+import { Title } from "../Styles/common/Title.style";
 const MyPlants = () => {
   const { environmentID, environmentName, isOwner } = useEnvironmentCtx();
   const { pots, loadingPots, fetchPots } =
@@ -48,7 +51,7 @@ const MyPlants = () => {
     }
     const watering = parseInt(wateringFrequency, 10);
     const dose = parseInt(dosage, 10);
-    if (watering <= 0 || dose <= 0) {
+    if (watering <= 0 || dose <= 0 || watering >= 120 || dose >= 500) {
       toast.error("Please set correct dosage and watering.");
       return;
     }
@@ -89,45 +92,45 @@ const MyPlants = () => {
   };
 
   return (
-  <StyledMyPlantsContainer>
-    
+    <StyledMyPlantsContainer>
       <Title>My Plants - {environmentName}</Title>
-  <Flex $width="70%" $justifyC="space-between" $gap="1rem" style={{ flexWrap: "wrap" }}>
-    {isOwner && (
-      <StyledButtonContainer>
-        <Button onClick={() => navigate(`/assistants`)}>
-          Manage Assistants
-        </Button>
-      </StyledButtonContainer>
-    )}
-    {isOwner && (
-      <StyledButtonContainer>
-        <Button onClick={() => setOpenNewType(true)}>Add new type</Button>
-      </StyledButtonContainer>
-    )}
-    {openNewType && (
-      <AddPlantTypeModal
-        typeName={typeName}
-        setTypeName={setTypeName}
-        wateringFrequency={wateringFrequency}
-        setWateringFrequency={setWateringFrequency}
-        dosage={dosage}
-        setDosage={setDosage}
-        error={""}
-        handleContinue={handleContinue}
-        handleCancel={handleCancel}
-      />
-    )}
-    {isOwner && (
-     
+      <Flex
+        $width="70%"
+        $justifyC="space-between"
+        $gap="1rem"
+        style={{ flexWrap: "wrap" }}
+      >
+        {isOwner && (
+          <StyledButtonContainer>
+            <Button onClick={() => navigate(`/assistants`)}>
+              Manage Assistants
+            </Button>
+          </StyledButtonContainer>
+        )}
         <StyledButtonContainer>
-          <DeleteButton onClick={handleDeleteEnvironment}>
-            Delete
-          </DeleteButton>
+          <Button onClick={() => setOpenNewType(true)}>Add new type</Button>
         </StyledButtonContainer>
-      
-    )}
-  </Flex>
+        {openNewType && (
+          <AddPlantTypeModal
+            typeName={typeName}
+            setTypeName={setTypeName}
+            wateringFrequency={wateringFrequency}
+            setWateringFrequency={setWateringFrequency}
+            dosage={dosage}
+            setDosage={setDosage}
+            error={""}
+            handleContinue={handleContinue}
+            handleCancel={handleCancel}
+          />
+        )}
+        {isOwner && (
+          <StyledButtonContainer>
+            <DeleteButton onClick={handleDeleteEnvironment}>
+              Delete
+            </DeleteButton>
+          </StyledButtonContainer>
+        )}
+      </Flex>
       {types.map((plant: PlantType, index: number) => {
         const filteredPots = pots.filter(
           (pot) => pot.plant_type_id === plant._id

@@ -55,7 +55,7 @@ import { useGetHistoricData } from "../hooks/potStatistics/useGetHistoricData";
 const PlantDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { deletePot } = useDeletePot();
-  const { environmentID } = useEnvironmentCtx();
+  const { environmentID, isOwner } = useEnvironmentCtx();
   const { user } = useAuth();
   const [potIdReady, setPotIdReady] = useState(false);
 
@@ -172,8 +172,8 @@ const PlantDetails = () => {
     pot?.state?.water_tank_capacity || 1
   );
 
-  // if (loading) return <div>Loading...</div>;
-  // if (error) return <div>Error: {error}</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
   if (!pot) return <div>Plant not found</div>;
   if (!type)
     return (
@@ -210,13 +210,12 @@ const PlantDetails = () => {
           <span className="detail-label">
             <i className="bi bi-droplet-fill" />
             Watering Frequency: once per
-            
           </span>
           <span className="detail-value">
             {type!.watering_frequency ||
               type!.watering_frequency ||
               "Not specified"}
-             h
+            h
           </span>
         </StyledDetailRow>
         <StyledDetailRow>
@@ -264,7 +263,7 @@ const PlantDetails = () => {
           <h3>Light Intensity:</h3>
           <StyledCircularMetric $colour="#ff8042" className="light">
             <div className="metric-value" data-testid="light-intensity">
-              {lightIntensityValue}%
+              {lightIntensityValue}lux
               <i className="bi bi-brightness-low" />
             </div>
           </StyledCircularMetric>
@@ -495,9 +494,11 @@ const PlantDetails = () => {
 
       <Flex $justifyC="center" $gap="20px" $width="600px" $margin="40px auto 0">
         <StyledSaveButton onClick={handleSave}>Go Back</StyledSaveButton>
-        <StyledDeleteButton onClick={handleDelete} disabled={isDeleting}>
-          {isDeleting ? "Deleting..." : `Delete ${pot!.label}`}
-        </StyledDeleteButton>
+       
+          <StyledDeleteButton onClick={handleDelete} disabled={isDeleting}>
+            {isDeleting ? "Deleting..." : `Delete ${pot!.label}`}
+          </StyledDeleteButton>
+      
       </Flex>
 
       {loading && (

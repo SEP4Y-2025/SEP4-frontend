@@ -73,7 +73,7 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
                   value={wateringFrequency}
                   onChange={(e) => setWateringFrequency(e.target.value)}
                 />
-                <span className="unit-text">times/week</span>
+                <span className="unit-text">once/x hours</span>
               </Flex>
             </Flex>
 
