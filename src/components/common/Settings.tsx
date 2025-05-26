@@ -12,21 +12,11 @@ const Settings = () => {
       <button onClick={() => navigate("/")}>
         <Icon source={HomeIcon} summary="My Environments" />
       </button>
-      <button>
-        <Icon source={BellIcon} summary="Notifications" />
-      </button>
       <button onClick={() => navigate("/profile")} className="profile">
         <Icon source={UserIcon} summary="Profile" />
       </button>
       {/* onClick={() =>toggleTheme(false)} */}
-      <Flex $dir="column" $background="auto" $gap="0.5rem">
-        <div className={`theme-btn`}>
-          <i className={`bi bi-sun${darkMode ? "" : "-fill"}`}></i>{" "}
-        </div>
-        <div className={`theme-btn `}>
-          <i className={`bi bi-moon${darkMode ? "-fill" : ""}`}></i>
-        </div>
-      </Flex>
+     
     </Flex>
   );
 };

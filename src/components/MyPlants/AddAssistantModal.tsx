@@ -10,6 +10,7 @@ import { Flex } from "../../Styles/common/Flex";
 import { useInviteAssistants } from "../../hooks/users/useInviteAssistant";
 import { useEnvironmentCtx } from "../../contexts/EnvironmentContext";
 import { toast } from "react-toastify";
+import { TextFields } from "../../Styles/common/TextFields.style";
 
 interface AddAssistantModalProps {
   onClose: () => void;
@@ -17,44 +18,35 @@ interface AddAssistantModalProps {
 
 const AddAssistantModal: React.FC<AddAssistantModalProps> = ({ onClose }) => {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
   const { invite } = useInviteAssistants();
   const { environmentID } = useEnvironmentCtx();
 
   const handleSubmit = async () => {
     if (!email.trim()) {
-      setError("Email is required.");
-      return;
+     toast.error("Please input an email address.");
+    return;
     }
     const { success, error } = await invite(environmentID, email, onClose);
     if (!success) {
-      toast.error(error || "Failed to delete environment");
+      toast.error(error || "Failed to delete environment.");
     } else {
-      toast.success("Assistant added successfully");
+      toast.success("Assistant added successfully.");
     }
   };
-
-  // React.useEffect(() => {
-  //     if (errorOnInvite) {
-  //         setError(errorOnInvite);
-  //     } else if (errorOnInvite === null) {
-  //         // If invite was successful, close modal
-  //         onClose();
-  //     }
-  // }, [errorOnInvite, onClose]);
 
   return (
     <Overlay>
       <Modal>
         <Title>Add Assistant</Title>
-        {error && <ErrorLabel>{error}</ErrorLabel>}
-        <Input
-          type="email"
-          placeholder="Assistant Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Flex $justifyC="flex-end" $alignI="center" $gap="1rem">
+        <TextFields>
+          <Input
+            type="email"
+            placeholder="Assistant Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </TextFields>
+        <Flex $justifyC="center" $alignI="center" $gap="1rem">
           <Button onClick={handleSubmit}>Add</Button>
           <Button onClick={onClose} $variant="cancel">
             Cancel

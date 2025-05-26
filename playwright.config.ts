@@ -22,8 +22,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   use: {
-      video: 'on',
-  
+   
       trace: 'on-first-retry',
   },
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
