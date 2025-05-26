@@ -200,56 +200,72 @@ const PlantDetails = () => {
           <span className="detail-value">{pot!.label}</span>
         </StyledDetailRow>
         <StyledDetailRow>
-          <span className="detail-label">Type Details</span>
-          <span className="detail-value with-arrow">{type!.name} ▼</span>
+          <span className="detail-label">
+            <i className="bi bi-flower1" />
+            Type Details
+          </span>
+          <span className="detail-value with-arrow">{type!.name} </span>
         </StyledDetailRow>
         <StyledDetailRow>
-          <span className="detail-label">Watering Frequency</span>
+          <span className="detail-label">
+            <i className="bi bi-droplet-fill" />
+            Watering Frequency: once per
+            
+          </span>
           <span className="detail-value">
             {type!.watering_frequency ||
               type!.watering_frequency ||
               "Not specified"}
+             h
           </span>
         </StyledDetailRow>
         <StyledDetailRow>
-          <span className="detail-label">Dosage ml</span>
-          <span className="detail-value">{type!.water_dosage}</span>
+          <span className="detail-label">
+            <i className="bi bi-droplet-half" />
+            Dosage:{" "}
+          </span>
+          <span className="detail-value">{type!.water_dosage} ml</span>
         </StyledDetailRow>
       </StyledDetailsCard>
 
       <StyledMetricsContainer>
         <StyledMetricBox>
           <h3>Temperature:</h3>
-          <StyledCircularMetric className="temperature">
+          <StyledCircularMetric $colour="#8884d8" className="temperature">
             <div className="metric-value" data-testid="temperature">
               {temperatureValue}°C
+              <i className="bi bi-thermometer-half" />
             </div>
           </StyledCircularMetric>
         </StyledMetricBox>
 
         <StyledMetricBox>
           <h3>Soil Humidity:</h3>
-          <StyledCircularMetric className="soil">
+          <StyledCircularMetric $colour="#ffc658" className="soil">
             <div className="metric-value" data-testid="soil-humidity">
               {soilHumidityValue}%
+              <i className="bi bi-moisture" />
             </div>
           </StyledCircularMetric>
         </StyledMetricBox>
 
         <StyledMetricBox>
           <h3>Air Humidity:</h3>
-          <StyledCircularMetric className="air">
+          <StyledCircularMetric $colour="#82ca9d" className="air">
             <div className="metric-value" data-testid="air-humidity">
               {airHumidityValue}%
+              <i className="bi bi-wind" />
+              <i className="bi bi-moisture" />
             </div>
           </StyledCircularMetric>
         </StyledMetricBox>
 
         <StyledMetricBox>
           <h3>Light Intensity:</h3>
-          <StyledCircularMetric className="light">
+          <StyledCircularMetric $colour="#ff8042" className="light">
             <div className="metric-value" data-testid="light-intensity">
               {lightIntensityValue}%
+              <i className="bi bi-brightness-low" />
             </div>
           </StyledCircularMetric>
         </StyledMetricBox>

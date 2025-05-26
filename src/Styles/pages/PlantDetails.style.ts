@@ -96,8 +96,10 @@ export const StyledMetricBox = styled.div`
     font-weight: 600;
   }
 `;
-
-export const StyledCircularMetric = styled.div`
+interface Props{
+  $colour:string;
+}
+export const StyledCircularMetric = styled.div<Props>`
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -108,7 +110,7 @@ export const StyledCircularMetric = styled.div`
   align-items: center;
   margin: 0 auto;
   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.08);
-  border: 3px solid #8fd28f;
+  border: 3px solid ${(p) => p.$colour};
   position: relative;
 
   .metric-value {
