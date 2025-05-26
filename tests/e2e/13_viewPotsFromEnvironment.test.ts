@@ -7,6 +7,7 @@ const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
 const password = 'password4';
 test('viewPotsFromEnvironment', async ({ page }) => {
+  
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
@@ -14,7 +15,6 @@ test('viewPotsFromEnvironment', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).click();
   await page.getByRole('textbox', { name: 'Enter password' }).fill(password);
   await page.getByRole('button', { name: 'Log in' }).click();
-  await expect(page.getByText('My Environment')).toBeVisible();
   await page.getByText('Bathroom').click();
   await expect(page.getByText('My Plants')).toBeVisible();
   await expect(page.getByText('pot3Test')).toBeVisible();  

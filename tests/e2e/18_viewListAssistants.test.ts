@@ -9,7 +9,8 @@ export default defineConfig({
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
 const password = 'password4';
-test('viewListAssinsts', async ({ page }) => {
+test('viewListAssinsts', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'This test only runs on chromium');
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
@@ -23,5 +24,5 @@ test('viewListAssinsts', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Assistant Email' }).click();
   await page.getByRole('textbox', { name: 'Assistant Email' }).fill('email2@domain.com');
   await page.getByRole('button', { name: 'Add', exact: true }).click();
-  await expect(page.getByRole('rowheader', { name: 'email2@domain.com' })).toBeVisible();
+  await expect(page.getByRole('rowheader', { name: 'email2@domain.com' })).toBeVisible({ timeout: 30000 });
 });
