@@ -18,7 +18,7 @@ import { useGetTypesByEnvironment } from "../hooks/pots/useGetTypesByEnvironment
 import { CircularProgress } from "@mui/material";
 import { Overlay } from "../Styles/modal/Overlay.style";
 import { dir } from "console";
-
+import {Title} from "../Styles/common/Title.style";
 const MyPlants = () => {
   const { environmentID, environmentName, isOwner } = useEnvironmentCtx();
   const { pots, loadingPots, fetchPots } =
@@ -42,7 +42,7 @@ const MyPlants = () => {
 
   const handleContinue = async () => {
     if (!typeName || !wateringFrequency || !dosage) {
-      toast.error("Please fill in all fields");
+      toast.error("Please fill in all fields.");
       //setErrorMessage("Please fill in all fields");
       return;
     }
@@ -92,7 +92,7 @@ const MyPlants = () => {
   return (
   <StyledMyPlantsContainer>
     
-      <div className="title">My Plants - {environmentName}</div>
+      <Title>My Plants - {environmentName}</Title>
   <Flex $width="70%" $justifyC="space-between" $gap="1rem" style={{ flexWrap: "wrap" }}>
     {isOwner && (
       <StyledButtonContainer>

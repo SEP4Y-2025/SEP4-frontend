@@ -12,9 +12,6 @@ const Settings = () => {
       <button onClick={() => navigate("/")}>
         <Icon source={HomeIcon} summary="My Environments" />
       </button>
-      <button>
-        <Icon source={BellIcon} summary="Notifications" />
-      </button>
       <button onClick={() => navigate("/profile")} className="profile">
         <Icon source={UserIcon} summary="Profile" />
       </button>

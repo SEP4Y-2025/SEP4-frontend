@@ -34,7 +34,7 @@ export const DeleteButton = styled(Button)`
   background-color: #e15f54;
   color: white;
   align-self: center;
-  margin: 0.7rem;
+
 
   &:hover {
     background-color: #e15f54;

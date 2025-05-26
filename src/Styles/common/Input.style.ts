@@ -23,4 +23,7 @@ export const Input = styled.input<Props>`
   &:focus {
     box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.15), 0 0 0 2px #c8e6c9;
   }
+      @media (max-width: 480px) {
+    font-size: 0.95rem;
+  }
 `;

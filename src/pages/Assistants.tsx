@@ -40,6 +40,7 @@ const Assistants = () => {
 <TableContainer component={Paper} sx={{ width: "100%", overflowX: "hidden" }}>
   <Table sx={{ width: "100%" }} aria-label="assistants table"> <TableHead>
             <TableRow>
+              
               <TableCell>Assistant Email</TableCell>
               <TableCell align="right"></TableCell>
               <TableCell align="right"></TableCell>
