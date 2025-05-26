@@ -40,7 +40,6 @@ const AddPlant: React.FC = () => {
         plant_pot_label: plantName,
         plant_type_id: plantTypeId,
       };
-      console.log("Request payload:", request);
       await addPlantPot(environmentID, request);
       toast.success("Plant added successfully");
       navigate("/plants");

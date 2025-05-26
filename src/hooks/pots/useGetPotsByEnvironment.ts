@@ -16,7 +16,6 @@ export const useGetPotsByEnvironment = (environmentId: string) => {
       const response = await axios.get(
         `${BASE_URL}/environments/${environmentId}/pots`
       );
-      console.log(response.data);
       setPots(response.data.pots);
     } catch (err) {
       setError(err as Error);

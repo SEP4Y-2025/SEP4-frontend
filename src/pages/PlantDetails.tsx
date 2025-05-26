@@ -47,6 +47,7 @@ import { useAuth } from "../../src/contexts/UserAuthContext";
 import { useGetTypesByEnvironment } from "../hooks/pots/useGetTypesByEnvironment";
 import { Overlay } from "../Styles/modal/Overlay.style";
 import { CircularProgress } from "@mui/material";
+import { useGetHistoricData } from "../hooks/potStatistics/useGetHistoricData";
 
 const PlantDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -65,6 +66,7 @@ const PlantDetails = () => {
     potIdReady ? id! : "",
     potIdReady ? environmentID : ""
   );
+  const { oldReadings } = useGetHistoricData(environmentID, "pot_1");
   const { types } = useGetTypesByEnvironment(environmentID);
   const navigate = useNavigate();
 

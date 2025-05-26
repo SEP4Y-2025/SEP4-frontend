@@ -35,7 +35,6 @@ const Assistants = () => {
       {loadingAssistants && <CircularProgress style={{ marginTop: 20 }} />}
       <Button $margin="2rem 0 2rem 0" onClick={() => setOpenAddAssistant(true)}>Add assistants</Button>
       {openAddAssistant && <AddAssistantModal onClose={handleCloseModal} />}
-
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
