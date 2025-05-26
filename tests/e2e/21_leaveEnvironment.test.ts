@@ -10,7 +10,7 @@ const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
 const password = 'password4';
 test('leaveEnvironment', async ({ page, browserName }) => {
-   test.skip(browserName !== 'firefox', 'This test only runs on webkit');
+  test.skip(browserName !== 'chromium', 'This test only runs on chromium');
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();

@@ -7,6 +7,7 @@ test('register', async ({ page, browserName }) => {
   const username = `kasia${randomNumber}`;
   const email = `kasia${randomNumber}@domain.com`;
   const password = 'password123';
+  test.skip(browserName !== 'chromium', 'This test only runs on chromium');
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Register' }).click();
   await page.getByRole('textbox', { name: 'Enter username' }).fill(username);

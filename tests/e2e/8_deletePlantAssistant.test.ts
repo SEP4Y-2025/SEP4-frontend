@@ -1,14 +1,15 @@
 
+
 // playwright.config.ts
 import { defineConfig, test, expect } from '@playwright/test';
-export default defineConfig({
-  testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
-})
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
 const password = 'password4';
-test('deletePlant', async ({ page, browserName }) => {
-  test.skip(browserName !== 'webkit', 'This test only runs on webkit');
+export default defineConfig({
+  testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
+});
+test('deletePlantAssistant', async ({ page, browserName }) => {
+ test.skip(browserName !== 'chromium', 'This test only runs on chromium');
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
@@ -17,10 +18,7 @@ test('deletePlant', async ({ page, browserName }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).fill(password);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Bathroom').click();
-  await page.getByRole('button', { name: 'Plant Icon pot3Test' }).click();
-  page.once('dialog', dialog => {
-    console.log(`Dialog message: ${dialog.message()}`);
-    dialog.dismiss().catch(() => {});
-  });
-  await page.getByRole('button', { name: 'Delete pot3Test' }).click();
+  await page.getByRole('button', { name: 'Manage Assistants' }).click();
+  await expect(page.getByRole('rowheader', { name: 'email2@domain.com' })).toBeVisible();
+  await page.getByRole('row', { name: 'email2@domain.com Remove' }).getByRole('button').click();
 });

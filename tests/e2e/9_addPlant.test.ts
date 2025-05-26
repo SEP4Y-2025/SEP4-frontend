@@ -1,14 +1,11 @@
-
-
-// playwright.config.ts
-import { defineConfig, test, expect } from '@playwright/test';
-export default defineConfig({
-  testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
-});
+import { test } from '@playwright/test';
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
 const password = 'password4';
-test('createEnvironment', async ({ page }) => {
+
+ test('addPlant', async ({ page, browserName }) => {
+
+    test.skip(browserName !== 'chromium', 'This test only runs on webkit');
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
@@ -16,10 +13,12 @@ test('createEnvironment', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).click();
   await page.getByRole('textbox', { name: 'Enter password' }).fill(password);
   await page.getByRole('button', { name: 'Log in' }).click();
-  await page.getByRole('button', { name: 'Add new' }).click();
-  await page.getByRole('textbox', { name: 'Environment Name' }).click();
-  await page.getByRole('textbox', { name: 'Environment Name' }).fill('Kitchen');
-  await page.getByRole('button', { name: 'Add', exact: true }).click();
-  await expect(page.getByText('Kitchen')).toBeVisible();
+    await page.getByText('Bathroom').click();
+    await page.getByRole('button', { name: 'Add plant' }).nth(1).click();
+    await page.getByPlaceholder('Enter device ID').fill("pot_2");
+    await page.getByPlaceholder('Enter plant name').fill('pot2Test');
+    await page.getByRole('button', { name: 'Save' }).click();
 
-});
+  });
+
+

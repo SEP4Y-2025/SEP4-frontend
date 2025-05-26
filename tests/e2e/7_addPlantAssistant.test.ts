@@ -1,13 +1,17 @@
+
+
 // playwright.config.ts
 import { defineConfig, test, expect } from '@playwright/test';
+
+
 export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
-
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
 const password = 'password4';
-test('viewPotsFromEnvironment', async ({ page }) => {
+test('addPlantAssistant', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'This test only runs on chromium');
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
@@ -16,7 +20,9 @@ test('viewPotsFromEnvironment', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter password' }).fill(password);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Bathroom').click();
-  await expect(page.getByText('Type: Daisy')).toBeVisible();
-
-
+  await page.getByRole('button', { name: 'Manage Assistants' }).click();
+  await page.getByRole('button', { name: 'Add assistants' }).click();
+  await page.getByRole('textbox', { name: 'Assistant Email' }).click();
+  await page.getByRole('textbox', { name: 'Assistant Email' }).fill('email1@domain.com');
+  await page.getByRole('button', { name: 'Add', exact: true }).click();
 });
