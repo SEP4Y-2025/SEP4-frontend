@@ -23,6 +23,6 @@ test('addPlantAssistant', async ({ page, browserName }) => {
   await page.getByRole('button', { name: 'Manage Assistants' }).click();
   await page.getByRole('button', { name: 'Add assistants' }).click();
   await page.getByRole('textbox', { name: 'Assistant Email' }).click();
-  await page.getByRole('textbox', { name: 'Assistant Email' }).fill('email2@domain.com');
+  await page.getByRole('textbox', { name: 'Assistant Email' }).fill('email1@domain.com');
   await page.getByRole('button', { name: 'Add', exact: true }).click();
 });

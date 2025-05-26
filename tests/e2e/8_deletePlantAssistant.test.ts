@@ -9,7 +9,7 @@ export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
 });
 test('deletePlantAssistant', async ({ page, browserName }) => {
- test.skip(browserName !== 'chromium', 'This test only runs on chromium');await page.getByRole('button', { name: 'Manage Assistants' }).click();
+ test.skip(browserName !== 'chromium', 'This test only runs on chromium');
   await page.goto(baseUrl);
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
