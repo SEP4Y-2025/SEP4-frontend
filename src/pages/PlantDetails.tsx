@@ -55,7 +55,7 @@ import { useGetHistoricData } from "../hooks/potStatistics/useGetHistoricData";
 const PlantDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { deletePot } = useDeletePot();
-  const { environmentID, isOwner } = useEnvironmentCtx();
+  const { environmentID } = useEnvironmentCtx();
   const { user } = useAuth();
   const [potIdReady, setPotIdReady] = useState(false);
 
@@ -173,7 +173,7 @@ const PlantDetails = () => {
   );
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  //if (error) return <div>Error: {error.message}</div>;
   if (!pot) return <div>Plant not found</div>;
   if (!type)
     return (
