@@ -13,7 +13,7 @@ const password = 'password4';
 
 test('leaveEnvironment', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'This test only runs on chromium');
-  await page.goto(baseUrl);
+  await page.goto(baseUrl, { timeout: 15000 });
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).fill(email);
@@ -26,7 +26,7 @@ test('leaveEnvironment', async ({ page, browserName }) => {
   await page.getByRole('textbox', { name: 'Assistant Email' }).click();
   await page.getByRole('textbox', { name: 'Assistant Email' }).fill('email3@domain.com');
   await page.getByRole('button', { name: 'Add', exact: true }).click();
-  await page.getByText('Assistant added successfully').click();
+  await page.getByText('Assistant added successfully').click( { timeout: 15000 });
   await page.getByRole('button', { name: 'Profile' }).click();
   await page.getByRole('button', { name: 'Log Out' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
