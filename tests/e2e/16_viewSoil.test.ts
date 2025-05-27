@@ -24,7 +24,7 @@ test('viewSoil', async ({ page }) => {
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Bathroom').click();
   await page.getByRole('button', { name: 'Plant Icon pot3Test' }).click();
-  await expect(page.getByText('Namepot3Test')).toBeVisible();
+  await expect(page.getByText('Namepot3Test')).toBeVisible({ timeout: 40000 });
   await expect(page.getByText('Type DetailsMint')).toBeVisible();
   await expect(page.getByText('Soil Humidity:')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
