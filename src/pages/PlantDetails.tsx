@@ -173,7 +173,7 @@ const PlantDetails = () => {
   );
 
   if (loading) return <div>Loading...</div>;
-  //if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div>Error: {error.message}</div>;
   if (!pot) return <div>Plant not found</div>;
   if (!type)
     return (

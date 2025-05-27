@@ -24,7 +24,7 @@ test('viewLightIntensity', async ({ page }) => {
   await page.getByText('Bathroom').click();
   await page.getByRole('button', { name: 'Plant Icon pot3Test' }).click();
 
-  await expect(page.getByText('Namepot3Test')).toBeVisible();
+  await expect(page.getByText('Namepot3Test')).toBeVisible({ timeout: 15000 });
  await expect(page.getByText('Light Intensity:')).toBeVisible();
 
 

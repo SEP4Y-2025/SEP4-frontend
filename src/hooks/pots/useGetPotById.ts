@@ -41,7 +41,7 @@ export const useGetPotById = (potId: string, environmentId: string) => {
         setPot(transformedPot);
       } catch (err) {
         setError(err as Error);
-        throw err;
+    
       } finally {
         setLoading(false);
       }
