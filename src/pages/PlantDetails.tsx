@@ -200,6 +200,10 @@ const PlantDetails = () => {
           <span className="detail-value">{pot!.label}</span>
         </StyledDetailRow>
         <StyledDetailRow>
+          <span className="detail-label"><i className="bi bi-motherboard"/>Device ID:</span>
+          <span className="detail-value">{pot!.pot_id}</span>
+        </StyledDetailRow>
+        <StyledDetailRow>
           <span className="detail-label">
             <i className="bi bi-flower1" />
             Type Details
