@@ -7,6 +7,7 @@ export const StyledMyPlantsContainer = styled.div`
   align-items: center;
   gap: 2rem;
   margin-top: 1rem;
+  margin-bottom: 2rem;
   font-size: 1.25rem;
   font-weight: 600;
   .title {
@@ -101,6 +102,7 @@ export const StyledTypeContent = styled.div`
   background-color: white;
   border-radius: 1rem;
   padding: 2rem;
+
   width: 100%;
   max-width: 30rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);

@@ -496,14 +496,23 @@ const PlantDetails = () => {
         </StyledWaterTankVisual>
       </StyledDetailsCard>
 
-      <Flex $justifyC="center" $gap="20px" $width="600px" $margin="40px auto 0">
-        <StyledSaveButton onClick={handleSave}>Go Back</StyledSaveButton>
-       
-          <StyledDeleteButton onClick={handleDelete} disabled={isDeleting}>
-            {isDeleting ? "Deleting..." : `Delete ${pot!.label}`}
-          </StyledDeleteButton>
-      
-      </Flex>
+   <Flex
+  $justifyC="center"
+  $gap="20px"
+  $width="100%"
+  $margin="40px auto 0"
+  style={{
+    flexDirection: "row",
+    flexWrap: "wrap",
+    rowGap: "10px"
+  }}
+>
+  <StyledSaveButton onClick={handleSave}>Go Back</StyledSaveButton>
+  <StyledDeleteButton onClick={handleDelete} disabled={isDeleting}>
+    {isDeleting ? "Deleting..." : `Delete ${pot!.label}`}
+  </StyledDeleteButton>
+</Flex>
+
 
       {loading && (
         <Overlay>

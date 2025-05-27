@@ -4,12 +4,17 @@ export const StyledPlantDetailsPage = styled.div`
   font-family: "Inter", sans-serif;
   padding: 20px;
   max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
 
   @media (max-width: 768px) {
     h1 {
       font-size: 32px;
     }
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
   }
 `;
 
@@ -36,7 +41,7 @@ export const StyledDetailRow = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  font-size: 18px;
+  font-size: clamp(14px, 2vw, 18px);
   padding: 10px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
@@ -59,6 +64,15 @@ export const StyledDetailRow = styled.div`
     align-items: center;
     gap: 5px;
   }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .detail-value {
+      margin-top: 4px;
+    }
+  }
 `;
 
 export const StyledMetricsContainer = styled.div`
@@ -72,7 +86,7 @@ export const StyledMetricsContainer = styled.div`
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -96,9 +110,11 @@ export const StyledMetricBox = styled.div`
     font-weight: 600;
   }
 `;
-interface Props{
-  $colour:string;
+
+interface Props {
+  $colour: string;
 }
+
 export const StyledCircularMetric = styled.div<Props>`
   width: 120px;
   height: 120px;
@@ -120,7 +136,6 @@ export const StyledCircularMetric = styled.div<Props>`
   }
 `;
 
-// New Soil Humidity Prediction Section
 export const StyledSoilHumidityPrediction = styled.div`
   background-color: #f9f9f9;
   border-radius: 12px;
@@ -230,6 +245,7 @@ export const StyledPredictionGraph = styled.div`
   padding: 20px;
   margin-top: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
 
   h3 {
     color: #333;
@@ -245,7 +261,6 @@ export const StyledPredictionGraph = styled.div`
     min-height: 300px;
   }
 
-  /* Recharts custom styling */
   .recharts-bar {
     cursor: pointer;
   }
@@ -349,7 +364,6 @@ export const StyledTankLabels = styled.div`
   color: #666;
 `;
 
-// Specific button styles for PlantDetails page
 export const StyledDeleteButton = styled.button`
   flex: 1;
   padding: 15px 30px;
@@ -377,6 +391,8 @@ export const StyledDeleteButton = styled.button`
 
   @media (max-width: 480px) {
     width: 100%;
+    font-size: 16px;
+    padding: 12px;
   }
 `;
 
@@ -400,5 +416,7 @@ export const StyledSaveButton = styled.button`
 
   @media (max-width: 480px) {
     width: 100%;
+    font-size: 16px;
+    padding: 12px;
   }
 `;
