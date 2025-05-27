@@ -14,7 +14,7 @@ const email = 'email4@domain.com';
 const password = 'password4';
 
 test('viewLightIntensity', async ({ page }) => {
-  await page.goto(baseUrl);
+  await page.goto(baseUrl, { timeout: 15000 });
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).fill(email);
