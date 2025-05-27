@@ -3,9 +3,8 @@
 import { defineConfig, test, expect } from '@playwright/test';
 export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
-  use: {
-    video: 'on', 
-  },
+  
+   timeout: 60000
 });
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';

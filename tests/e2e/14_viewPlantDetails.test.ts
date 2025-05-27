@@ -1,7 +1,8 @@
 // playwright.config.ts
 import { defineConfig, test, expect } from '@playwright/test';
 export default defineConfig({
-  testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
+  testMatch: ["**/*.spec.ts", "**/*.test.ts"], 
+  timeout: 60000
 });
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
