@@ -3,11 +3,11 @@ import axios from "axios";
 import {
   AddPlantTypeRequest,
   AddPlantTypeResponse,
-} from "../types/addPlantTypeApi";
+} from "../../types/addPlantTypeApi";
 
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
-export const useAddPlantType = (onSuccess?:() => void) => {
+export const useAddPlantType = (onSuccess?: () => void) => {
   const [error, setError] = useState<Error | null>(null);
 
   const addPlantType = async (
@@ -20,7 +20,7 @@ export const useAddPlantType = (onSuccess?:() => void) => {
         `${BASE_URL}/environments/${environmentId}/plant_types`,
         newType
       );
-     onSuccess && onSuccess();
+      onSuccess && onSuccess();
       return response.data;
     } catch (err) {
       setError(err as Error);

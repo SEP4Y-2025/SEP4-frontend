@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { P } from 'vitest/dist/chunks/environment.d.Dmw5ulng';
+import styled from "styled-components";
+import { P } from "vitest/dist/chunks/environment.d.Dmw5ulng";
 
 interface Props {
   $marginTop?: string;
@@ -7,6 +7,7 @@ interface Props {
 }
 
 export const Label = styled.label<Props>`
+  font-family: "Inter", sans-serif;
   align-self: flex-start;
   font-size: 0.9rem;
   color: #333;

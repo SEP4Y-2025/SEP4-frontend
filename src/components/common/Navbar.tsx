@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "../../assets/leaf2.svg"; // Adjust the path to where your logo is
 import BellIcon from "../../assets/bell.svg";
 import UserIcon from "../../assets/person.svg";
+import HomeIcon from "../../assets/home.svg";
 import { StyledNavBar } from "../../Styles/pages/NavBar.Style";
 import Icon from "./Icon";
 import { Flex } from "../../Styles/common/Flex";

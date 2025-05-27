@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
 export const StyledMyPlantsContainer = styled.div`
+  font-family: "Inter", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
   margin-top: 1rem;
+  margin-bottom: 2rem;
   font-size: 1.25rem;
   font-weight: 600;
   .title {
@@ -46,6 +48,13 @@ export const StyledMyPlantsContainer = styled.div`
     div {
       width: 100%;
     }
+  }
+    @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 1.2rem;
   }
 `;
 
@@ -93,6 +102,7 @@ export const StyledTypeContent = styled.div`
   background-color: white;
   border-radius: 1rem;
   padding: 2rem;
+
   width: 100%;
   max-width: 30rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
@@ -120,3 +130,18 @@ export const StyledTypeContent = styled.div`
     max-width: 100%;
   }
 `;
+
+
+export const StyledButtonContainer = styled.div`
+  flex: 1 1 auto;
+  max-width: 12rem;
+  min-width: 8rem;
+  display: flex;
+  justify-content: center;
+
+  @media screen and (max-width: 768px) {
+    max-width: 100%;
+    margin-bottom: 0.5rem;
+  }
+`;
+
