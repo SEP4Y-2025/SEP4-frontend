@@ -81,7 +81,7 @@ export const UserContextProvider = ({ children }: Props) => {
         sessionStorage.setItem("user", JSON.stringify(newUser));
         setUser(newUser);
         toast.success(res.data.message || "Registration successful");
-        navigate("/");
+        await loginUser(email, password);
       } else {
         toast.error("Registration failed.");
       }
