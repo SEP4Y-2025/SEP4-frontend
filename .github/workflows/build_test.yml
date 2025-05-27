@@ -25,7 +25,7 @@ jobs:
 
       - name: Run tests
         run: echo "Running tests..."
-        #run: npx vitest
+        run: npx vitest
 
       - name: Build the app
         run: CI=false npm run build
