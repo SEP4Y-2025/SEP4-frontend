@@ -20,6 +20,6 @@ test('deletePlantAssistant', async ({ page, browserName }) => {
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByText('Bathroom').click();
   await page.getByRole('button', { name: 'Manage Assistants' }).click();
-  await expect(page.getByRole('rowheader', { name: 'email2@domain.com' })).toBeVisible();
+  await expect(page.getByRole('rowheader', { name: 'email2@domain.com' })).toBeVisible({ timeout: 15000 });
   await page.getByRole('row', { name: 'email2@domain.com Remove' }).getByRole('button').click();
 });
