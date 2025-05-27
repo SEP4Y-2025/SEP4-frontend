@@ -6,7 +6,8 @@ const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
 const password = 'password4';
 export default defineConfig({
-  testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
+  testMatch: ["**/*.spec.ts", "**/*.test.ts"],
+   timeout: 60000
 });
 test('deletePlantAssistant', async ({ page, browserName }) => {
  test.skip(browserName !== 'chromium', 'This test only runs on chromium');

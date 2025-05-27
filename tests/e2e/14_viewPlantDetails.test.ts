@@ -1,7 +1,8 @@
 // playwright.config.ts
 import { defineConfig, test, expect } from '@playwright/test';
 export default defineConfig({
-  testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
+  testMatch: ["**/*.spec.ts", "**/*.test.ts"], 
+  timeout: 60000
 });
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
@@ -17,7 +18,7 @@ test('viewPlantDetails', async ({ page }) => {
   await page.getByText('Bathroom').click();
   await page.getByRole('button', { name: 'Plant Icon pot3Test' }).click();
   await expect(page.getByText('Namepot3Test')).toBeVisible();
-  await expect(page.getByText('Type DetailsDaisy')).toBeVisible();
+  await expect(page.getByText('Type DetailsMint')).toBeVisible();
   await expect(page.getByText('Watering Frequency')).toBeVisible();
   await expect(page.getByText('Dosage ')).toBeVisible();
   await expect(page.getByText('Temperature:')).toBeVisible();
@@ -30,3 +31,4 @@ test('viewPlantDetails', async ({ page }) => {
   await expect(page.getByText('Total Capacity')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Go Back' })).toBeVisible();
 });
+

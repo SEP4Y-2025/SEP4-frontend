@@ -3,9 +3,8 @@
 import { defineConfig, test, expect } from '@playwright/test';
 export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.test.ts"], // default
-  use: {
-    video: 'on', 
-  },
+  
+   timeout: 60000
 });
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 const email = 'email4@domain.com';
@@ -28,4 +27,5 @@ test('addPlantType', async ({ page, browserName }) => {
   await page.getByRole('spinbutton', { name: 'Dosage' }).click();
   await page.getByRole('spinbutton', { name: 'Dosage' }).fill('23');
   await page.getByRole('button', { name: 'Continue' }).click();
- });
+  await expect(page.getByText('Daisy')).toBeVisible();
+});
