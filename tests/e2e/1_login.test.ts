@@ -8,7 +8,7 @@ export default defineConfig({
 const baseUrl = 'http://plantandgo-frontend.northeurope.azurecontainer.io';
 test('login', async ({ page }) => {
   
-  await page.goto(baseUrl);
+  await page.goto(baseUrl, { timeout: 15000 });
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByPlaceholder('Enter email').fill('email4@domain.com');
   await page.getByPlaceholder('Enter password').fill('password4');
