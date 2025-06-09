@@ -1,57 +1,78 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import PlantTypeRow from "../../src/components/MyPlants/PlantTypeRow";
+import {
+  EnvironmentProvider,
+  useEnvironmentCtx,
+} from "../../src/contexts/EnvironmentContext";
 import { BrowserRouter } from "react-router-dom";
-import PlantTypeRow, { PlantTypeRowProps } from "../../src/components/MyPlants/PlantTypeRow";
-import "@testing-library/jest-dom";
-import { describe, expect, it, vi } from "vitest";
+import { expect, test, vi } from "vitest";
 
-const mockNavigate = vi.fn();
+const mockedNavigate = vi.fn();
+
 vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual<typeof import("react-router-dom")>("react-router-dom");
+  const actual = await vi.importActual("react-router-dom");
   return {
     ...actual,
-    useNavigate: () => mockNavigate,
+    useNavigate: () => mockedNavigate,
   };
 });
 
-describe("PlantTypeRow", () => {
-  const mockProps: PlantTypeRowProps = {
-    plant: {
-      _id: "1",
-      name: "Cactus",
-      water_frequency: 1,
-      water_dosage: 100,
-    },
-    pots: [
-      { id: "1", potName: "Pot 1" },
-      { id: "2", potName: "Pot 2" },
-    ],
+vi.mock("../../src/contexts/EnvironmentContext", async () => {
+  const originalModule = await vi.importActual(
+    "../../src/contexts/EnvironmentContext"
+  );
+  return {
+    ...originalModule,
+    useEnvironmentCtx: () => ({ isOwner: true }),
+    EnvironmentProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
   };
+});
 
-  it("renders the plant type title and pots", () => {
-    render(
-      <BrowserRouter>
-        <PlantTypeRow {...mockProps} />
-      </BrowserRouter>
-    );
+const mockPlant = {
+  _id: "plant1",
+  name: "Cactus",
+  watering_frequency: 3,
+  water_dosage: 200,
+};
 
-    expect(
-      screen.getByText(/Type: Cactus \(1x\/week, 100ml\)/i)
-    ).toBeInTheDocument();
-    expect(screen.getByText("Pot 1")).toBeInTheDocument();
-    expect(screen.getByText("Pot 2")).toBeInTheDocument();
-  });
+const mockPots = [
+  { id: "pot1", potName: "Pot 1" },
+  { id: "pot2", potName: "Pot 2" },
+];
 
-  it("navigates to the add plant page when the '+' button is clicked", async () => {
-    render(
-      <BrowserRouter>
-        <PlantTypeRow {...mockProps} />
-      </BrowserRouter>
-    );
+test("renders plant type info and pots", () => {
+  render(
+    <BrowserRouter>
+      <EnvironmentProvider>
+        <PlantTypeRow plant={mockPlant} pots={mockPots} />
+      </EnvironmentProvider>
+    </BrowserRouter>
+  );
 
-    const addButton = screen.getByRole("button", { name: "Add plant" });
-    await userEvent.click(addButton);
+  expect(screen.getByText(/Type: Cactus/i)).toBeInTheDocument();
+  expect(screen.getByText(/once per 3h/i)).toBeInTheDocument();
+  expect(screen.getByText(/200ml/i)).toBeInTheDocument();
 
-    expect(mockNavigate).toHaveBeenCalledWith("/addplant/Cactus");
-  });
+  expect(screen.getByText("Pot 1")).toBeInTheDocument();
+  expect(screen.getByText("Pot 2")).toBeInTheDocument();
+});
+
+test("renders Add plant button and navigates on click", () => {
+  render(
+    <BrowserRouter>
+      <EnvironmentProvider>
+        <PlantTypeRow plant={mockPlant} pots={mockPots} />
+      </EnvironmentProvider>
+    </BrowserRouter>
+  );
+
+  const addButton = screen.getByRole("button", { name: /Add plant/i });
+  expect(addButton).toBeInTheDocument();
+
+  fireEvent.click(addButton);
+
+  expect(mockedNavigate).toHaveBeenCalledWith("/addplant/Cactus");
 });

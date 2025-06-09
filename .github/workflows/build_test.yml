@@ -22,10 +22,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Run tests
-        run: echo "Running tests..."
-        #run: npx vitest
-
+        
       - name: Build the app
         run: CI=false npm run build
+
+      - name: Run tests
+        run: npx vitest run tests/components

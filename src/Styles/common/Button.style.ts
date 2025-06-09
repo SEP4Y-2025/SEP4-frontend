@@ -10,10 +10,9 @@ interface Props {
 }
 
 export const Button = styled.button<Props>`
-  background-color: ${(p) =>
-    p.$variant === "cancel" ? "#e0e0e0" : "#58cd63"};
-  color: ${(p) =>
-    p.$variant === "cancel" ? "#333" : "white"};
+  font-family: "Inter", sans-serif;
+  background-color: ${(p) => (p.$variant === "cancel" ? "#e0e0e0" : "#58cd63")};
+  color: ${(p) => (p.$variant === "cancel" ? "#333" : "white")};
   font-weight: bold;
   cursor: pointer;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.15);
@@ -22,18 +21,25 @@ export const Button = styled.button<Props>`
   padding: ${(p) => p.$padding || "10px 20px"};
   border-radius: ${(p) => p.$borderR || "10px"};
   border: ${(p) => p.$border || "none"};
+  width: ${(p) => p.$width || "auto"};
 
   &:hover {
     background-color: ${(p) =>
-    p.$variant === "cancel" ? "#bdbdbd" : "#4bb157"};
+    p.$variant === "cancel" ? "#bdbdbd" : "#70D767"};
   }
 `;
 
 export const DeleteButton = styled(Button)`
-  background-color: #e53935;
+  font-family: "Inter", sans-serif;
+  background-color: #e15f54;
   color: white;
+  align-self: center;
+
 
   &:hover {
-    background-color: #b71c1c;
+    background-color: #e15f54;
   }
+
+
+
 `;

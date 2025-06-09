@@ -3,6 +3,13 @@ import { StyledTypeContent } from "../../Styles/pages/MyPlants.style";
 import { Flex } from "../../Styles/common/Flex";
 import { Input } from "../../Styles/common/Input.style";
 import { ErrorLabel } from "../../Styles/common/ErrorLabel";
+import { Button } from "../../Styles/common/Button.style";
+import plant1 from "../../assets/plant1.png";
+import {
+  Label,
+  FormTitle,
+  SectionHeader,
+} from "../../Styles/pages/addPlantType.style";
 
 interface AddPlantModalProps {
   typeName: string;
@@ -27,43 +34,37 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
   handleContinue,
   handleCancel,
 }) => {
-  
+
   return (
     <div className="modal-overlay">
-      <StyledTypeContent>
-        <Flex
-          $background="#f1f8e9"
-          $alignI="center"
-          $gap="0.5rem"
-          $colour="black"
-        >
-          <span role="img" aria-label="leaf">
-            🌿
-          </span>
-          <h2>Add new Type</h2>
+     <StyledTypeContent>
+      <SectionHeader>
+        <img src={plant1} alt="leaf icon" width="40" height="40" />
+        <FormTitle>Add new Type</FormTitle>
+      </SectionHeader>
+
+        <Flex $dir="column" $gap="2rem" $overflow="visible" $colour="green">
+          <Flex $dir="column" $gap="0.3rem" $colour="green">
+            <Label htmlFor="type-name-input">Type</Label>
+            <Input
+              id="type-name-input"
+              $width="100%"
+              $border="2px solid #ccc"
+              $padding="0.5rem"
+              $borderR="0.5rem"
+              placeholder="Type name"
+              value={typeName}
+              onChange={(e) => setTypeName(e.target.value)}
+            />
         </Flex>
-
-        <Flex $dir="column" $gap="1rem" $overflow="visible" $colour="green">
-          <label htmlFor="type-name-input">Type</label>
-          <Input
-            id="type-name-input"
-            $width="100%"
-            $border="1px solid #ccc"
-            $padding="0.5rem"
-            $borderR="0.5rem"
-            placeholder="Type name"
-            value={typeName}
-            onChange={(e) => setTypeName(e.target.value)}
-          />
-
           <Flex $justifyC="space-between" >
             <Flex $dir="column" $alignI="center" $colour="green">
-              <label htmlFor="water-frequency-input">Watering frequency</label>
+              <Label htmlFor="water-frequency-input">Watering frequency</Label>
               <Flex $alignI="center" $justifyC="center">
                 <Input
                   id="water-frequency-input"
                   $width="80px"
-                  $border="1px solid #ccc"
+                  $border="2px solid #ccc"
                   $padding="0.5rem"
                   $borderR="0.5rem"
                   type="number"
@@ -72,17 +73,17 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
                   value={wateringFrequency}
                   onChange={(e) => setWateringFrequency(e.target.value)}
                 />
-                <span className="unit-text">times/week</span>
+                <span className="unit-text">once/x hours</span>
               </Flex>
             </Flex>
 
             <Flex $dir="column" $alignI="center" $colour="green">
-              <label htmlFor="dosage-input">Dosage</label>
+              <Label htmlFor="dosage-input">Dosage</Label>
               <Flex $alignI="center" $justifyC="center">
                 <Input
                   id="dosage-input"
                   $width="80px"
-                  $border="1px solid #ccc"
+                  $border="2px solid #ccc"
                   $padding="0.5rem"
                   $borderR="0.5rem"
                   type="number"
@@ -103,12 +104,12 @@ const AddPlantModal: React.FC<AddPlantModalProps> = ({
           )}
 
           <Flex $justifyC="space-between" $margin="1rem">
-            <button className="cancel-button" onClick={handleCancel}>
+            <Button $variant="cancel" onClick={handleCancel}>
               Cancel
-            </button>
-            <button className="continue-button" onClick={handleContinue}>
+            </Button>
+            <Button onClick={handleContinue}>
               Continue
-            </button>
+            </Button>
           </Flex>
         </Flex>
       </StyledTypeContent>
